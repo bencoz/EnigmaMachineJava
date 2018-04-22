@@ -14,9 +14,10 @@ public class InitialCodeConfiguration{
                                     Integer chosenReflectorId)
     {
         rotorsLocation = new ArrayList<>();
-        RotorLocation rotorLoc = new RotorLocation();
+        RotorLocation rotorLoc ;
         for(int i=0;i<chosenRotors_sorted.size();i++) //same as rotorsLoctionInit_sorted.size()
         {
+            rotorLoc = new RotorLocation();
             rotorLoc.chosenRotor = chosenRotors_sorted.get(i);
             rotorLoc.InitialChosenRotorLocation = rotorsLocationInit_Sorted.get(i);
             rotorsLocation.add(rotorLoc);

@@ -31,9 +31,10 @@ public class UIEnigmaProfile {
     public void setRotorsNotch(List<Integer> i_rotorsID_sorted, List<Integer> i_rotorsNotch_sorted)
     {
         rotorsNotch = new ArrayList<RotorNotch>();
-        RotorNotch rotorNotch = new RotorNotch();
+        RotorNotch rotorNotch;
         for(int i=0;i<i_rotorsID_sorted.size();i++) //same as i_rotorsNotch_sorted.size()
         {
+            rotorNotch = new RotorNotch();
             rotorNotch.rotorId = i_rotorsID_sorted.get(i);
             rotorNotch.notchPosition = i_rotorsNotch_sorted.get(i);
             rotorsNotch.add(rotorNotch);
@@ -71,7 +72,7 @@ public class UIEnigmaProfile {
         Description.append("Rotors Notch:\n");
         for(RotorNotch rotorNotch : rotorsNotch)
         {
-            Description.append("Rotor Number: ").append(rotorNotch.rotorId).append("notch position: ").append(rotorNotch.notchPosition).append('\n');
+            Description.append("Rotor Number: ").append(rotorNotch.rotorId).append(" notch position: ").append(rotorNotch.notchPosition).append('\n');
         }
         Description.append("Number of reflectors: ").append(numOfReflectors).append('\n');
         Description.append("Number of messages (until now): ").append(numOfMessages).append('\n');
