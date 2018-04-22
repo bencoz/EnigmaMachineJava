@@ -1,11 +1,11 @@
 ---------------------------------------------------------------------------------------
 Welcome to Enigma Machine, Choose one of the following options :
-1.bla bla bla bla
-2.bla bla bla bla
-3.bla bla bla bla
-4.bla bla bla bla
-5.bla bla bla bla
-6.bla bla bla bla
-7.bla bla bla bla
-8.bla bla bla bla
+1.Read machine detalis from Xml file
+2.Display the machine specifications
+3.Choose an initial code configuration
+4.Rand an initial code configuration
+5.Process code
+6.Reset machine 
+7.Display history and statistics
+8.Exit
 --------------------------------------------------------------------------------------
