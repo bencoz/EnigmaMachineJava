@@ -1,5 +1,6 @@
 package EnigmaMachineFactory;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 
@@ -68,9 +69,29 @@ public interface EnigmaMachine {
      */
     void consumeState(Consumer<String> stateConsumer);
 
-    int getABCLength();
+    int getMaxNumOfRotors();
 
-    int getNumOfRotors();
+    int getActualNumOfRotors();
 
-    int getRotorsCount();
+    List<Integer> getRotorsId_sorted();
+
+    List<Integer> getRotorsNotch_sorted();
+
+    int getNumOfReflectors();
+
+    int getNumOfMassages();
+
+    boolean isCodeInitialized();
+
+    List<Integer> getChosenRotorsID_sorted();
+
+    List<Character> getChosenRotorsLocationInit_Sorted();
+
+    Integer getChosenReflectorId();
+
+    String getReflectorRomanID(int reflectorNum);
+
+    List<Integer> getReflectorsId();
+
+    String getABC();
 }
