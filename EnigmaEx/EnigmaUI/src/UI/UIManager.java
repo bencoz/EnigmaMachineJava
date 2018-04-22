@@ -40,7 +40,6 @@ public class UIManager {
                     break;
                 case 4:
                     randomChooseMachineConfiguration();
-                    ;
                     break;
                 case 5:
                     processInput();
@@ -57,12 +56,13 @@ public class UIManager {
             }
         }
 
-        /*
-        Logic.createEnigmaMachineFromXMLFile(null);
+
+/*        Logic.createEnigmaMachineFromXMLFile(null);
         Logic.getMachine().createSecret()
                 .selectRotor(3,'X')
                 .selectRotor(2,'D')
                 .selectRotor(1,'O')
+
                 .selectReflector(1)
                 .create();
         System.out.println(Logic.getMachine().process("WOWCANTBELIEVEITACTUALLYWORKS"));*/

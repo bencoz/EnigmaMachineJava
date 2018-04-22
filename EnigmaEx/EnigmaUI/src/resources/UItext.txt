@@ -5,7 +5,7 @@ Welcome to Enigma Machine, Choose one of the following options :
 3.Choose an initial code configuration
 4.Rand an initial code configuration
 5.Process code
-6.Reset machine 
+6.Reset machine
 7.Display history and statistics
 8.Exit
---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------

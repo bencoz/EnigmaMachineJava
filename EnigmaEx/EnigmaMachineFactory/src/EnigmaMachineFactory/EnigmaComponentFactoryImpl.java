@@ -13,7 +13,7 @@ public class EnigmaComponentFactoryImpl implements EnigmaComponentFactory {
     private final static String JAXB_PACKAGE_NAME = "EnigmaMachineFactory.JAXBGenerated";
 
     public EnigmaMachine createEnigmaMachineFromXMLFile(String path){
-        String sanity = "/resources/ex1-sanity-small.xml";
+        String sanity = "/resources/ex1-sanity-paper-enigma.xml";
         String using = (path != null)? path : sanity;
 
         EnigmaMachineImpl enigmaMachine = null;
