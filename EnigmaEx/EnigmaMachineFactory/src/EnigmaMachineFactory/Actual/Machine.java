@@ -68,4 +68,15 @@ public class Machine {
         }
         return result;
     }
+
+    public List<Rotor> getRotors() {
+        return rotors;
+    }
+
+
+    public List<Reflector> getReflectors(){
+        return reflectors;
+    }
+
+
 }
