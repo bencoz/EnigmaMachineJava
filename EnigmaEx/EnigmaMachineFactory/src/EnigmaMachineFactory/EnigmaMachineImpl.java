@@ -24,6 +24,19 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         return enigma;
     }
 
+    public Reflector getWorkingReflector() {
+        return workingReflector;
+    }
+
+    public int getABCLength(){
+        return enigma.getMachine().getAbc().length();
+    }
+    public int getNumOfRotors(){
+        return enigma.getMachine().getRotorsSize();
+    }
+    public int getRotorsCount(){
+        return enigma.getMachine().getRotorsCount();
+    }
     @Override
     public SecretBuilder createSecret() {
         return new SecretBuilder(this);
@@ -112,17 +125,17 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     }
 
     private void moveFirstRotorAndCheckNotch() {
-        boolean updateFinished = false;
+        boolean updateFinsied = false;
         Rotor rotor = workingRotors.get(0);
         int i = 1;
         rotor.increasePositionBy(1);
         if (rotor.isNotchAtPosition()) {
-            while (!updateFinished) {
+            while (!updateFinsied) {
                 Rotor innerRotor = workingRotors.get(i);
                 innerRotor.increasePositionBy(1);
                 i++;
                 if (!innerRotor.isNotchAtPosition()) {
-                    updateFinished = true;
+                    updateFinsied = true;
                 }
             }
         }
@@ -133,107 +146,18 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         debugModeOn = debug;
     }
 
+
     @Override
     public void consumeState(Consumer<String> stateConsumer) {
         StringBuilder sb = new StringBuilder();
-        getWorkingRotors(sb);
-        getWorkingRotorsChar(sb);
+        sb.append(getWorkingRotors());
+        sb.append(getWorkingRotorsChar());
         sb.append('<').append(workingReflector.getStringID()).append('>');
         stateConsumer.accept(sb.toString());
     }
 
-    @Override
-    public int getMaxNumOfRotors() { //TODO: implement
-        return enigma.getMachine().getRotors().size();
-    }
-
-    @Override
-    public int getActualNumOfRotors() {
-        return workingRotors.size();
-    }
-
-    @Override
-    public List<Integer> getRotorsId_sorted() {
-        List<Integer> rotorsId_sorted =new ArrayList<>() ;
-        for(Rotor rotor: enigma.getMachine().getRotors())
-        {
-            rotorsId_sorted.add(rotor.getID());
-        }
-        return rotorsId_sorted;
-    }
-
-    @Override
-    public List<Integer> getRotorsNotch_sorted() {
-        List<Integer> rotorsNotch_sorted =new ArrayList<>() ;
-        for(Rotor chosenRotor: enigma.getMachine().getRotors())
-        {
-            rotorsNotch_sorted.add(chosenRotor.getNotch());
-        }
-        return rotorsNotch_sorted;
-    }
-
-    @Override
-    public int getNumOfReflectors() {
-        return enigma.getMachine().getReflectors().size();
-    }
-
-    @Override
-    public int getNumOfMassages() { //TODO: implement
-        return 0;
-    }
-
-    @Override
-    public boolean isCodeInitialized() {
-        return secret.isInitial();
-    }
-
-    @Override
-    public List<Integer> getChosenRotorsID_sorted() {
-        List<Integer> chosenRotorsId_sorted =new ArrayList<>() ;
-        for(Rotor chosenRotor: workingRotors)
-        {
-            chosenRotorsId_sorted.add(chosenRotor.getID());
-        }
-        return chosenRotorsId_sorted;
-    }
-
-
-    @Override
-    public List<Character> getChosenRotorsLocationInit_Sorted() {
-        List<Character> chosenRotorsLoc =new ArrayList<>() ;
-        for(Rotor chosenRotor: workingRotors)
-        {
-            chosenRotorsLoc.add(chosenRotor.getMappingCharFromPart(chosenRotor.getPosition()));
-        }
-        return chosenRotorsLoc;
-    }
-
-    @Override
-    public Integer getChosenReflectorId() {
-        return workingReflector.getID();
-    }
-
-    @Override
-    public String getReflectorRomanID(int reflectorNum) {
-        return workingReflector.getStringID();
-    }
-
-    @Override
-    public List<Integer> getReflectorsId() {
-        List<Integer> reflectorsId = new ArrayList<>();
-        for (Reflector reflector : enigma.getMachine().getReflectors())
-        {
-            reflectorsId.add(reflector.getID());
-        }
-        return reflectorsId;
-    }
-
-    @Override
-    public String getABC() {
-        return enigma.getMachine().getAbc();
-    }
-
-    private void getWorkingRotorsChar(StringBuilder sb) {
+    private String getWorkingRotorsChar() {
+        StringBuilder sb = new StringBuilder();
         sb.append('<');
         List<Character> chars = new ArrayList<>();
         for (Rotor rotor : workingRotors){
@@ -245,9 +169,11 @@ public class EnigmaMachineImpl implements EnigmaMachine {
             sb.append(character).append(',');
         }
         sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
     }
 
-    private void getWorkingRotors(StringBuilder sb) {
+    private String getWorkingRotors() {
+        StringBuilder sb = new StringBuilder();
         sb.append('<');
         List<Integer> selectedRotors = secret.getSelectedRotorsInOrder();
         List<Integer> shallowCopy = selectedRotors.subList(0, selectedRotors.size());
@@ -256,6 +182,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
             sb.append(integer).append(',');
         }
         sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
     }
 
     public void setSecret(SecretImpl secret) {
@@ -280,7 +207,11 @@ public class EnigmaMachineImpl implements EnigmaMachine {
 
     private void setWorkingRotorsFixedNotch() {
         for (Rotor rotor : workingRotors){
-            rotor.setWorkingNotch(rotor.getNotch()-rotor.getPosition());
+            int notchPosition = rotor.getNotch();
+            int rotorPosition = rotor.getPosition();
+            int result = (notchPosition > rotorPosition) ?
+                    (notchPosition - rotorPosition) : (notchPosition + rotorPosition);
+            rotor.setWorkingNotch(result);
         }
     }
 }
