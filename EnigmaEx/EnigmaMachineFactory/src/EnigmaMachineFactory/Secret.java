@@ -34,4 +34,7 @@ public interface Secret {
      * @return new secret object holding the new positions
      */
     Secret setInitialPosition(List<Integer> newPosition);
+
+
+    boolean isInitial();
 }
