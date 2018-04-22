@@ -20,15 +20,17 @@ public class EngineManager {
     }
 
     public boolean createEnigmaMachineFromXMLFile(String path) {
-        machine = factory.createEnigmaMachineFromXMLFile(path);
-        if (checkMachineABC())
+        machine = factory.createEnigmaMachineFromXMLFile(path);//TODO:change names
+        /*
+        if (!checkMachineABC())
             return false;
-        if (checkMachineRotorsCount())
+        if (!checkMachineRotorsCount())
             return false;
-        if (checkMachineRotors())
+        if (!checkMachineRotors())
             return false;
-        if (checkMachineReflectors())
+        if (!checkMachineReflectors())
             return false;
+            */
         return true;
     }
 
@@ -43,6 +45,11 @@ public class EngineManager {
             if (reflectors.get(i).getID() != i+1)
                 return false;
         }
+        return true;
+    }
+
+    private boolean checkMachineReflectorsMapping() {
+        //TODO : implement
         return true;
     }
 
@@ -63,6 +70,16 @@ public class EngineManager {
         return true;
     }
 
+    private boolean checkMachineRotorsNotchPosition() {
+        //TODO : implement
+        return true;
+    }
+
+    private boolean checkMachineRotorsMapping() {
+        //TODO : implement
+        return true;
+    }
+
     private boolean checkMachineRotorsCount() {
         if (machine == null)
             return false;
@@ -77,7 +94,7 @@ public class EngineManager {
     private boolean checkMachineABC() {
         if (machine == null)
             return false;
-        return (machine.getABCLength() % 2 == 0);
+        return (machine.getABC().length() % 2 == 0);
     }
 
     public EnigmaMachine getMachine() {
@@ -86,11 +103,11 @@ public class EngineManager {
 
     public int getMaxNumOfRotors()
     {
-        return machine.getMaxNumOfRotors();
+        return machine.getNumOfRotors();
     }
     public int getActualNumOfRotors()
     {
-        return machine.getActualNumOfRotors();
+        return machine.getRotorsCount();
     }
     public List<Integer> getRotorsId_sorted()
     {
@@ -157,7 +174,7 @@ public class EngineManager {
         Instant end = Instant.now();
         codedStrings.setOutput(result);
         codedStrings.setDuration(start,end);
-        statsManager.addCodedString(currentCodeFormat,codedStrings);
+        //statsManager.addCodedString(currentCodeFormat,codedStrings);
         return result;
     }
 
@@ -206,6 +223,7 @@ public class EngineManager {
         return machine.getABC();
     }
 
+    //TODO: need to add to statsManager?
     public void setMachineConfig(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
         SecretBuilder secretBuilder = machine.createSecret();
         for(int i=0;i<chosenRotorsID.size();i++) {
@@ -213,6 +231,7 @@ public class EngineManager {
         }
         secretBuilder.selectReflector(chosenReflectorID);
         secretBuilder.create();
+        currentCodeFormat = new CodeFormat(chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
     }
 }
 
