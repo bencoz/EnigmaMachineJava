@@ -36,7 +36,7 @@ public class UIEnigmaProfile {
         {
             rotorNotch = new RotorNotch();
             rotorNotch.rotorId = i_rotorsID_sorted.get(i);
-            rotorNotch.notchPosition = i_rotorsNotch_sorted.get(i);
+            rotorNotch.notchPosition = i_rotorsNotch_sorted.get(i)+1;
             rotorsNotch.add(rotorNotch);
         }
     }

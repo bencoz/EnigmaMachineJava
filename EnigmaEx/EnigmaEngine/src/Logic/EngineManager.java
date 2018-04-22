@@ -21,7 +21,7 @@ public class EngineManager {
 
     public boolean createEnigmaMachineFromXMLFile(String path) {
         machine = factory.createEnigmaMachineFromXMLFile(path);//TODO:change names
-        /*
+/*
         if (!checkMachineABC())
             return false;
         if (!checkMachineRotorsCount())
@@ -30,7 +30,7 @@ public class EngineManager {
             return false;
         if (!checkMachineReflectors())
             return false;
-            */
+*/
         return true;
     }
 
@@ -62,7 +62,7 @@ public class EngineManager {
             return false;
 
         List<Rotor> rotors = machine.getRotors();
-        rotors.sort((r1,r2) -> r1.getID() - r2.getID());
+        rotors.sort(Comparator.comparingInt(Rotor::getID));
         for (int i = 0; i< rotors.size(); i++){
             if (rotors.get(i).getID() != i+1)
                 return false;
@@ -147,23 +147,13 @@ public class EngineManager {
 
     public boolean isValidABC(String code)
     {
-        for (char ch: code.toCharArray()) {
-            if(!isValidChar(ch))
+        for (int i =0; i< code.length(); ++i){
+            String ch = String.valueOf(code.charAt(i));
+            if (!getABC().contains(ch))
                 return false;
         }
         return true;
     }
-
-    private boolean isValidChar(char ch)
-    {
-        for(char legCh : getABC().toCharArray())
-        {
-            if(legCh == ch)
-                return true;
-        }
-        return false;
-    }
-
 
     public String process(String code)
     {

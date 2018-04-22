@@ -314,7 +314,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
             int notchPosition = rotor.getNotch();
             int rotorPosition = rotor.getPosition();
             int result = (notchPosition > rotorPosition) ?
-                    (notchPosition - rotorPosition) : (notchPosition + rotorPosition);
+                    (notchPosition - rotorPosition) : (notchPosition);
             rotor.setWorkingNotch(result);
         }
     }
