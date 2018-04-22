@@ -9,13 +9,16 @@ import java.util.List;
 
 public class CodeFormat {
     private List<Integer> rotors;
-    private List<String> positions;
-    private String reflectorID;
+    private List<Character> positions;
+    private Integer reflectorID; //TODO: check with Ben that its ok
 
-    public CodeFormat(Reflector reflector){
-        reflectorID = reflector.getStringID();
+    public CodeFormat(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID){
+        rotors = chosenRotorsID;
+        positions = chosenRotorsLoc;
+        reflectorID = chosenReflectorID;
 
     }
+
 
     @Override
     public boolean equals(Object o) {
