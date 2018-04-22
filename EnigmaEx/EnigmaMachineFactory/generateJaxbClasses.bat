@@ -1,0 +1,1 @@
+xjc -p EnigmaMachineFactory.JAXBGenerated ../resources/Enigma.xsd
