@@ -86,52 +86,67 @@ public class EngineManager {
 
     public int getMaxNumOfRotors()
     {
-        return 0;
+        return machine.getMaxNumOfRotors();
     }
     public int getActualNumOfRotors()
     {
-        return 0;
+        return machine.getActualNumOfRotors();
     }
     public List<Integer> getRotorsId_sorted()
     {
-        return null;
+        return machine.getRotorsId_sorted();
     }
     public List<Integer> getRotorsNotch_sorted()
     {
-        return null;
+        return machine.getRotorsNotch_sorted();
     }
     public int getNumOfReflectors()
     {
-        return 0;
+        return machine.getNumOfReflectors();
     }
     public int getNumOfMassages()
     {
-        return 0;
+        return machine.getNumOfMassages();
     }
     public boolean isCodeInitialized()
     {
-        return false;
+        return machine.isCodeInitialized();
     }
 
     public List<Integer> getChosenRotorsID_sorted()
     {
-        return null;
+        return machine.getChosenRotorsID_sorted();
     }
 
     public List<Character> getChosenRotorsLocationInit_Sorted()
     {
-        return null;
+        return machine.getChosenRotorsLocationInit_Sorted();
     }
 
-    public String getChosenReflectorId()
+    public Integer getChosenReflectorId()
     {
-        return null;
+        return machine.getChosenReflectorId();
     }
 
     public boolean isValidABC(String code)
     {
+        for (char ch: code.toCharArray()) {
+            if(!isValidChar(ch))
+                return false;
+        }
         return true;
     }
+
+    private boolean isValidChar(char ch)
+    {
+        for(char legCh : getABC().toCharArray())
+        {
+            if(legCh == ch)
+                return true;
+        }
+        return false;
+    }
+
 
     public String process(String code)
     {
@@ -148,30 +163,56 @@ public class EngineManager {
 
     public void resetSystem()
     {
-
+        machine.resetToInitialPosition();
     }
 
     public boolean isRotorID(Integer rotorID)
     {
-        return false;
+        boolean isRotorId=false;
+        List<Integer> RotorsId = machine.getRotorsId_sorted();
+        for(Integer id : RotorsId)
+        {
+            if(id == rotorID)
+            {
+                isRotorId = true;
+                break;
+            }
+        }
+        return isRotorId;
     }
 
-    public boolean isReflectorID()
+    public boolean isReflectorID(Integer reflectorID)
     {
-        return false;
+        boolean isReflectorId=false;
+        List<Integer> ReflectorsId = machine.getReflectorsId();
+        for(Integer id : ReflectorsId)
+        {
+            if(id == reflectorID)
+            {
+                isReflectorId = true;
+                break;
+            }
+        }
+        return isReflectorId;
     }
 
     public String getReflectorRomanID(int reflectorNum)
     {
-        return null;
+        return machine.getReflectorRomanID(reflectorNum);
     }
 
-    public List<Character> getABC() {
-
-        return null;
+    public String getABC()
+    {
+        return machine.getABC();
     }
 
-    public void setMachineConfig(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, String chosenReflectorID) {
+    public void setMachineConfig(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
+        SecretBuilder secretBuilder = machine.createSecret();
+        for(int i=0;i<chosenRotorsID.size();i++) {
+                    secretBuilder.selectRotor(chosenRotorsID.get(i), chosenRotorsLoc.get(i));
+        }
+        secretBuilder.selectReflector(chosenReflectorID);
+        secretBuilder.create();
     }
 }
 
