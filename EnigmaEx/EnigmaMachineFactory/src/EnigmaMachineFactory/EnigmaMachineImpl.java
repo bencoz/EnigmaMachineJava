@@ -8,7 +8,7 @@ import EnigmaMachineFactory.Actual.*;
 
 public class EnigmaMachineImpl implements EnigmaMachine {
     private Enigma enigma;
-    private Secret secret;
+    private Secret secret = null;
     private List<Rotor> workingRotors;
     private Reflector workingReflector;
     private boolean debugModeOn = false;
@@ -145,13 +145,17 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     public int getABCLength(){
         return enigma.getMachine().getAbc().length();
     }
+
+    @Override
     public int getNumOfRotors(){
         return enigma.getMachine().getRotorsSize();
     }
+
+    @Override
     public int getRotorsCount(){
         return enigma.getMachine().getRotorsCount();
     }
-
+/*
     @Override
     public int getMaxNumOfRotors() { //TODO: implement
         return enigma.getMachine().getRotors().size();
@@ -161,7 +165,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     public int getActualNumOfRotors() {
         return workingRotors.size();
     }
-
+*/
     @Override
     public List<Integer> getRotorsId_sorted() {
         List<Integer> rotorsId_sorted =new ArrayList<>() ;
@@ -194,7 +198,10 @@ public class EnigmaMachineImpl implements EnigmaMachine {
 
     @Override
     public boolean isCodeInitialized() {
-        return secret.isInitial();
+        if (secret == null)
+            return false;
+        else
+            return true;
     }
 
     @Override
@@ -241,6 +248,16 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     @Override
     public String getABC() {
         return enigma.getMachine().getAbc();
+    }
+
+    @Override
+    public List<Rotor> getRotors() {
+        return enigma.getMachine().getRotors();
+    }
+
+    @Override
+    public List<Reflector> getReflectors() {
+        return enigma.getMachine().getReflectors();
     }
 
     private String getWorkingRotorsChar() {

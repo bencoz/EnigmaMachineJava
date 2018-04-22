@@ -9,7 +9,6 @@ public class SecretImpl implements Secret {
     private List<Integer> selectedRotors;
     private List<Integer> selectedRotorsPositions;
     private int selectedReflector;
-    private boolean isInitial;
 
     public SecretImpl() {
         selectedRotorsPositions = new LinkedList<>();
@@ -47,12 +46,7 @@ public class SecretImpl implements Secret {
         for (int i = 0; i < rotorIDs.size(); i++)
             newSecret.addRotor(rotorIDs.get(i).intValue(), newPosition.get(i).intValue()-1 );//Postion is 1-based
 
-        isInitial = true;
         return (Secret)newSecret;
     }
 
-    @Override
-    public boolean isInitial() {
-        return isInitial;
-    }
 }
