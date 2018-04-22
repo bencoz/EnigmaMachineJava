@@ -28,7 +28,7 @@ public class UIManager {
                 .selectRotor(1,'O')
                 .selectReflector(1)
                 .create();
-        System.out.println(Logic.process("WOWCANTBELIEVEITACTUALLYWORKS"));
+        System.out.println(Logic.getMachine().process("WOWCANTBELIEVEITACTUALLYWORKS"));
     }
 
     private void init() throws IOException {
@@ -151,13 +151,14 @@ public class UIManager {
         Scanner in = new Scanner(System.in);
         String userInput;
         String reflectorID = null;
-        boolean validInput = false;
+        boolean validInput = false,validType=false;
 
         System.out.println("Please enter your wanted reflector-ID:");
         while (!validInput) {
             System.out.print("Reflector ID: ");
             userInput = in.next();
-            if(Logic.isReflectorID())
+
+            if(tryParseInt(userInput) && Logic.isReflectorID(Integer.parseInt(userInput)))
                 reflectorID = userInput;
             else
                 System.out.println("INVALID INPUT, please try again:");
@@ -170,7 +171,7 @@ public class UIManager {
     {
         List<Integer> chosenRotorsID ;
         List<Character> chosenRotorsLoc ;
-        String chosenReflectorID;
+        Integer chosenReflectorID;
 
         chosenRotorsID = randRotorsID();
         chosenRotorsLoc = randRotorsLoc();
@@ -196,7 +197,11 @@ public class UIManager {
     public List<Character> randRotorsLoc ()
     {
         int actualNumOfRotors = Logic.getActualNumOfRotors();
-        List<Character> ABC  = Logic.getABC();
+        List<Character> ABC = new ArrayList<>();
+        for (Character ch:Logic.getABC().toCharArray())
+        {
+            ABC.add(ch);
+        }
         List<Character> rotorsLoc = new ArrayList<>();
         Random rand = new Random();
 

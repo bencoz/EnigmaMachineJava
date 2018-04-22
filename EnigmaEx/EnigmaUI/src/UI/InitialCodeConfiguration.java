@@ -8,10 +8,10 @@ public class InitialCodeConfiguration{
         private Character InitialChosenRotorLocation;
     }
     private List<RotorLocation> rotorsLocation;
-    private String reflectorID;
+    private Integer reflectorID;
 
     public InitialCodeConfiguration(List<Integer> chosenRotors_sorted, List<Character> rotorsLocationInit_Sorted,
-                                    String chosenReflectorId)
+                                    Integer chosenReflectorId)
     {
         rotorsLocation = new ArrayList<>();
         RotorLocation rotorLoc = new RotorLocation();
