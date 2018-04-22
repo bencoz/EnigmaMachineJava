@@ -20,7 +20,44 @@ public class UIManager {
         manager.run();
     }
 
+    public UIManager()
+    {
+        EnigmaProf = new UIEnigmaProfile();
+    }
     private void run() {
+        while(true) {
+            int userSelection = getValidUserSelection();
+            switch (userSelection) {
+                case 1:
+                    createMachineFromXML();
+                    DisplayMachineSpec();
+                    break;
+                case 2:
+                    DisplayMachineSpec();
+                    break;
+                case 3:
+                    getMachineConfigurationFromUser();
+                    break;
+                case 4:
+                    randomChooseMachineConfiguration();
+                    ;
+                    break;
+                case 5:
+                    processInput();
+                    break;
+                case 6:
+                    resetSystem();
+                    break;
+                case 7:
+                    DisplayStatisticsAndHistory();
+                    break;
+                case 8:
+                    exit();
+                    break;
+            }
+        }
+
+        /*
         Logic.createEnigmaMachineFromXMLFile(null);
         Logic.getMachine().createSecret()
                 .selectRotor(3,'X')
@@ -28,7 +65,25 @@ public class UIManager {
                 .selectRotor(1,'O')
                 .selectReflector(1)
                 .create();
-        System.out.println(Logic.getMachine().process("WOWCANTBELIEVEITACTUALLYWORKS"));
+        System.out.println(Logic.getMachine().process("WOWCANTBELIEVEITACTUALLYWORKS"));*/
+    }
+
+    private int getValidUserSelection() {
+        Scanner in = new Scanner(System.in);
+        String userInput;
+        int userSelection ;
+
+        userInput = in.next();
+        while (!tryParseInt(userInput) || !isValidOptionNum(userSelection = Integer.parseInt(userInput)))
+        {
+            System.out.println("Invalid selection, please try again:");
+            userInput = in.next();
+        }
+        return userSelection;
+    }
+
+    private boolean isValidOptionNum(int i) { //TODO : implement
+        return true;
     }
 
     private void init() throws IOException {
@@ -44,7 +99,25 @@ public class UIManager {
         }
     }
 
-    //1.This function get a path of XML-file and do a basic checking (is xml)
+    //1.This function creates machine from XML-file
+    public boolean createMachineFromXML()
+    {
+        boolean isValid = Logic.createEnigmaMachineFromXMLFile(null);
+        if(isValid) {
+            EnigmaProf.setMaxNumOfRotors(Logic.getMaxNumOfRotors());
+            EnigmaProf.setActualNamOfRotors(Logic.getActualNumOfRotors());
+            EnigmaProf.setRotorsNotch(Logic.getRotorsId_sorted(), Logic.getRotorsNotch_sorted()); //TODO:change to 1-Base
+            EnigmaProf.setNumOfReflectors(Logic.getNumOfReflectors());
+            EnigmaProf.setNumOfMessages(Logic.getNumOfMassages());
+        }
+        else
+        {
+
+        }
+        return isValid;
+
+    }
+
     public boolean isXml(String xmlPath)
     {
         return xmlPath.endsWith(".xml");
@@ -53,17 +126,6 @@ public class UIManager {
     //2.this function display the machine specifications
     public void DisplayMachineSpec()
     {
-        EnigmaProf = new UIEnigmaProfile();
-        EnigmaProf.setMaxNumOfRotors(Logic.getMaxNumOfRotors());
-        EnigmaProf.setActualNamOfRotors(Logic.getActualNumOfRotors());
-        EnigmaProf.setRotorsNotch(Logic.getRotorsId_sorted(),Logic.getRotorsNotch_sorted());
-        EnigmaProf.setNumOfReflectors(Logic.getNumOfReflectors());
-        EnigmaProf.setNumOfMessages(Logic.getNumOfMassages());
-        if(Logic.isCodeInitialized()) {
-            EnigmaProf.setAsInitial();
-            EnigmaProf.setInitialCodeConfiguration(Logic.getChosenRotorsID_sorted(), Logic.getChosenRotorsLocationInit_Sorted(),
-                    Logic.getChosenReflectorId());
-        }
         System.out.println(EnigmaProf.toString());
     }
 
@@ -74,24 +136,30 @@ public class UIManager {
         String userInput;
         List<Integer> chosenRotorsID = new ArrayList<>();
         List<Character> chosenRotorsLoc = new ArrayList<>();
-        String chosenReflectorID;
+        Integer chosenReflectorID;
 
         int actualNumOfRotors = Logic.getActualNumOfRotors();
 
         System.out.println("Please insert your wanted rotors-ID and their init-location:");
         for(int i=0;i<actualNumOfRotors;i++) {
-            System.out.format("rotor number %d\n",i);
+            System.out.format("Rotor number %d\n",i+1);
             chosenRotorsID.add(getValidRotorID());
             chosenRotorsLoc.add(getValidRotorLocation());
         }
 
         chosenReflectorID = getValidReflectorID();
 
+        setInitialCodeConfiguration(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
+        System.out.println("Your settings have been saved");
+    }
+
+    private void setInitialCodeConfiguration(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
         Logic.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
         EnigmaProf.setAsInitial();
         EnigmaProf.setInitialCodeConfiguration(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
 
     }
+
 
     public Integer getValidRotorID()
     {
@@ -132,12 +200,9 @@ public class UIManager {
         while (!validInput) {
             System.out.print("Rotor location: ");
             userInput = in.next();
-            if (userInput.length() == 1) {
-                if(Logic.isValidABC(userInput))
-                {
-                    rotorLoc=userInput.charAt(0);
-                    validInput = true;
-                }
+            if (userInput.length() == 1 && Logic.isValidABC(userInput) ) {
+                rotorLoc=userInput.charAt(0);
+                validInput = true;
             }
             else
             {
@@ -147,10 +212,10 @@ public class UIManager {
         return rotorLoc;
     }
 
-    public String getValidReflectorID() {
+    public Integer getValidReflectorID() {
         Scanner in = new Scanner(System.in);
         String userInput;
-        String reflectorID = null;
+        Integer reflectorID =0;
         boolean validInput = false,validType=false;
 
         System.out.println("Please enter your wanted reflector-ID:");
@@ -158,8 +223,10 @@ public class UIManager {
             System.out.print("Reflector ID: ");
             userInput = in.next();
 
-            if(tryParseInt(userInput) && Logic.isReflectorID(Integer.parseInt(userInput)))
-                reflectorID = userInput;
+            if(tryParseInt(userInput) && Logic.isReflectorID(Integer.parseInt(userInput))) {
+                reflectorID = Integer.parseInt(userInput);
+                validInput = true;
+            }
             else
                 System.out.println("INVALID INPUT, please try again:");
         }
@@ -177,10 +244,8 @@ public class UIManager {
         chosenRotorsLoc = randRotorsLoc();
         chosenReflectorID = randReflectorID();
 
-
-        Logic.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
-        EnigmaProf.setAsInitial();
-        EnigmaProf.setInitialCodeConfiguration(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
+        setInitialCodeConfiguration(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
+        System.out.println("The settings have been updated");
 
     }
 
@@ -213,11 +278,10 @@ public class UIManager {
         return rotorsLoc;
     }
 
-    public String randReflectorID()
+    public Integer randReflectorID()
     {
         Random rand = new Random();
-        int reflectorNum = rand.nextInt(Logic.getNumOfReflectors()) +1;
-        return Logic.getReflectorRomanID(reflectorNum);
+        return rand.nextInt(Logic.getNumOfReflectors()) +1;
     }
 
     //5.this function gets input from user and processes it (encrypts or decrypts)
@@ -246,7 +310,7 @@ public class UIManager {
     }
 
     //7.this function will display basic statistics and history of the system
-    public void displayStatisticsAndHistory()
+    public void DisplayStatisticsAndHistory()
     {
 
     }
