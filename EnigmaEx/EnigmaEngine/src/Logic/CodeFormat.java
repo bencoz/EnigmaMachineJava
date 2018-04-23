@@ -10,15 +10,36 @@ import java.util.List;
 public class CodeFormat {
     private List<Integer> rotors;
     private List<Character> positions;
-    private Integer reflectorID; //TODO: check with Ben that its ok
+    private String reflectorID;
 
-    public CodeFormat(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID){
+    public CodeFormat(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, String chosenReflectorID){
         rotors = chosenRotorsID;
         positions = chosenRotorsLoc;
         reflectorID = chosenReflectorID;
-
     }
 
+    public String toString() {
+        StringBuilder Description = new StringBuilder();
+        Description.append('<');
+        //the loop start from the end to the beginning because the first rotor should be written on the RIGHT side, and so on..
+        for (int i = rotors.size()-1; i >=0 ; i--) {
+            Description.append(rotors.get(i));
+            if (i != 0)
+                Description.append(',');
+            else
+                Description.append('>');
+        }
+        Description.append('<');
+        for (int i = positions.size()-1; i >=0 ; i--) {
+            Description.append(positions.get(i));
+            if (i != 0)
+                Description.append(',');
+            else
+                Description.append('>');
+        }
+        Description.append('<').append(reflectorID).append('>');
+        return Description.toString();
+    }
 
     @Override
     public boolean equals(Object o) {

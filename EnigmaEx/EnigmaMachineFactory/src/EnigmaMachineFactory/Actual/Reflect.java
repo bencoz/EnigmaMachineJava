@@ -12,4 +12,8 @@ public class Reflect {
     public int compareToByInput(Reflect r2) {
         return this.input - r2.input;
     }
+
+    public boolean isDoubleMapping(){
+        return input == output;
+    }
 }

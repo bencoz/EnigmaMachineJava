@@ -3,12 +3,16 @@ package UI;
 import java.io.*;
 import java.util.*;
 import Logic.*;
+import sun.rmi.runtime.Log;
 
 public class UIManager {
     private EngineManager Logic;
     private StringBuilder m_menu;
-    private int m_requestedChoise;
     private UIEnigmaProfile EnigmaProf;
+    private boolean gameIsRunning = true;
+    private boolean isMachineSet = false;
+    private boolean isConfigSet = false;
+    private int numOfOptions=8;
 
     public static void main(String[] args) throws FileNotFoundException {
         UIManager manager = new UIManager();
@@ -25,9 +29,12 @@ public class UIManager {
         EnigmaProf = new UIEnigmaProfile();
     }
     private void run() {
-        while(true) {
+        while(gameIsRunning) {
             int userSelection = getValidUserSelection();
             switch (userSelection) {
+                case 0:
+                    displayMenu();
+                    break;
                 case 1:
                     createMachineFromXML();
                     DisplayMachineSpec();
@@ -54,36 +61,59 @@ public class UIManager {
                     exit();
                     break;
             }
+            System.out.println("Waiting for the next command (press 0 to display menu)");
         }
-
-
-/*        Logic.createEnigmaMachineFromXMLFile(null);
-        Logic.getMachine().createSecret()
-                .selectRotor(3,'X')
-                .selectRotor(2,'D')
-                .selectRotor(1,'O')
-
-                .selectReflector(1)
-                .create();
-        System.out.println(Logic.getMachine().process("WOWCANTBELIEVEITACTUALLYWORKS"));*/
     }
 
     private int getValidUserSelection() {
         Scanner in = new Scanner(System.in);
         String userInput;
-        int userSelection ;
+        int userSelection = 0;
+        boolean isValid = false;
 
-        userInput = in.next();
-        while (!tryParseInt(userInput) || !isValidOptionNum(userSelection = Integer.parseInt(userInput)))
-        {
-            System.out.println("Invalid selection, please try again:");
+        while (!isValid) {
             userInput = in.next();
+            while (!isValidOptionNum(userInput)) {
+                System.out.println("This option doesn't exist in the system, please try again:");
+                userInput = in.next();
+            }
+            userSelection = Integer.parseInt(userInput);
+            if (isValidOptionPriority(userSelection)) {
+                isValid = true;
+            }
         }
         return userSelection;
     }
 
-    private boolean isValidOptionNum(int i) { //TODO : implement
-        return true;
+
+    private boolean isValidOptionPriority(int userSelection) {
+        boolean isValid = true;
+        if(userSelection == 0)
+            return true;
+        if(!isMachineSet && userSelection != 1)
+        {
+            System.out.println("Please load the machine first");
+            isValid = false;
+        }
+        else if(!isConfigSet && (userSelection >= 5 && userSelection <= 7))
+        {
+            System.out.println("Please set the machine configuration first");
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    private boolean isValidOptionNum(String userInput) {
+        int userSelection =0 ;
+        if(!tryParseInt(userInput))
+            return false; //invalid type
+        else
+        {
+            userSelection = Integer.parseInt(userInput);
+            if((userSelection>=0)&&(userSelection<=numOfOptions))
+                return true;
+        }
+        return false;
     }
 
     private void init() throws IOException {
@@ -94,28 +124,46 @@ public class UIManager {
         inputStream = UIManager.class.getResourceAsStream("/resources/UItext.txt");
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
         while((line = in.readLine()) != null) {
-            m_menu.append(line);
+            m_menu.append(line).append("\n");
             System.out.println(line);
         }
     }
 
-    //1.This function creates machine from XML-file
-    public boolean createMachineFromXML()
+    private void displayMenu()
     {
-        boolean isValid = Logic.createEnigmaMachineFromXMLFile(null);
-        if(isValid) {
-            EnigmaProf.setMaxNumOfRotors(Logic.getMaxNumOfRotors());
-            EnigmaProf.setActualNamOfRotors(Logic.getActualNumOfRotors());
-            EnigmaProf.setRotorsNotch(Logic.getRotorsId_sorted(), Logic.getRotorsNotch_sorted()); //TODO:change to 1-Base
-            EnigmaProf.setNumOfReflectors(Logic.getNumOfReflectors());
-            EnigmaProf.setNumOfMessages(Logic.getNumOfMassages());
-        }
-        else
-        {
+        System.out.println(m_menu);
+    }
 
-        }
-        return isValid;
+    //1.This function creates machine from XML-file
+    public void createMachineFromXML() {
+        boolean isValid = false;
+        String path = getEnigmaMachinePath();
+        isValid = Logic.createEnigmaMachineFromXMLFile(path);
 
+        while (!isValid) {
+            System.out.println("XML-file is Invalid\n" + Logic.getErrorInMachineBuilding());
+            path = getEnigmaMachinePath();
+            isValid = Logic.createEnigmaMachineFromXMLFile(path);
+        }
+
+        isMachineSet = true;
+        EnigmaProf.setMaxNumOfRotors(Logic.getMaxNumOfRotors());
+        EnigmaProf.setActualNamOfRotors(Logic.getActualNumOfRotors());
+        EnigmaProf.setRotorsNotch(Logic.getRotorsId_sorted(), Logic.getRotorsNotch_sorted()); //TODO:change to 1-Base
+        EnigmaProf.setNumOfReflectors(Logic.getNumOfReflectors());
+        EnigmaProf.setNumOfMessages(Logic.getNumOfMassages());
+    }
+
+    private String getEnigmaMachinePath() {
+        Scanner in = new Scanner(System.in);
+        String path;
+        System.out.println("Please enter your Enigma Machine XML file Path:");
+        path = in.next();
+        while (!isXml(path)){
+            System.out.println("Please try again (file must end with .xml)...:");
+            path = in.next();
+        }
+        return path;
     }
 
     public boolean isXml(String xmlPath)
@@ -126,24 +174,32 @@ public class UIManager {
     //2.this function display the machine specifications
     public void DisplayMachineSpec()
     {
+        EnigmaProf.setNumOfMessages(Logic.getNumOfMassages());
         System.out.println(EnigmaProf.toString());
     }
 
     //3.this function gets the initial code configuration from user
     public void getMachineConfigurationFromUser()
     {
+        isConfigSet = true;
         Scanner in = new Scanner(System.in);
         String userInput;
         List<Integer> chosenRotorsID = new ArrayList<>();
+        Integer currRotorID;
         List<Character> chosenRotorsLoc = new ArrayList<>();
-        Integer chosenReflectorID;
+        RomanDigit chosenReflectorID;
 
         int actualNumOfRotors = Logic.getActualNumOfRotors();
 
         System.out.println("Please insert your wanted rotors-ID and their init-location:");
-        for(int i=0;i<actualNumOfRotors;i++) {
+        for(int i=0;i < actualNumOfRotors; i++) {
             System.out.format("Rotor number %d\n",i+1);
-            chosenRotorsID.add(getValidRotorID());
+            currRotorID = getValidRotorID();
+            while(chosenRotorsID.contains(currRotorID)) {
+                System.out.println("This rotor already selected, please try again:");
+                currRotorID = getValidRotorID();
+            }
+            chosenRotorsID.add(currRotorID);
             chosenRotorsLoc.add(getValidRotorLocation());
         }
 
@@ -153,11 +209,10 @@ public class UIManager {
         System.out.println("Your settings have been saved");
     }
 
-    private void setInitialCodeConfiguration(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
-        Logic.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
+    private void setInitialCodeConfiguration(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, RomanDigit chosenReflectorID) {
+        Logic.setMachineConfig(chosenRotorsID,chosenRotorsLoc,chosenReflectorID.getIntValue());
         EnigmaProf.setAsInitial();
         EnigmaProf.setInitialCodeConfiguration(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
-
     }
 
 
@@ -200,8 +255,9 @@ public class UIManager {
         while (!validInput) {
             System.out.print("Rotor location: ");
             userInput = in.next();
+            userInput = userInput.toUpperCase();
             if (userInput.length() == 1 && Logic.isValidABC(userInput) ) {
-                rotorLoc=userInput.charAt(0);
+                rotorLoc = userInput.charAt(0);
                 validInput = true;
             }
             else
@@ -212,19 +268,19 @@ public class UIManager {
         return rotorLoc;
     }
 
-    public Integer getValidReflectorID() {
+    public RomanDigit getValidReflectorID() {
         Scanner in = new Scanner(System.in);
         String userInput;
-        Integer reflectorID =0;
+        RomanDigit reflectorID = RomanDigit.I;
         boolean validInput = false,validType=false;
 
-        System.out.println("Please enter your wanted reflector-ID:");
+        System.out.println("Please enter your wanted reflector-ID (Roman digits):");
         while (!validInput) {
             System.out.print("Reflector ID: ");
             userInput = in.next();
 
-            if(tryParseInt(userInput) && Logic.isReflectorID(Integer.parseInt(userInput))) {
-                reflectorID = Integer.parseInt(userInput);
+            if(RomanDigit.isRomanDig(userInput)){
+                reflectorID = RomanDigit.valueOf(userInput);
                 validInput = true;
             }
             else
@@ -236,9 +292,10 @@ public class UIManager {
     //4.this function randomly selects the initial code configuration and displays this to the user
     public void randomChooseMachineConfiguration()
     {
+        isConfigSet = true;
         List<Integer> chosenRotorsID ;
         List<Character> chosenRotorsLoc ;
-        Integer chosenReflectorID;
+        RomanDigit chosenReflectorID;
 
         chosenRotorsID = randRotorsID();
         chosenRotorsLoc = randRotorsLoc();
@@ -278,13 +335,13 @@ public class UIManager {
         return rotorsLoc;
     }
 
-    public Integer randReflectorID()
-    {
+    public RomanDigit randReflectorID() {
         Random rand = new Random();
-        return rand.nextInt(Logic.getNumOfReflectors()) +1;
+        int val = rand.nextInt(Logic.getNumOfReflectors()) + 1;
+        return RomanDigit.getRomanDigByIntVal(val);
     }
 
-    //5.this function gets input from user and processes it (encrypts or decrypts)
+        //5.this function gets input from user and processes it (encrypts or decrypts)
     public void processInput()
     {
         Scanner in = new Scanner(System.in);
@@ -292,10 +349,12 @@ public class UIManager {
 
         System.out.println("Please enter your wanted message:");
         userInput = in.nextLine();
+        userInput = userInput.toUpperCase();
         while (!Logic.isValidABC(userInput))
         {
             System.out.println("INVALID INPUT. Please enter your wanted message:");
             userInput = in.nextLine();
+            userInput = userInput.toUpperCase();
         }
         output = Logic.process(userInput);
 
@@ -312,13 +371,15 @@ public class UIManager {
     //7.this function will display basic statistics and history of the system
     public void DisplayStatisticsAndHistory()
     {
-
+        String text = Logic.getAllStats();
+        System.out.println(text);
     }
 
     //8.exit
     public void exit()
     {
-
+        gameIsRunning = false;
+        System.out.println("Bye Bye :(");
     }
 
 

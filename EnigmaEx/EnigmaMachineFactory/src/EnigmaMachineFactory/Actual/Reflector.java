@@ -1,5 +1,6 @@
 package EnigmaMachineFactory.Actual;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class Reflector {
         }
         reflect.sort((r1,r2) -> r1.compareToByInput(r2));
     }
+
     private void stringIDToNumID(){
         switch (id) {
             case "I":
@@ -60,6 +62,8 @@ public class Reflector {
             case "V":
                 numID = 5;
                 break;
+            default:
+                numID = 0;
         }
     }
 
@@ -80,6 +84,8 @@ public class Reflector {
             case 5:
                 id = "V";
                 break;
+            default:
+                id = "";
         }
     }
 
@@ -92,5 +98,17 @@ public class Reflector {
         return reflect.stream().
                 filter(r -> r.input == num)
                 .findFirst().get();
+    }
+
+    public boolean containsDoubleMapping() {
+        for (Reflect reflect : reflect){
+            if (reflect.isDoubleMapping())
+                return true;
+        }
+        return false;
+    }
+
+    public Integer getReflectLength() {
+        return reflect.size();
     }
 }

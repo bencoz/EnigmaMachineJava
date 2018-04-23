@@ -4,14 +4,17 @@ import EnigmaMachineFactory.*;
 import EnigmaMachineFactory.Actual.Reflector;
 import EnigmaMachineFactory.Actual.Rotor;
 
+import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.*;
 
 public class EngineManager {
-    EnigmaMachine machine;
-    EnigmaComponentFactoryImpl factory;
-    StatsManager statsManager;
-    CodeFormat currentCodeFormat;
+    private EnigmaMachine machine;
+    private EnigmaComponentFactoryImpl factory;
+    private StatsManager statsManager;
+    private CodeFormat currentCodeFormat;
+    private String errorInMachineBuilding;
+
 
     public EngineManager() {
         this.machine = null;
@@ -19,81 +22,117 @@ public class EngineManager {
         statsManager = new StatsManager();
     }
 
+    public String getErrorInMachineBuilding() {
+        return errorInMachineBuilding;
+    }
+
     public boolean createEnigmaMachineFromXMLFile(String path) {
-        machine = factory.createEnigmaMachineFromXMLFile(path);//TODO:change names
-/*
-        if (!checkMachineABC())
+        try {
+            machine = factory.createEnigmaMachineFromXMLFile(path);
+        } catch (FileNotFoundException e){
+            errorInMachineBuilding = "Could not find XML file.";
+        }
+        if (machine == null) {
+            errorInMachineBuilding = "Could not load Machine";
             return false;
-        if (!checkMachineRotorsCount())
+        }
+        if (!isMachineABCEven()) {
+            errorInMachineBuilding = "Machine ABC is not Even";
             return false;
-        if (!checkMachineRotors())
+        }
+        if (!isMachineRotorsCountOK())
             return false;
-        if (!checkMachineReflectors())
+        if (!isMachineRotorsOK())
             return false;
-*/
+        if (!isMachineReflectorsOK())
+            return false;
+
         return true;
     }
 
-    private boolean checkMachineReflectors() {
-        if (machine == null)
+    private boolean isMachineReflectorsOK() {
+        if (!isMachineReflectorsMappingOK()) {
+            errorInMachineBuilding = "One or more of Machines reflectors contains double mapping";
             return false;
-        if (checkMachineReflectorsMapping())
-            return false;
+        }
         List<Reflector> reflectors = machine.getReflectors();
-        reflectors.sort((r1,r2) -> r1.getID() - r2.getID());
+        reflectors.sort(Comparator.comparingInt(Reflector::getID));
         for (int i = 0; i< reflectors.size(); i++){
-            if (reflectors.get(i).getID() != i+1)
+            Reflector reflect = reflectors.get(i);
+            if (reflect.getID() != i+1) {
+                errorInMachineBuilding = "Machine reflectors id's are not in sequential order";
                 return false;
+            }
+            if (reflect.getReflectLength() != getABC().length()) {
+                errorInMachineBuilding = "One of machine's reflectors mapping is not the same size as abc";
+                return false;
+            }
         }
         return true;
     }
 
-    private boolean checkMachineReflectorsMapping() {
-        //TODO : implement
-        return true;
+    private boolean isMachineReflectorsMappingOK() {
+        Reflector reflector = null;
+        reflector = getMachine().getReflectors().stream().
+                filter(Reflector::containsDoubleMapping).
+                findAny().
+                orElse(null);
+        if (reflector == null)
+            return true;
+        else
+            return false;
     }
 
-    private boolean checkMachineRotors() {
-        if (machine == null)
+    private boolean isMachineRotorsOK() {
+        if (!isMachineRotorsNotchPositionOK()){
+            errorInMachineBuilding = "One of machine's rotors has bad notch position";
             return false;
-        if (checkMachineRotorsNotchPosition())
+        }
+        if (!isMachineRotorsMappingOK()) {
+            errorInMachineBuilding = "One of machine's rotors mapping is not the same size as abc";
             return false;
-        if (checkMachineRotorsMapping())
-            return false;
-
+        }
         List<Rotor> rotors = machine.getRotors();
         rotors.sort(Comparator.comparingInt(Rotor::getID));
         for (int i = 0; i< rotors.size(); i++){
-            if (rotors.get(i).getID() != i+1)
+            if (rotors.get(i).getID() != i+1) {
+                errorInMachineBuilding = "Machine rotors id's are not in sequential order";
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isMachineRotorsNotchPositionOK() {
+        List<Rotor> rotors = getMachine().getRotors();
+        for (Rotor rotor : rotors){
+            if (rotor.getNotch() < 0 || rotor.getNotch() > getMachine().getABC().length())
                 return false;
         }
         return true;
     }
 
-    private boolean checkMachineRotorsNotchPosition() {
-        //TODO : implement
+    private boolean isMachineRotorsMappingOK() {
+        List<Rotor> rotors = getMachine().getRotors();
+        for (Rotor rotor : rotors) {
+            if (rotor.getMappingLength() != getABC().length())
+                return false;
+        }
         return true;
     }
 
-    private boolean checkMachineRotorsMapping() {
-        //TODO : implement
-        return true;
-    }
-
-    private boolean checkMachineRotorsCount() {
-        if (machine == null)
-            return false;
+    private boolean isMachineRotorsCountOK() {
         int numOfRotors = machine.getNumOfRotors();
         int rotorsCount = machine.getRotorsCount();
-        if (rotorsCount < 2 || rotorsCount > numOfRotors)
+        if (rotorsCount < 2 || rotorsCount > numOfRotors) {
+            errorInMachineBuilding = "Machine's 2 <= rotors-count < the total number of rotors";
             return false;
+        }
         else
             return true;
     }
 
-    private boolean checkMachineABC() {
-        if (machine == null)
-            return false;
+    private boolean isMachineABCEven() {
         return (machine.getABC().length() % 2 == 0);
     }
 
@@ -123,7 +162,7 @@ public class EngineManager {
     }
     public int getNumOfMassages()
     {
-        return machine.getNumOfMassages();
+        return statsManager.getTotalNumOfCodedStrings();
     }
     public boolean isCodeInitialized()
     {
@@ -164,7 +203,7 @@ public class EngineManager {
         Instant end = Instant.now();
         codedStrings.setOutput(result);
         codedStrings.setDuration(start,end);
-        //statsManager.addCodedString(currentCodeFormat,codedStrings);
+        statsManager.addCodedString(currentCodeFormat,codedStrings);
         return result;
     }
 
@@ -205,7 +244,7 @@ public class EngineManager {
 
     public String getReflectorRomanID(int reflectorNum)
     {
-        return machine.getReflectorRomanID(reflectorNum);
+        return machine.getWorkingReflectorRomanID();
     }
 
     public String getABC()
@@ -213,15 +252,46 @@ public class EngineManager {
         return machine.getABC();
     }
 
-    //TODO: need to add to statsManager?
     public void setMachineConfig(List<Integer> chosenRotorsID, List<Character> chosenRotorsLoc, Integer chosenReflectorID) {
         SecretBuilder secretBuilder = machine.createSecret();
-        for(int i=0;i<chosenRotorsID.size();i++) {
-                    secretBuilder.selectRotor(chosenRotorsID.get(i), chosenRotorsLoc.get(i));
+        for(int i = 0; i < chosenRotorsID.size(); i++) {
+            secretBuilder.selectRotor(chosenRotorsID.get(i), chosenRotorsLoc.get(i));
         }
         secretBuilder.selectReflector(chosenReflectorID);
         secretBuilder.create();
-        currentCodeFormat = new CodeFormat(chosenRotorsID, chosenRotorsLoc, chosenReflectorID);
+        currentCodeFormat = new CodeFormat(chosenRotorsID, chosenRotorsLoc, toRoman(chosenReflectorID));
+    }
+
+    private String toRoman(Integer numID) {
+        String id;
+        switch (numID) {
+            case 1:
+                id = "I";
+                break;
+            case 2:
+                id = "II";
+                break;
+            case 3:
+                id = "III";
+                break;
+            case 4:
+                id = "IV";
+                break;
+            case 5:
+                id = "V";
+                break;
+            default:
+                id = "";
+        }
+        return id;
+    }
+
+    public String getAllStats() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(statsManager.getDiconaryToString());
+        sb.append("Average time taken to process: ");
+        sb.append(statsManager.getAvarageTimeForCoding());
+        return sb.toString();
     }
 }
 

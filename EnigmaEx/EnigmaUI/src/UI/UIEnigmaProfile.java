@@ -59,7 +59,7 @@ public class UIEnigmaProfile {
 
 
     public void setInitialCodeConfiguration(List<Integer> chosenRotors_sorted, List<Character> rotorsLocationInit_Sorted,
-                                             Integer chosenReflectorId)
+                                            RomanDigit chosenReflectorId)
     {
         initialCodeConfig = new InitialCodeConfiguration(chosenRotors_sorted, rotorsLocationInit_Sorted, chosenReflectorId);
     }

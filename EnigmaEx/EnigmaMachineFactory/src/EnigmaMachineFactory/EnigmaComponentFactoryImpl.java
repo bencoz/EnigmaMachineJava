@@ -5,6 +5,9 @@ import EnigmaMachineFactory.JAXBGenerated.Enigma;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 
@@ -12,21 +15,19 @@ public class EnigmaComponentFactoryImpl implements EnigmaComponentFactory {
 
     private final static String JAXB_PACKAGE_NAME = "EnigmaMachineFactory.JAXBGenerated";
 
-    public EnigmaMachine createEnigmaMachineFromXMLFile(String path){
-        String sanity = "/resources/ex1-sanity-paper-enigma.xml";
-        String using = (path != null)? path : sanity;
-
+    public EnigmaMachine createEnigmaMachineFromXMLFile(String path) throws FileNotFoundException {
         EnigmaMachineImpl enigmaMachine = null;
         EnigmaMachineFactory.Actual.Enigma res = null;
-        InputStream inputStream = EnigmaComponentFactoryImpl.class.getResourceAsStream(using);
+        File file = new File(path);
+        InputStream inputStream = new FileInputStream(file);
+
         try {
             EnigmaMachineFactory.JAXBGenerated.Enigma enigma = deserializeFrom(inputStream);
             res = makeEnigmaFromJAXB(enigma);
             enigmaMachine = new EnigmaMachineImpl(res);
         } catch (JAXBException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             return enigmaMachine;
         }
     }

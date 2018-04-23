@@ -35,13 +35,13 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     }
 
     @Override
-    public void initFromSecret(Secret secret) {//TODO: implement
-
+    public void initFromSecret(Secret secret) {
+        setSecret(secret);
     }
 
     @Override
-    public void resetToInitialPosition() {//TODO: implement
-
+    public void resetToInitialPosition() {
+        setSecret(this.secret);
     }
 
     @Override
@@ -142,10 +142,6 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         stateConsumer.accept(sb.toString());
     }
 
-    public int getABCLength(){
-        return enigma.getMachine().getAbc().length();
-    }
-
     @Override
     public int getNumOfRotors(){
         return enigma.getMachine().getRotorsSize();
@@ -155,17 +151,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     public int getRotorsCount(){
         return enigma.getMachine().getRotorsCount();
     }
-/*
-    @Override
-    public int getMaxNumOfRotors() { //TODO: implement
-        return enigma.getMachine().getRotors().size();
-    }
 
-    @Override
-    public int getActualNumOfRotors() {
-        return workingRotors.size();
-    }
-*/
     @Override
     public List<Integer> getRotorsId_sorted() {
         List<Integer> rotorsId_sorted =new ArrayList<>() ;
@@ -192,11 +178,6 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     }
 
     @Override
-    public int getNumOfMassages() { //TODO: implement
-        return 0;
-    }
-
-    @Override
     public boolean isCodeInitialized() {
         if (secret == null)
             return false;
@@ -214,7 +195,6 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         return chosenRotorsId_sorted;
     }
 
-
     @Override
     public List<Character> getChosenRotorsLocationInit_Sorted() {
         List<Character> chosenRotorsLoc =new ArrayList<>() ;
@@ -231,7 +211,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     }
 
     @Override
-    public String getReflectorRomanID(int reflectorNum) {
+    public String getWorkingReflectorRomanID() {
         return workingReflector.getStringID();
     }
 
@@ -289,7 +269,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         return sb.toString();
     }
 
-    public void setSecret(SecretImpl secret) {
+    public void setSecret(Secret secret) {
         this.secret = secret;
         initSecretInMachine();
     }
@@ -304,6 +284,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     private void setWorkingRotorsPostions() {
         int i = 0;
         for (Rotor rotor : workingRotors){
+            rotor.resetPositionToZero();
             rotor.increasePositionBy(secret.getSelectedRotorsPositions().get(i));
             i++;
         }
@@ -318,6 +299,4 @@ public class EnigmaMachineImpl implements EnigmaMachine {
             rotor.setWorkingNotch(result);
         }
     }
-
-
 }

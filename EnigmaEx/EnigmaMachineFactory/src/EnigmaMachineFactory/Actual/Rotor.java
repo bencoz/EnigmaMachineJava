@@ -22,7 +22,10 @@ public class Rotor {
     public void setID(int ID) {
         this.id = ID;
     }
-    public int getID(){return id; }
+
+    public int getID() {
+        return id;
+    }
 
     public int getWorkingNotch() {
         return workingNotch;
@@ -32,13 +35,13 @@ public class Rotor {
         this.workingNotch = workingNotch;
     }
 
-    public void addMapping(Mapping map){
+    public void addMapping(Mapping map) {
         mapping.add(map);
     }
 
-    public void addMappingList(List<EnigmaMachineFactory.JAXBGenerated.Mapping> mapList){
-        for (EnigmaMachineFactory.JAXBGenerated.Mapping map : mapList ){
-            Mapping ActualMap = new Mapping(map.getFrom(),map.getTo());
+    public void addMappingList(List<EnigmaMachineFactory.JAXBGenerated.Mapping> mapList) {
+        for (EnigmaMachineFactory.JAXBGenerated.Mapping map : mapList) {
+            Mapping ActualMap = new Mapping(map.getFrom(), map.getTo());
             mapping.add(ActualMap);
         }
     }
@@ -56,17 +59,21 @@ public class Rotor {
     }
 
     public void increasePositionBy(int size) {
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             this.position--;
-            if (this.position < 0){
-                this.position = mapping.size()-1;
+            if (this.position < 0) {
+                this.position = mapping.size() - 1;
             }
         }
     }
 
+    public void resetPositionToZero() {
+        this.position = 0;
+    }
+
     public int getMapFromPositionByChar(char rotorPosition) {
         int result = -1;
-        for (int i = 0; i < mapping.size() ; i++){
+        for (int i = 0; i < mapping.size(); i++) {
             if (mapping.get(i).from == rotorPosition) {
                 result = i;
                 break;
@@ -77,7 +84,7 @@ public class Rotor {
 
     public int getMapToPositionByChar(char rotorPosition) {
         int result = -1;
-        for (int i = 0; i < mapping.size() ; i++){
+        for (int i = 0; i < mapping.size(); i++) {
             if (mapping.get(i).to == rotorPosition) {
                 result = i;
                 break;
@@ -98,5 +105,7 @@ public class Rotor {
         return (getWorkingNotch() == getPosition());
     }
 
-
+    public Integer getMappingLength() {
+        return mapping.size();
+    }
 }

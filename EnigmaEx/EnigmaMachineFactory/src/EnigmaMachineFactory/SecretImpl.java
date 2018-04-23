@@ -15,11 +15,13 @@ public class SecretImpl implements Secret {
         selectedRotors = new LinkedList<>();
     }
 
+    @Override
     public void addRotor(int rotorID, int rotorPostion){
         selectedRotors.add(rotorID);
         selectedRotorsPositions.add(rotorPostion);
     }
 
+    @Override
     public void setSelectedReflector(int reflectorID){
         selectedReflector = reflectorID;
     }
@@ -27,12 +29,12 @@ public class SecretImpl implements Secret {
     @Override
     public List<Integer> getSelectedRotorsInOrder() {
         return selectedRotors;
-    }//TODO:: add lambda function to increase position by one.
+    }
 
     @Override
     public List<Integer> getSelectedRotorsPositions() {
         return selectedRotorsPositions;
-    }//TODO:: add lambda function to increase position by one.
+    }
 
     @Override
     public int getSelectedReflector() {

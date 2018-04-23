@@ -14,4 +14,7 @@ public class Mapping {
         this.from = from;
         this.to = to;
     }
+
+    public boolean isDoubleMapping() {return from == to; }
+
 }

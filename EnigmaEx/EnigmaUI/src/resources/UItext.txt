@@ -1,4 +1,4 @@
----------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 Welcome to Enigma Machine, Choose one of the following options :
 1.Read machine detalis from Xml file
 2.Display the machine specifications
@@ -8,4 +8,4 @@ Welcome to Enigma Machine, Choose one of the following options :
 6.Reset machine
 7.Display history and statistics
 8.Exit
----------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------

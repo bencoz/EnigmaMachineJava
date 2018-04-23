@@ -84,7 +84,6 @@ public interface EnigmaMachine {
 
     int getNumOfReflectors();
 
-    int getNumOfMassages();
 
     boolean isCodeInitialized();
 
@@ -94,7 +93,7 @@ public interface EnigmaMachine {
 
     Integer getChosenReflectorId();
 
-    String getReflectorRomanID(int reflectorNum);
+    String getWorkingReflectorRomanID();
 
     List<Integer> getReflectorsId();
 
