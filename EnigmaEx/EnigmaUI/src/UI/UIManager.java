@@ -204,10 +204,12 @@ public class UIManager {
                 System.out.println("This rotor already selected, please try again:");
                 currRotorID = getValidRotorID();
             }
+            //the rotors is get from the left one to the right one
             chosenRotorsID.add(currRotorID);
             chosenRotorsLoc.add(getValidRotorLocation());
         }
-
+        Collections.reverse(chosenRotorsID);
+        Collections.reverse(chosenRotorsLoc);
         chosenReflectorID = getValidReflectorID();
 
         setInitialCodeConfiguration(chosenRotorsID,chosenRotorsLoc,chosenReflectorID);
