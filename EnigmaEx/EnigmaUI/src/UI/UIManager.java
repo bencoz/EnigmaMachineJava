@@ -12,7 +12,7 @@ public class UIManager {
     private boolean gameIsRunning = true;
     private boolean isMachineSet = false;
     private boolean isConfigSet = false;
-    private int numOfOptions=8;
+    private int numOfOptions = 8;
 
     public static void main(String[] args) throws FileNotFoundException {
         UIManager manager = new UIManager();
@@ -145,7 +145,12 @@ public class UIManager {
             path = getEnigmaMachinePath();
             isValid = Logic.createEnigmaMachineFromXMLFile(path);
         }
-
+        isMachineSet = true;
+        if(isMachineSet) //not the first machine
+        {
+            isConfigSet = false;
+            EnigmaProf.resetConfig();
+        }
         isMachineSet = true;
         EnigmaProf.setMaxNumOfRotors(Logic.getMaxNumOfRotors());
         EnigmaProf.setActualNamOfRotors(Logic.getActualNumOfRotors());

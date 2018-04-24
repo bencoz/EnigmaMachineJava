@@ -36,6 +36,7 @@ public class EngineManager {
             errorInMachineBuilding = "Could not load Machine";
             return false;
         }
+
         if (!isMachineABCEven()) {
             errorInMachineBuilding = "Machine ABC is not Even";
             return false;
@@ -47,11 +48,12 @@ public class EngineManager {
         if (!isMachineReflectorsOK())
             return false;
 
+        statsManager.reset();
         return true;
     }
 
     private boolean isMachineReflectorsOK() {
-        if (!isMachineReflectorsMappingOK()) {
+        if (!isMachineReflectorsDoubleMapping()) {
             errorInMachineBuilding = "One or more of Machines reflectors contains double mapping";
             return false;
         }
@@ -71,7 +73,7 @@ public class EngineManager {
         return true;
     }
 
-    private boolean isMachineReflectorsMappingOK() {
+    private boolean isMachineReflectorsDoubleMapping() {
         Reflector reflector = null;
         reflector = getMachine().getReflectors().stream().
                 filter(Reflector::containsDoubleMapping).
@@ -88,16 +90,52 @@ public class EngineManager {
             errorInMachineBuilding = "One of machine's rotors has bad notch position";
             return false;
         }
-        if (!isMachineRotorsMappingOK()) {
+        if (!isMachineRotorsMappingSizeOK()) {
             errorInMachineBuilding = "One of machine's rotors mapping is not the same size as abc";
             return false;
         }
+        if(!isMachineRotorsMappingOK())
+        {
+            errorInMachineBuilding = "One of machine's rotors mapping letters doesn't contains in the ABC";
+            return false;
+        }
+        if(!isMachineReflectorsMappingOK())
+        {
+            errorInMachineBuilding = "One of machine's reflector mapping in not valid";
+            return false;
+        }
+
         List<Rotor> rotors = machine.getRotors();
         rotors.sort(Comparator.comparingInt(Rotor::getID));
         for (int i = 0; i< rotors.size(); i++){
             if (rotors.get(i).getID() != i+1) {
                 errorInMachineBuilding = "Machine rotors id's are not in sequential order";
                 return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isMachineRotorsMappingOK() {
+        List<Rotor> rotors = getMachine().getRotors();
+        for (Rotor rotor : rotors) {
+            for(char mapCh : rotor.getMappingABC().toCharArray())
+            {
+                if(!machine.getABC().contains(String.valueOf(mapCh)))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+
+    private boolean isMachineReflectorsMappingOK() {
+        List<Reflector> reflectors = getMachine().getReflectors();
+        for (Reflector reflector : reflectors) {
+            for(int mapInt : reflector.getReflectorMapping())
+            {
+                if(!((mapInt >= 0) && (mapInt < machine.getABC().length() )))
+                    return false;
             }
         }
         return true;
@@ -112,7 +150,7 @@ public class EngineManager {
         return true;
     }
 
-    private boolean isMachineRotorsMappingOK() {
+    private boolean isMachineRotorsMappingSizeOK() {
         List<Rotor> rotors = getMachine().getRotors();
         for (Rotor rotor : rotors) {
             if (rotor.getMappingLength() != getABC().length())
@@ -131,6 +169,8 @@ public class EngineManager {
         else
             return true;
     }
+
+
 
     private boolean isMachineABCEven() {
         return (machine.getABC().length() % 2 == 0);
@@ -288,10 +328,15 @@ public class EngineManager {
 
     public String getAllStats() {
         StringBuilder sb = new StringBuilder();
-        sb.append(statsManager.getDiconaryToString());
-        sb.append("Average time taken to process: ");
-        sb.append(statsManager.getAvarageTimeForCoding());
-        return sb.toString();
+        if(statsManager.getTotalNumOfCodedStrings()>0) {
+            sb.append(statsManager.getDiconaryToString());
+            sb.append("Average time taken to process: ");
+            sb.append(statsManager.getAvarageTimeForCoding());
+            return sb.toString();
+        }
+        else
+            return "No messages received yet";
     }
+
 }
 

@@ -50,4 +50,11 @@ public class StatsManager {
         }
         return sb.toString();
     }
+
+    public void reset()
+    {
+        totalNumOfCodedStrings = 0;
+        totalTimeOfCodingStrings = Duration.ZERO;
+        listDictionary = new Hashtable<>();
+    }
 }

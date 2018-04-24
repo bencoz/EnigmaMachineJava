@@ -17,4 +17,11 @@ public class Mapping {
 
     public boolean isDoubleMapping() {return from == to; }
 
+    public char getFrom() {
+        return from;
+    }
+
+    public char getTo() {
+        return to;
+    }
 }

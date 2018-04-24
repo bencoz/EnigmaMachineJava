@@ -16,4 +16,14 @@ public class Reflect {
     public boolean isDoubleMapping(){
         return input == output;
     }
+
+    public int getInput()
+    {
+        return input;
+    }
+
+    public int getOutput()
+    {
+        return output;
+    }
 }

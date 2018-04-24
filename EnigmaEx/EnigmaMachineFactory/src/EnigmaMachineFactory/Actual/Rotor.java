@@ -8,7 +8,6 @@ import java.util.Map;
 import static java.lang.StrictMath.abs;
 
 public class Rotor {
-
     private List<EnigmaMachineFactory.Actual.Mapping> mapping;
     private int notch;
     private int id;
@@ -65,6 +64,26 @@ public class Rotor {
                 this.position = mapping.size() - 1;
             }
         }
+    }
+
+    public String getMappingABC()
+    {
+        StringBuilder sb = new StringBuilder();
+        String ch ;
+        for(EnigmaMachineFactory.Actual.Mapping map : mapping)
+        {
+            ch = String.valueOf(map.getFrom());
+            if(!sb.toString().contains(ch))
+            {
+                sb.append(map.getFrom());
+            }
+            ch = String.valueOf(map.getTo());
+            if(!sb.toString().contains(ch))
+            {
+                sb.append(map.getTo());
+            }
+        }
+        return sb.toString();
     }
 
     public void resetPositionToZero() {

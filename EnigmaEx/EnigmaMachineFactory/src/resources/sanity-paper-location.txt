@@ -1,2 +1,3 @@
-C:\Users\USER\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-paper-enigma.xml
-C:\Users\USER\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-small.xml
+C:\Users\roseh\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-small.xml
+C:\Users\roseh\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-paper-enigma.xml
+

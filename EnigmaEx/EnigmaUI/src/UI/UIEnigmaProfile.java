@@ -5,6 +5,8 @@ import java.util.*;
 
 public class UIEnigmaProfile {
 
+
+
     private class RotorNotch{
         private Integer rotorId;
         private Integer notchPosition;
@@ -80,6 +82,11 @@ public class UIEnigmaProfile {
             Description.append(initialCodeConfig).append('\n');
         }
         return Description.toString();
+    }
+
+    public void resetConfig() {
+        isInitial = false;
+        initialCodeConfig = null;
     }
 
 }

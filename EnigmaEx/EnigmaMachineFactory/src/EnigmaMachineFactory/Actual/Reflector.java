@@ -35,6 +35,16 @@ public class Reflector {
         reflect.add(r);
     }
 
+    public List<Integer> getReflectorMapping()
+    {
+        List<Integer> reflectorMapping = new ArrayList<>();
+        for(EnigmaMachineFactory.Actual.Reflect ref :reflect)
+        {
+            reflectorMapping.add(ref.getInput());
+            reflectorMapping.add(ref.getOutput());
+        }
+        return reflectorMapping;
+    }
     public void addReflectList(List<EnigmaMachineFactory.JAXBGenerated.Reflect> reflectorList) {
         for (EnigmaMachineFactory.JAXBGenerated.Reflect JAXBReflect : reflectorList) {
             Reflect ActualReflect = new Reflect(JAXBReflect.getInput()-1, JAXBReflect.getOutput()-1);

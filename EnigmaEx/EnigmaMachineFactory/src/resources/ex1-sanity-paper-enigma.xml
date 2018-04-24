@@ -2,7 +2,7 @@
 <Enigma xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Enigma.xsd">
 	<Machine rotors-count="3">
 		<ABC>
-			ABCDEFGHIJKLMNOPQRSTUVWXY&amp;
+			ABCDEFGHIJKLMNOPQRSTUVWXYZ
 		</ABC>
 		<Rotors>
 			<Rotor id="1" notch="17">
@@ -15,7 +15,7 @@
 				<Mapping from="D" to="G"/>
 				<Mapping from="Q" to="H"/>
 				<Mapping from="V" to="I"/>
-				<Mapping from="&amp;" to="J"/>
+				<Mapping from="Z" to="J"/>
 				<Mapping from="N" to="K"/>
 				<Mapping from="T" to="L"/>
 				<Mapping from="O" to="M"/>
@@ -31,7 +31,7 @@
 				<Mapping from="B" to="W"/>
 				<Mapping from="R" to="X"/>
 				<Mapping from="C" to="Y"/>
-				<Mapping from="J" to="&amp;"/>
+				<Mapping from="J" to="Z"/>
 			</Rotor>
 			<Rotor id="2" notch="5">
 				<Mapping from="A" to="A"/>
@@ -52,14 +52,14 @@
 				<Mapping from="C" to="P"/>
 				<Mapping from="Q" to="Q"/>
 				<Mapping from="G" to="R"/>
-				<Mapping from="&amp;" to="S"/>
+				<Mapping from="Z" to="S"/>
 				<Mapping from="N" to="T"/>
 				<Mapping from="P" to="U"/>
 				<Mapping from="Y" to="V"/>
 				<Mapping from="F" to="W"/>
 				<Mapping from="V" to="X"/>
 				<Mapping from="O" to="Y"/>
-				<Mapping from="E" to="&amp;"/>
+				<Mapping from="E" to="Z"/>
 			</Rotor>
 			<Rotor id="3" notch="22">
 				<Mapping from="B" to="A"/>
@@ -74,7 +74,7 @@
 				<Mapping from="T" to="J"/>
 				<Mapping from="X" to="K"/>
 				<Mapping from="V" to="L"/>
-				<Mapping from="&amp;" to="M"/>
+				<Mapping from="Z" to="M"/>
 				<Mapping from="N" to="N"/>
 				<Mapping from="Y" to="O"/>
 				<Mapping from="E" to="P"/>
@@ -87,7 +87,7 @@
 				<Mapping from="U" to="W"/>
 				<Mapping from="S" to="X"/>
 				<Mapping from="Q" to="Y"/>
-				<Mapping from="O" to="&amp;"/>
+				<Mapping from="O" to="Z"/>
 			</Rotor>
 		</Rotors>
 		<Reflectors>
@@ -107,5 +107,5 @@
 				<Reflect input="22" output="23"/>
 			</Reflector>
 		</Reflectors>
-	</Machine>	
+	</Machine>
 </Enigma>
