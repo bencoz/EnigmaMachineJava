@@ -23,7 +23,7 @@ public class JAXBToActual {
         EnigmaMachineFactory.Actual.Enigma res = new EnigmaMachineFactory.Actual.Enigma();
         Machine machine = new Machine();
 
-        machine.setAbc(enigma.getMachine().getABC().replaceAll("\\s",""));
+        machine.setAbc(enigma.getMachine().getABC().trim());
         machine.setRotorsCount(enigma.getMachine().getRotorsCount());
 
         JAXBRotors = enigma.getMachine().getRotors().getRotor();

@@ -88,7 +88,7 @@ public class UIManager {
 
     private boolean isValidOptionPriority(int userSelection) {
         boolean isValid = true;
-        if(userSelection == 0)
+        if(userSelection == 0 || userSelection == 8)
             return true;
         if(!isMachineSet && userSelection != 1)
         {
@@ -163,7 +163,8 @@ public class UIManager {
         Scanner in = new Scanner(System.in);
         String path;
         System.out.println("Please enter your Enigma Machine XML file Path:");
-        path = in.next();
+
+        path = in.nextLine();
         while (!isXml(path)){
             System.out.println("Please try again (file must end with .xml)...:");
             path = in.next();

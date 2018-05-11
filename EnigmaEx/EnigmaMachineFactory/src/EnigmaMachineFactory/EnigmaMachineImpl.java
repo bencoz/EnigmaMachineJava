@@ -86,7 +86,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
             } else {
                 finalLocation = (abcLength - (position - entry))%abcLength;
             }
-            char c = rotor.getMappingCharToPart(finalLocation);
+            char c = rotor.getMappingCharLeftPart(finalLocation);
             entry = rotor.getMapFromPositionByChar(c);
         }
         return getEnigma().getMachine().getAbc().charAt(entry);
@@ -105,7 +105,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
             } else {
                 finalLocation = (abc.length() - (position - entry))%abc.length();
             }
-            char c = rotor.getMappingCharFromPart(finalLocation);
+            char c = rotor.getMappingCharRightPart(finalLocation);
             entry = rotor.getMapToPositionByChar(c);
         }
         return workingReflector.getReflectToByPosition(entry);
@@ -200,7 +200,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         List<Character> chosenRotorsLoc =new ArrayList<>() ;
         for(Rotor chosenRotor: workingRotors)
         {
-            chosenRotorsLoc.add(chosenRotor.getMappingCharFromPart(chosenRotor.getPosition()));
+            chosenRotorsLoc.add(chosenRotor.getMappingCharRightPart(chosenRotor.getPosition()));
         }
         return chosenRotorsLoc;
     }
@@ -245,7 +245,7 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         sb.append('<');
         List<Character> chars = new ArrayList<>();
         for (Rotor rotor : workingRotors){
-            chars.add(rotor.getMappingCharFromPart(rotor.getPosition()));
+            chars.add(rotor.getMappingCharRightPart(rotor.getPosition()));
         }
         List<Character> shallowCopy = chars.subList(0,chars.size());
         Collections.reverse(shallowCopy);

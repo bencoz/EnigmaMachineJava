@@ -1,3 +1,7 @@
-C:\Users\roseh\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-small.xml
-C:\Users\roseh\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-paper-enigma.xml
+C:\Users\User\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex2-basic.xml
+C:\Users\User\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex2-large.xml
+C:\Users\User\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex2-error-example.xml
 
+C:\Users\User\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-paper-enigma.xml
+
+C:\Users\User\IdeaProjects\EnigmaEx\EnigmaMachineFactory\src\resources\ex1-sanity-small.xml
