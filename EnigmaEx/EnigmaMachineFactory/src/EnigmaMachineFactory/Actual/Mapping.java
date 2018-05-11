@@ -2,26 +2,26 @@ package EnigmaMachineFactory.Actual;
 
 
 public class Mapping {
-    protected char from;
-    protected char to;
+    protected char right;
+    protected char left;
 
-    public Mapping(String from, String to) {
-        this.from = from.toUpperCase().charAt(0);
-        this.to = to.toUpperCase().charAt(0);
+    public Mapping(String right, String left) {
+        this.right = right.toUpperCase().charAt(0);
+        this.left = left.toUpperCase().charAt(0);
     }
 
-    public Mapping(char from, char to) {
-        this.from = from;
-        this.to = to;
+    public Mapping(char right, char left) {
+        this.right = right;
+        this.left = left;
     }
 
-    public boolean isDoubleMapping() {return from == to; }
+    public boolean isDoubleMapping() {return right == left; }
 
-    public char getFrom() {
-        return from;
+    public char getRight() {
+        return right;
     }
 
-    public char getTo() {
-        return to;
+    public char getLeft() {
+        return left;
     }
 }

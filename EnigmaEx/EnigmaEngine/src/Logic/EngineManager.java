@@ -4,6 +4,7 @@ import EnigmaMachineFactory.*;
 import EnigmaMachineFactory.Actual.Reflector;
 import EnigmaMachineFactory.Actual.Rotor;
 
+
 import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.*;
@@ -14,7 +15,7 @@ public class EngineManager {
     private StatsManager statsManager;
     private CodeFormat currentCodeFormat;
     private String errorInMachineBuilding;
-
+    private DecryptionManager.Decipher deciper;
 
     public EngineManager() {
         this.machine = null;

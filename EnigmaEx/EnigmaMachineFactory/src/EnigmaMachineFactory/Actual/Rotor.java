@@ -40,7 +40,7 @@ public class Rotor {
 
     public void addMappingList(List<EnigmaMachineFactory.JAXBGenerated.Mapping> mapList) {
         for (EnigmaMachineFactory.JAXBGenerated.Mapping map : mapList) {
-            Mapping ActualMap = new Mapping(map.getFrom(), map.getTo());
+            Mapping ActualMap = new Mapping(map.getRight(), map.getLeft());
             mapping.add(ActualMap);
         }
     }
@@ -72,15 +72,15 @@ public class Rotor {
         String ch ;
         for(EnigmaMachineFactory.Actual.Mapping map : mapping)
         {
-            ch = String.valueOf(map.getFrom());
+            ch = String.valueOf(map.getRight());
             if(!sb.toString().contains(ch))
             {
-                sb.append(map.getFrom());
+                sb.append(map.getRight());
             }
-            ch = String.valueOf(map.getTo());
+            ch = String.valueOf(map.getLeft());
             if(!sb.toString().contains(ch))
             {
-                sb.append(map.getTo());
+                sb.append(map.getLeft());
             }
         }
         return sb.toString();
@@ -93,7 +93,7 @@ public class Rotor {
     public int getMapFromPositionByChar(char rotorPosition) {
         int result = -1;
         for (int i = 0; i < mapping.size(); i++) {
-            if (mapping.get(i).from == rotorPosition) {
+            if (mapping.get(i).right == rotorPosition) {
                 result = i;
                 break;
             }
@@ -104,7 +104,7 @@ public class Rotor {
     public int getMapToPositionByChar(char rotorPosition) {
         int result = -1;
         for (int i = 0; i < mapping.size(); i++) {
-            if (mapping.get(i).to == rotorPosition) {
+            if (mapping.get(i).left == rotorPosition) {
                 result = i;
                 break;
             }
@@ -112,12 +112,12 @@ public class Rotor {
         return (result + position) % mapping.size();
     }
 
-    public char getMappingCharFromPart(int position) {
-        return (mapping.get(position).from);
+    public char getMappingCharRightPart(int position) {
+        return (mapping.get(position).right);
     }
 
-    public char getMappingCharToPart(int position) {
-        return (mapping.get(position).to);
+    public char getMappingCharLeftPart(int position) {
+        return (mapping.get(position).left);
     }
 
     public boolean isNotchAtPosition() {

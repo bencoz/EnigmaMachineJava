@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by mazuki (darksiderg) -->
+<Enigma xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Enigma.xsd">
+	<Machine rotors-count="5">
+		<ABC>ABCDEFGHIJKLMNOPQRSTUVWXYZ !?'</ABC>
+		<Rotors>
+			<Rotor id="8" notch="30">
+				<Mapping right="A" left="G"/>
+				<Mapping right="B" left="A"/>
+				<Mapping right="C" left="U"/>
+				<Mapping right="D" left="N"/>
+				<Mapping right="E" left="E"/>
+				<Mapping right="F" left="H"/>
+				<Mapping right="G" left="D"/>
+				<Mapping right="H" left="L"/>
+				<Mapping right="I" left="M"/>
+				<Mapping right="J" left="F"/>
+				<Mapping right="K" left="V"/>
+				<Mapping right="L" left="R"/>
+				<Mapping right="M" left="W"/>
+				<Mapping right="N" left="Q"/>
+				<Mapping right="O" left="Y"/>
+				<Mapping right="P" left="I"/>
+				<Mapping right="Q" left="O"/>
+				<Mapping right="R" left="S"/>
+				<Mapping right="S" left="C"/>
+				<Mapping right="T" left="'"/>
+				<Mapping right="U" left="K"/>
+				<Mapping right="V" left=" "/>
+				<Mapping right="W" left="!"/>
+				<Mapping right="X" left="P"/>
+				<Mapping right="Y" left="T"/>
+				<Mapping right="Z" left="B"/>
+				<Mapping right=" " left="?"/>
+				<Mapping right="!" left="Z"/>
+				<Mapping right="?" left="X"/>
+				<Mapping right="'" left="J"/>
+			</Rotor>
+			<Rotor id="1" notch="17">
+				<Mapping right="A" left="V"/>
+				<Mapping right="B" left="Y"/>
+				<Mapping right="C" left="'"/>
+				<Mapping right="D" left=" "/>
+				<Mapping right="E" left="M"/>
+				<Mapping right="F" left="C"/>
+				<Mapping right="G" left="A"/>
+				<Mapping right="H" left="!"/>
+				<Mapping right="I" left="W"/>
+				<Mapping right="J" left="Z"/>
+				<Mapping right="K" left="U"/>
+				<Mapping right="L" left="G"/>
+				<Mapping right="M" left="O"/>
+				<Mapping right="N" left="H"/>
+				<Mapping right="O" left="T"/>
+				<Mapping right="P" left="J"/>
+				<Mapping right="Q" left="E"/>
+				<Mapping right="R" left="I"/>
+				<Mapping right="S" left="X"/>
+				<Mapping right="T" left="K"/>
+				<Mapping right="U" left="S"/>
+				<Mapping right="V" left="N"/>
+				<Mapping right="W" left="R"/>
+				<Mapping right="X" left="D"/>
+				<Mapping right="Y" left="P"/>
+				<Mapping right="Z" left="Q"/>
+				<Mapping right=" " left="?"/>
+				<Mapping right="!" left="B"/>
+				<Mapping right="?" left="F"/>
+				<Mapping right="'" left="L"/>
+			</Rotor>
+			<Rotor id="9" notch="10">
+				<Mapping right="A" left="G"/>
+				<Mapping right="B" left="N"/>
+				<Mapping right="C" left="S"/>
+				<Mapping right="D" left="?"/>
+				<Mapping right="E" left="V"/>
+				<Mapping right="F" left="K"/>
+				<Mapping right="G" left="W"/>
+				<Mapping right="H" left="O"/>
+				<Mapping right="I" left=" "/>
+				<Mapping right="J" left="U"/>
+				<Mapping right="K" left="X"/>
+				<Mapping right="L" left="R"/>
+				<Mapping right="M" left="I"/>
+				<Mapping right="N" left="P"/>
+				<Mapping right="O" left="T"/>
+				<Mapping right="P" left="A"/>
+				<Mapping right="Q" left="Z"/>
+				<Mapping right="R" left="C"/>
+				<Mapping right="S" left="!"/>
+				<Mapping right="T" left="Y"/>
+				<Mapping right="U" left="E"/>
+				<Mapping right="V" left="B"/>
+				<Mapping right="W" left="F"/>
+				<Mapping right="X" left="M"/>
+				<Mapping right="Y" left="H"/>
+				<Mapping right="Z" left="'"/>
+				<Mapping right=" " left="D"/>
+				<Mapping right="!" left="J"/>
+				<Mapping right="?" left="L"/>
+				<Mapping right="'" left="Q"/>
+			</Rotor>
+			<Rotor id="4" notch="28">
+				<Mapping right="A" left="X"/>
+				<Mapping right="B" left="Q"/>
+				<Mapping right="C" left="G"/>
+				<Mapping right="D" left="F"/>
+				<Mapping right="E" left="T"/>
+				<Mapping right="F" left="C"/>
+				<Mapping right="G" left="I"/>
+				<Mapping right="H" left="O"/>
+				<Mapping right="I" left="P"/>
+				<Mapping right="J" left="M"/>
+				<Mapping right="K" left="L"/>
+				<Mapping right="L" left="H"/>
+				<Mapping right="M" left="K"/>
+				<Mapping right="N" left="E"/>
+				<Mapping right="O" left="N"/>
+				<Mapping right="P" left="V"/>
+				<Mapping right="Q" left="R"/>
+				<Mapping right="R" left="B"/>
+				<Mapping right="S" left="Z"/>
+				<Mapping right="T" left="'"/>
+				<Mapping right="U" left="A"/>
+				<Mapping right="V" left="U"/>
+				<Mapping right="W" left="Y"/>
+				<Mapping right="X" left="W"/>
+				<Mapping right="Y" left="!"/>
+				<Mapping right="Z" left="D"/>
+				<Mapping right=" " left="J"/>
+				<Mapping right="!" left="?"/>
+				<Mapping right="?" left="S"/>
+				<Mapping right="'" left=" "/>
+			</Rotor>
+			<Rotor id="6" notch="15">
+				<Mapping right="A" left="K"/>
+				<Mapping right="B" left="A"/>
+				<Mapping right="C" left="L"/>
+				<Mapping right="D" left="V"/>
+				<Mapping right="E" left="O"/>
+				<Mapping right="F" left="P"/>
+				<Mapping right="G" left="Y"/>
+				<Mapping right="H" left="C"/>
+				<Mapping right="I" left="?"/>
+				<Mapping right="J" left="G"/>
+				<Mapping right="K" left="Z"/>
+				<Mapping right="L" left="J"/>
+				<Mapping right="M" left="R"/>
+				<Mapping right="N" left="X"/>
+				<Mapping right="O" left="Q"/>
+				<Mapping right="P" left="!"/>
+				<Mapping right="Q" left="B"/>
+				<Mapping right="R" left="U"/>
+				<Mapping right="S" left="D"/>
+				<Mapping right="T" left="I"/>
+				<Mapping right="U" left="F"/>
+				<Mapping right="V" left="T"/>
+				<Mapping right="W" left="M"/>
+				<Mapping right="X" left="W"/>
+				<Mapping right="Y" left="E"/>
+				<Mapping right="Z" left=" "/>
+				<Mapping right=" " left="'"/>
+				<Mapping right="!" left="S"/>
+				<Mapping right="?" left="N"/>
+				<Mapping right="'" left="H"/>
+			</Rotor>
+			<Rotor id="2" notch="5">
+				<Mapping right="A" left="Z"/>
+				<Mapping right="B" left="O"/>
+				<Mapping right="C" left="P"/>
+				<Mapping right="D" left=" "/>
+				<Mapping right="E" left="Q"/>
+				<Mapping right="F" left="I"/>
+				<Mapping right="G" left="!"/>
+				<Mapping right="H" left="E"/>
+				<Mapping right="I" left="?"/>
+				<Mapping right="J" left="N"/>
+				<Mapping right="K" left="U"/>
+				<Mapping right="L" left="M"/>
+				<Mapping right="M" left="F"/>
+				<Mapping right="N" left="V"/>
+				<Mapping right="O" left="'"/>
+				<Mapping right="P" left="B"/>
+				<Mapping right="Q" left="R"/>
+				<Mapping right="R" left="A"/>
+				<Mapping right="S" left="T"/>
+				<Mapping right="T" left="L"/>
+				<Mapping right="U" left="G"/>
+				<Mapping right="V" left="D"/>
+				<Mapping right="W" left="X"/>
+				<Mapping right="X" left="J"/>
+				<Mapping right="Y" left="C"/>
+				<Mapping right="Z" left="S"/>
+				<Mapping right=" " left="K"/>
+				<Mapping right="!" left="W"/>
+				<Mapping right="?" left="Y"/>
+				<Mapping right="'" left="H"/>
+			</Rotor>
+			<Rotor id="7" notch="1">
+				<Mapping right="A" left="H"/>
+				<Mapping right="B" left="K"/>
+				<Mapping right="C" left="L"/>
+				<Mapping right="D" left="F"/>
+				<Mapping right="E" left="O"/>
+				<Mapping right="F" left="S"/>
+				<Mapping right="G" left="J"/>
+				<Mapping right="H" left="N"/>
+				<Mapping right="I" left=" "/>
+				<Mapping right="J" left="V"/>
+				<Mapping right="K" left="R"/>
+				<Mapping right="L" left="B"/>
+				<Mapping right="M" left="D"/>
+				<Mapping right="N" left="C"/>
+				<Mapping right="O" left="A"/>
+				<Mapping right="P" left="Q"/>
+				<Mapping right="Q" left="P"/>
+				<Mapping right="R" left="Y"/>
+				<Mapping right="S" left="Z"/>
+				<Mapping right="T" left="?"/>
+				<Mapping right="U" left="I"/>
+				<Mapping right="V" left="W"/>
+				<Mapping right="W" left="E"/>
+				<Mapping right="X" left="M"/>
+				<Mapping right="Y" left="T"/>
+				<Mapping right="Z" left="G"/>
+				<Mapping right=" " left="!"/>
+				<Mapping right="!" left="'"/>
+				<Mapping right="?" left="U"/>
+				<Mapping right="'" left="X"/>
+			</Rotor>
+			<Rotor id="5" notch="20">
+				<Mapping right="A" left="O"/>
+				<Mapping right="B" left="U"/>
+				<Mapping right="C" left="F"/>
+				<Mapping right="D" left="I"/>
+				<Mapping right="E" left="Z"/>
+				<Mapping right="F" left="E"/>
+				<Mapping right="G" left="G"/>
+				<Mapping right="H" left="K"/>
+				<Mapping right="I" left="W"/>
+				<Mapping right="J" left="D"/>
+				<Mapping right="K" left="R"/>
+				<Mapping right="L" left="Y"/>
+				<Mapping right="M" left=" "/>
+				<Mapping right="N" left="S"/>
+				<Mapping right="O" left="J"/>
+				<Mapping right="P" left="'"/>
+				<Mapping right="Q" left="P"/>
+				<Mapping right="R" left="Q"/>
+				<Mapping right="S" left="N"/>
+				<Mapping right="T" left="T"/>
+				<Mapping right="U" left="L"/>
+				<Mapping right="V" left="V"/>
+				<Mapping right="W" left="!"/>
+				<Mapping right="X" left="?"/>
+				<Mapping right="Y" left="M"/>
+				<Mapping right="Z" left="C"/>
+				<Mapping right=" " left="H"/>
+				<Mapping right="!" left="X"/>
+				<Mapping right="?" left="B"/>
+				<Mapping right="'" left="A"/>
+			</Rotor>
+			<Rotor id="3" notch="22">
+				<Mapping right="A" left="D"/>
+				<Mapping right="B" left="M"/>
+				<Mapping right="C" left="Y"/>
+				<Mapping right="D" left="T"/>
+				<Mapping right="E" left="G"/>
+				<Mapping right="F" left="Z"/>
+				<Mapping right="G" left="'"/>
+				<Mapping right="H" left="H"/>
+				<Mapping right="I" left="U"/>
+				<Mapping right="J" left="N"/>
+				<Mapping right="K" left="B"/>
+				<Mapping right="L" left="K"/>
+				<Mapping right="M" left="J"/>
+				<Mapping right="N" left="F"/>
+				<Mapping right="O" left="L"/>
+				<Mapping right="P" left="Q"/>
+				<Mapping right="Q" left="I"/>
+				<Mapping right="R" left="X"/>
+				<Mapping right="S" left="!"/>
+				<Mapping right="T" left="O"/>
+				<Mapping right="U" left="W"/>
+				<Mapping right="V" left="C"/>
+				<Mapping right="W" left="S"/>
+				<Mapping right="X" left="?"/>
+				<Mapping right="Y" left="E"/>
+				<Mapping right="Z" left="R"/>
+				<Mapping right=" " left="A"/>
+				<Mapping right="!" left=" "/>
+				<Mapping right="?" left="V"/>
+				<Mapping right="'" left="P"/>
+			</Rotor>
+		</Rotors>
+		<Reflectors>
+			<Reflector id="I">
+				<Reflect input="23" output="29"/>
+				<Reflect input="2" output="10"/>
+				<Reflect input="18" output="13"/>
+				<Reflect input="26" output="12"/>
+				<Reflect input="9" output="17"/>
+				<Reflect input="25" output="14"/>
+				<Reflect input="15" output="28"/>
+				<Reflect input="8" output="24"/>
+				<Reflect input="4" output="19"/>
+				<Reflect input="22" output="11"/>
+				<Reflect input="1" output="21"/>
+				<Reflect input="5" output="30"/>
+				<Reflect input="27" output="16"/>
+				<Reflect input="6" output="3"/>
+				<Reflect input="20" output="7"/>
+			</Reflector>
+			<Reflector id="III">
+				<Reflect input="18" output="20"/>
+				<Reflect input="1" output="25"/>
+				<Reflect input="12" output="14"/>
+				<Reflect input="5" output="7"/>
+				<Reflect input="9" output="4"/>
+				<Reflect input="26" output="24"/>
+				<Reflect input="16" output="13"/>
+				<Reflect input="3" output="10"/>
+				<Reflect input="30" output="23"/>
+				<Reflect input="6" output="27"/>
+				<Reflect input="28" output="2"/>
+				<Reflect input="15" output="21"/>
+				<Reflect input="11" output="17"/>
+				<Reflect input="8" output="22"/>
+				<Reflect input="29" output="19"/>
+			</Reflector>
+			<Reflector id="V">
+				<Reflect input="22" output="16"/>
+				<Reflect input="29" output="20"/>
+				<Reflect input="24" output="6"/>
+				<Reflect input="30" output="4"/>
+				<Reflect input="27" output="8"/>
+				<Reflect input="18" output="5"/>
+				<Reflect input="15" output="28"/>
+				<Reflect input="23" output="21"/>
+				<Reflect input="1" output="25"/>
+				<Reflect input="11" output="10"/>
+				<Reflect input="17" output="13"/>
+				<Reflect input="12" output="14"/>
+				<Reflect input="7" output="9"/>
+				<Reflect input="3" output="2"/>
+				<Reflect input="19" output="26"/>
+			</Reflector>
+			<Reflector id="II">
+				<Reflect input="6" output="24"/>
+				<Reflect input="25" output="10"/>
+				<Reflect input="5" output="3"/>
+				<Reflect input="27" output="8"/>
+				<Reflect input="26" output="30"/>
+				<Reflect input="16" output="9"/>
+				<Reflect input="28" output="21"/>
+				<Reflect input="17" output="4"/>
+				<Reflect input="13" output="20"/>
+				<Reflect input="2" output="12"/>
+				<Reflect input="29" output="15"/>
+				<Reflect input="19" output="7"/>
+				<Reflect input="11" output="14"/>
+				<Reflect input="23" output="18"/>
+				<Reflect input="22" output="1"/>
+			</Reflector>
+			<Reflector id="IV">
+				<Reflect input="1" output="16"/>
+				<Reflect input="4" output="22"/>
+				<Reflect input="24" output="15"/>
+				<Reflect input="26" output="10"/>
+				<Reflect input="3" output="14"/>
+				<Reflect input="6" output="19"/>
+				<Reflect input="23" output="8"/>
+				<Reflect input="21" output="17"/>
+				<Reflect input="13" output="25"/>
+				<Reflect input="7" output="28"/>
+				<Reflect input="12" output="20"/>
+				<Reflect input="30" output="29"/>
+				<Reflect input="9" output="27"/>
+				<Reflect input="5" output="11"/>
+				<Reflect input="18" output="2"/>
+			</Reflector>
+		</Reflectors>
+	</Machine>
+	<Decipher agents="10">
+		<Dictionary exclude-chars="!'#?">
+			<Words>		
+			german year remote salary leg advance tea character rabbit fire stick they coffe sister element sure robot! edit nail past old dune dolphine scratch then am easy quality eye seat folder letter notch allies adult wing brother saturday strong yellow scam sea gold see does attack taken free foot hand mine a manager black i thursday pistol blood democracy battle single fly component blue watch progress purple under yours insurance mouce won't foam cannon lie project run do ruler bomb red mother view later white hello? missile huge wood finish which wendsday sink telephone check decrease ranch retreat she sand wire knife squad month desk loose child drop where? deep plural young father for privacy back rule house fox not street now lier missing ignore end hard class trike human mortal live patrol midnight green umbrella start bye bypass print fork money airplane pyramid iron window time gate he mark age tray encapsulation big poland happy slim kombat sanity convert waffele whom? tape terms else camel lost action text portal if sky calculator item pedal shape in metal it propellor explicit sunday moon system light tiny number# dog word partial hash why? gun implicit pink woman what? direct triangle local weak out slave computer noon file top freedom ear dark dwarf man stand can't table monday suprise could strike electricity kill great boat off help reflector future machine grid atom shuffle complete clip entity inferno voice rotor small tonight door domination shake data use doom sign screen feel employee second whale than function spoon england tap morning! dirt tree thrown water heart trash army square entry person coal rectangle present sugar soap magenta shame game code enigma week death vegtable fruit line snake their box racket can hair napkin paper hour and cat of snale design sad iteration friday steam said win make fight sheep how? on keyboard or will wheel saw smoke control increase master minute orange tuesday round bomer front walk account lame
+		</Words>
+		</Dictionary>
+	</Decipher>
+</Enigma>

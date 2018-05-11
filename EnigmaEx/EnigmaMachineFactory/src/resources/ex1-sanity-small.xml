@@ -6,28 +6,28 @@
 		</ABC>
 		<Rotors>
 			<Rotor id="1" notch="4">
-				<Mapping from="A" to="F"/>
-				<Mapping from="B" to="E"/>
-				<Mapping from="C" to="D"/>
-				<Mapping from="D" to="C"/>
-				<Mapping from="E" to="B"/>				
-				<Mapping from="F" to="A"/>				
+				<Mapping right="A" left="F"/>
+				<Mapping right="B" left="E"/>
+				<Mapping right="C" left="D"/>
+				<Mapping right="D" left="C"/>
+				<Mapping right="E" left="B"/>				
+				<Mapping right="F" left="A"/>				
 			</Rotor>
 			<Rotor id="3" notch="6">
-				<Mapping from="A" to="B"/>
-				<Mapping from="B" to="A"/>
-				<Mapping from="C" to="D"/>
-				<Mapping from="D" to="C"/>
-				<Mapping from="E" to="F"/>				
-				<Mapping from="F" to="E"/>				
+				<Mapping right="A" left="B"/>
+				<Mapping right="B" left="A"/>
+				<Mapping right="C" left="D"/>
+				<Mapping right="D" left="C"/>
+				<Mapping right="E" left="F"/>				
+				<Mapping right="F" left="E"/>				
 			</Rotor>						
 			<Rotor id="2" notch="1">
-				<Mapping from="A" to="E"/>
-				<Mapping from="B" to="B"/>
-				<Mapping from="C" to="D"/>
-				<Mapping from="D" to="F"/>
-				<Mapping from="E" to="C"/>				
-				<Mapping from="F" to="A"/>				
+				<Mapping right="A" left="E"/>
+				<Mapping right="B" left="B"/>
+				<Mapping right="C" left="D"/>
+				<Mapping right="D" left="F"/>
+				<Mapping right="E" left="C"/>				
+				<Mapping right="F" left="A"/>				
 			</Rotor>						
 		</Rotors>
 		<Reflectors>
