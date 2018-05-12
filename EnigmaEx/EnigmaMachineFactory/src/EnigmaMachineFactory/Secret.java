@@ -39,6 +39,6 @@ public interface Secret {
 
     void setSelectedReflector(int reflectorID);
 
-    Secret next(); //TODO:implement
+    //Secret next(); //TODO:implement
 
 }
