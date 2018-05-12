@@ -12,4 +12,21 @@ public class Decipher {
     private AgentFactory agentFactory;
     private List <Agent> agentsList;
     private DecipherMission mission;
+
+    //c'tor gets dictionary and machine
+    public Decipher(Map dictionary, EnigmaMachine machine){}
+
+    //get new mission from the mission factory
+    public void getNewMission(){}
+
+    //Solves the task and return list of strings that are decoding candidacies
+    public List<String> getCandidaciesForDecoding(String Code){}
+
+    //this function is responsible for crate new threads(for each agent),
+    //and than ask for agent factory to create new agents
+    public void createAgent(EnigmaMachine machine, String code){}
+
+
+
+
 }
