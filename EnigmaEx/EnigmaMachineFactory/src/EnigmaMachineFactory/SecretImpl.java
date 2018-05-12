@@ -9,12 +9,17 @@ public class SecretImpl implements Secret {
     private List<Integer> selectedRotors;
     private List<Integer> selectedRotorsPositions;
     private int selectedReflector;
-
+	private int abcSize;
+	
     public SecretImpl() {
         selectedRotorsPositions = new LinkedList<>();
         selectedRotors = new LinkedList<>();
     }
-
+	
+	public void setAbcSize(int abcSize) {
+        this.abcSize = abcSize;
+    }
+	
     @Override
     public void addRotor(int rotorID, int rotorPostion){
         selectedRotors.add(rotorID);

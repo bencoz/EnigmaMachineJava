@@ -240,35 +240,6 @@ public class EnigmaMachineImpl implements EnigmaMachine {
         return enigma.getMachine().getReflectors();
     }
 
-    private String getWorkingRotorsChar() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('<');
-        List<Character> chars = new ArrayList<>();
-        for (Rotor rotor : workingRotors){
-            chars.add(rotor.getMappingCharRightPart(rotor.getPosition()));
-        }
-        List<Character> shallowCopy = chars.subList(0,chars.size());
-        Collections.reverse(shallowCopy);
-        for (Character character : shallowCopy){
-            sb.append(character).append(',');
-        }
-        sb.deleteCharAt(sb.length()-1).append('>');
-        return sb.toString();
-    }
-
-    private String getWorkingRotors() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('<');
-        List<Integer> selectedRotors = secret.getSelectedRotorsInOrder();
-        List<Integer> shallowCopy = selectedRotors.subList(0, selectedRotors.size());
-        Collections.reverse(shallowCopy);
-        for (Integer integer : shallowCopy){
-            sb.append(integer).append(',');
-        }
-        sb.deleteCharAt(sb.length()-1).append('>');
-        return sb.toString();
-    }
-
     public void setSecret(Secret secret) {
         this.secret = secret;
         initSecretInMachine();
@@ -298,5 +269,34 @@ public class EnigmaMachineImpl implements EnigmaMachine {
                     (notchPosition - rotorPosition) : (notchPosition);
             rotor.setWorkingNotch(result);
         }
+    }
+	
+	private String getWorkingRotorsChar() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Character> chars = new ArrayList<>();
+        for (Rotor rotor : workingRotors){
+            chars.add(rotor.getMappingCharRightPart(rotor.getPosition()));
+        }
+        List<Character> shallowCopy = chars.subList(0,chars.size());
+        Collections.reverse(shallowCopy);
+        for (Character character : shallowCopy){
+            sb.append(character).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
+    }
+
+    private String getWorkingRotors() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Integer> selectedRotors = secret.getSelectedRotorsInOrder();
+        List<Integer> shallowCopy = selectedRotors.subList(0, selectedRotors.size());
+        Collections.reverse(shallowCopy);
+        for (Integer integer : shallowCopy){
+            sb.append(integer).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
     }
 }
