@@ -1,5 +1,7 @@
 package EnigmaMachineFactory;
 
+import java.util.List;
+
 public class SecretBuilder {
     private SecretImpl secret;
     private EnigmaMachineImpl machine;
