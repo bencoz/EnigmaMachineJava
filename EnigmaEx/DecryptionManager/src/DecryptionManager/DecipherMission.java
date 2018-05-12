@@ -13,5 +13,5 @@ public class DecipherMission {
     public DecipherMission(Integet _size,Integer _taskSize, Integer _numOfAgents, Secret firstPos){} //TODO:implement
 
     //return the next Aagent tasks
-    public getNextTask(){} //TODO:implement
+    public AgentTask getNextTask(){return null;} //TODO:implement
 }
