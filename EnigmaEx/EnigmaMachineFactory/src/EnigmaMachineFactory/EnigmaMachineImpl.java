@@ -263,6 +263,11 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
         }
     }
 
+    @Override
+    public Decipher getDecipher() {
+        return enigma.getDecipher();
+    }
+
     public void setSecret(Secret secret) {
         this.secret = secret;
         initSecretInMachine();

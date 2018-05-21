@@ -1,25 +1,25 @@
 package EnigmaMachineFactory.Actual;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 
 public class Decipher implements Serializable {
     protected int maxNumOfAgents;
     protected String excludeChars;
-    protected String dictionary = "";
+    protected List<String> dictionary = new LinkedList<>();
 
     public Decipher(int numOfAgents){
         maxNumOfAgents = numOfAgents;
     }
 
-    public String getDictionary() {
+    public List<String> getDictionary() {
         return dictionary;
     }
-    public void appedToDictionary(String words) {
-        StringBuilder sb = new StringBuilder(dictionary);
-        sb.append(words);
-        dictionary = sb.toString();
+    public void appedToDictionary(String[] words) {
+        for (String word : words) {
+            dictionary.add(word);
+        }
     }
     public int getMaxNumOfAgents() {
         return maxNumOfAgents;
@@ -33,6 +33,5 @@ public class Decipher implements Serializable {
     public void setExcludeChars(String excludeChars) {
         this.excludeChars = excludeChars;
     }
-
 
 }

@@ -72,15 +72,21 @@ public class UIManager {
     }
 
     private void automaticDecoding() {
+        if (!Logic.isDecipherAvailable())
+            return; //TODO: change and show msg
         String code = getValidCodeFromUser();
         DifficultyLevel difficulty = getValidDifficultyLevel();
         DisplayNumOfOptions(difficulty);
         Integer numOfAgents = getValidNumOfAgent();
         Integer taskSize = getValidTaskSize();
         boolean needToStart = getValidStartSignal();
-        //this.decipher = new Decipher(code,difficulty,taskSize,numOfAgents,dictionary,machine);
-        //this.decipher.start();
+        Logic.setDecipher(code,difficulty,taskSize,numOfAgents);
+        Logic.startDecipher();
+        runSubMenu();
     }//TODO:implement
+
+    private void runSubMenu() {
+    }
 
     private boolean getValidStartSignal() {
         return true;
@@ -107,10 +113,20 @@ public class UIManager {
     }//TODO:implement
 
     private String getValidCodeFromUser() {
-        System.out.println("Please enter code to decrypt:");
-        //...
-        return null;
-    }//TODO:implement
+        Scanner in = new Scanner(System.in);
+        String userInput;
+
+        System.out.println("Please enter your wanted message:");
+        userInput = in.nextLine();
+        userInput = userInput.toUpperCase();
+        while (!Logic.isValidABC(userInput) || !Logic.isInDictionary(userInput))
+        {
+            System.out.println("INVALID INPUT. Please enter your wanted message:");
+            userInput = in.nextLine();
+            userInput = userInput.toUpperCase();
+        }
+        return userInput;
+    }
 
     private int getValidUserSelection() {
         Scanner in = new Scanner(System.in);
@@ -399,20 +415,9 @@ public class UIManager {
         //5.this function gets input from user and processes it (encrypts or decrypts)
     public void processInput()
     {
-        Scanner in = new Scanner(System.in);
-        String userInput, output;
-
-        System.out.println("Please enter your wanted message:");
-        userInput = in.nextLine();
-        userInput = userInput.toUpperCase();
-        while (!Logic.isValidABC(userInput))
-        {
-            System.out.println("INVALID INPUT. Please enter your wanted message:");
-            userInput = in.nextLine();
-            userInput = userInput.toUpperCase();
-        }
+        String output;
+        String userInput = getValidCodeFromUser();
         output = Logic.process(userInput);
-
         System.out.println("your processed message:");
         System.out.println(output);
     }
