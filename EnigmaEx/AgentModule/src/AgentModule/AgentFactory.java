@@ -6,7 +6,7 @@ import EnigmaMachineFactory.*;
 import java.util.concurrent.BlockingQueue;
 
 public class AgentFactory {
-    private static int nextAgentID = 1;
+    private static int nextAgentID = 0;
     //this function create and return new agent, (maybe give him task?)
     public static Agent createAgent(EnigmaMachine _machine, String _code,
                                     BlockingQueue<AgentResponse> _answersToDM_Queue){

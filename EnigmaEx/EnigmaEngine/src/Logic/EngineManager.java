@@ -1,5 +1,6 @@
 package Logic;
 
+import DecryptionManager.DecipherManager;
 import EnigmaMachineFactory.*;
 import EnigmaMachineFactory.Actual.Reflector;
 import EnigmaMachineFactory.Actual.Rotor;
@@ -15,7 +16,16 @@ public class EngineManager {
     private StatsManager statsManager;
     private CodeFormat currentCodeFormat;
     private String errorInMachineBuilding;
-    private DecryptionManager.Decipher deciper;
+    private List<String> dictionary;
+    private DecipherManager decipherManager = null;
+    private boolean decipherAvailable = false;
+
+    public DecipherManager getDecipherManager() {
+        return decipherManager;
+    }
+    public boolean isDecipherAvailable() {
+        return decipherAvailable;
+    }
 
     public EngineManager() {
         this.machine = null;
@@ -27,9 +37,22 @@ public class EngineManager {
         return errorInMachineBuilding;
     }
 
+    public boolean setDecipher(String i_encrypedCode, DifficultyLevel i_level, Integer i_taskSize, Integer i_numOfAgents){
+        if (!decipherAvailable)
+            return false;
+        DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(i_level.name());
+
+        return decipherManager.initFromUser(i_encrypedCode, newLevel, i_taskSize, i_numOfAgents);
+    }
+
     public boolean createEnigmaMachineFromXMLFile(String path) {
         try {
             machine = factory.createEnigmaMachineFromXMLFile(path);
+            if (machine.getDecipher() != null) {
+                decipherManager = new DecipherManager(machine.deepCopy());
+                dictionary = machine.getDecipher().getDictionary();
+                decipherAvailable = true;
+            }
         } catch (FileNotFoundException e){
             errorInMachineBuilding = "Could not find XML file.";
         }
@@ -37,7 +60,6 @@ public class EngineManager {
             errorInMachineBuilding = "Could not load Machine";
             return false;
         }
-
         if (!isMachineABCEven()) {
             errorInMachineBuilding = "Machine ABC is not Even";
             return false;
@@ -339,5 +361,25 @@ public class EngineManager {
             return "No messages received yet";
     }
 
+    public boolean isInDictionary(String userInput) {
+        if (!decipherAvailable)
+            return true;
+        boolean found;
+        String[] words = userInput.split(" ");
+        for (String word : words){
+            found = false;
+            for (String permittedWord : dictionary){
+                if (permittedWord.equals(word))
+                    found = true;
+            }
+            if (!found)
+                return false;
+        }
+        return true;
+    }
+
+    public void startDecipher() {
+        this.decipherManager.start();
+    }
 }
 
