@@ -1,12 +1,13 @@
 package EnigmaMachineFactory;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import EnigmaMachineFactory.Actual.*;
 
-public class EnigmaMachineImpl implements EnigmaMachine {
+public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
     private Enigma enigma;
     private Secret secret = null;
     private List<Rotor> workingRotors;
@@ -238,6 +239,28 @@ public class EnigmaMachineImpl implements EnigmaMachine {
     @Override
     public List<Reflector> getReflectors() {
         return enigma.getMachine().getReflectors();
+    }
+
+    @Override
+    public EnigmaMachine deepCopy() {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        EnigmaMachineImpl res = null;
+        ObjectOutputStream oos;
+        try {
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+            bos.close();
+            byte[] byteData = bos.toByteArray();
+            ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
+            res =  (EnigmaMachineImpl) new ObjectInputStream(bais).readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            return res;
+        }
     }
 
     public void setSecret(Secret secret) {

@@ -1,6 +1,8 @@
 package EnigmaMachineFactory.Actual;
 
-public class Reflect {
+import java.io.Serializable;
+
+public class Reflect implements Serializable {
     protected int input;
     protected int output;
 

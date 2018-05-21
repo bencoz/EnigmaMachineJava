@@ -1,10 +1,11 @@
 package EnigmaMachineFactory.Actual;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Machine {
+public class Machine implements Serializable {
     private String abc;
     private int rotorsCount;
     private List<Rotor> rotors;
