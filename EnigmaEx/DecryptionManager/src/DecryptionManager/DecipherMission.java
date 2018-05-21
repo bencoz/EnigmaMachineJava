@@ -1,17 +1,31 @@
 package DecryptionManager;
 
+import AgentModule.*;
+import java.util.*;
+
 public class DecipherMission {
+    private String code;
     private Integer size;
-    private Integer taskSize; //will be log of Mission Size
+    private Integer taskSize;
     private Integer numOfAgents;
     private List<AgentTask> tasks;
     private Integer currentTask; //index
-    private Secret firstPos;
+    //private Secret firstPos;
 
 
     //gets all mission details, and divide into sub-tasks(saved in tasks)
-    public DecipherMission(Integet _size,Integer _taskSize, Integer _numOfAgents, Secret firstPos){} //TODO:implement
+    //add getting of Secret firstPos
+    public DecipherMission(DifficultyLevel difficulty, Integer _taskSize, Integer _numOfAgents){} //TODO:implement
 
-    //return the next Aagent tasks
+    //return the next Agent tasks
     public AgentTask getNextTask(){return null;} //TODO:implement
+
+    public Integer getNumOfAgent(){
+        return numOfAgents;
+    }
+
+    public String getCode()
+    {
+        return code;
+    }
 }

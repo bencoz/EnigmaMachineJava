@@ -2,6 +2,8 @@ package UI;
 
 import java.io.*;
 import java.util.*;
+
+import EnigmaMachineFactory.JAXBGenerated.Decipher;
 import Logic.*;
 import sun.rmi.runtime.Log;
 
@@ -12,7 +14,8 @@ public class UIManager {
     private boolean gameIsRunning = true;
     private boolean isMachineSet = false;
     private boolean isConfigSet = false;
-    private int numOfOptions = 8;
+    private int numOfOptions = 9;
+    private Decipher decipher;
 
     public static void main(String[] args) throws FileNotFoundException {
         UIManager manager = new UIManager();
@@ -58,12 +61,56 @@ public class UIManager {
                     DisplayStatisticsAndHistory();
                     break;
                 case 8:
+                    automaticDecoding();
+                    break;
+                case 9:
                     exit();
                     break;
             }
             System.out.println("Waiting for the next command (press 0 to display menu)");
         }
     }
+
+    private void automaticDecoding() {
+        String code = getValidCodeFromUser();
+        DifficultyLevel difficulty = getValidDifficultyLevel();
+        DisplayNumOfOptions(difficulty);
+        Integer numOfAgents = getValidNumOfAgent();
+        Integer taskSize = getValidTaskSize();
+        boolean needToStart = getValidStartSignal();
+        //this.decipher = new Decipher(code,difficulty,taskSize,numOfAgents,dictionary,machine);
+        //this.decipher.start();
+    }//TODO:implement
+
+    private boolean getValidStartSignal() {
+        return true;
+    }//TODO:implement
+
+    private Integer getValidTaskSize() {
+        //need to check task size is less than num of options
+        return 0;
+    }//TODO:implement
+
+    private Integer getValidNumOfAgent() {
+        //need to check is less than man num of agent(gotten from XML file)
+        return 0;
+    }//TODO:implement
+
+    private void DisplayNumOfOptions(DifficultyLevel difficulty) {
+        //need to calculate num of option according to difficulty level and the size and properties of the machine
+    }//TODO:implement
+
+    private DifficultyLevel getValidDifficultyLevel() {
+        System.out.println("Please enter difficulty level:");
+        //..
+        return null;
+    }//TODO:implement
+
+    private String getValidCodeFromUser() {
+        System.out.println("Please enter code to decrypt:");
+        //...
+        return null;
+    }//TODO:implement
 
     private int getValidUserSelection() {
         Scanner in = new Scanner(System.in);
@@ -88,7 +135,7 @@ public class UIManager {
 
     private boolean isValidOptionPriority(int userSelection) {
         boolean isValid = true;
-        if(userSelection == 0 || userSelection == 8)
+        if(userSelection == 0 || userSelection == 9)
             return true;
         if(!isMachineSet && userSelection != 1)
         {
