@@ -1,11 +1,13 @@
 package EnigmaMachineFactory;
 
 import EnigmaMachineFactory.Actual.Machine;
+import EnigmaMachineFactory.JAXBGenerated.Decipher;
 import EnigmaMachineFactory.JAXBGenerated.Enigma;
 import EnigmaMachineFactory.JAXBGenerated.Reflector;
 import EnigmaMachineFactory.JAXBGenerated.Rotor;
 
 import java.util.List;
+import java.util.Map;
 
 public class JAXBToActual {
     private static JAXBToActual ourInstance = new JAXBToActual();
@@ -20,6 +22,7 @@ public class JAXBToActual {
     public EnigmaMachineFactory.Actual.Enigma change(Enigma enigma) {
         List<Reflector> JAXBReflectors;
         List<Rotor> JAXBRotors;
+        Decipher decipher = enigma.getDecipher();
         EnigmaMachineFactory.Actual.Enigma res = new EnigmaMachineFactory.Actual.Enigma();
         Machine machine = new Machine();
 
@@ -42,6 +45,15 @@ public class JAXBToActual {
             ActualReflector.setID(reflector.getId());
             ActualReflector.addReflectList(reflector.getReflect());
             machine.addReflector(ActualReflector);
+        }
+
+        if (decipher != null){
+            EnigmaMachineFactory.Actual.Decipher ActualDecipher = new EnigmaMachineFactory.Actual.Decipher(decipher.getAgents());
+            String words = decipher.getDictionary().getWords().trim();
+            ActualDecipher.appedToDictionary(words);
+            ActualDecipher.setExcludeChars(decipher.getDictionary().getExcludeChars());
+            res.setDecipher(ActualDecipher);
+            //TODO: process dictinary words that only exclude chars inside dictionary words
         }
 
         res.setMachine(machine);

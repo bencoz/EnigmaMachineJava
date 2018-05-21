@@ -102,4 +102,6 @@ public interface EnigmaMachine {
     List<Rotor> getRotors();
 
     List<Reflector> getReflectors();
+
+    EnigmaMachine deepCopy();
 }

@@ -1,10 +1,11 @@
 package EnigmaMachineFactory.Actual;
 
+import java.io.Serializable;
 import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reflector {
+public class Reflector implements Serializable {
 
     private List<EnigmaMachineFactory.Actual.Reflect> reflect;
     private String id;

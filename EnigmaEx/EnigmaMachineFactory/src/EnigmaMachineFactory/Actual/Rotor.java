@@ -1,13 +1,14 @@
 package EnigmaMachineFactory.Actual;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static java.lang.StrictMath.abs;
 
-public class Rotor {
+public class Rotor implements Serializable {
     private List<EnigmaMachineFactory.Actual.Mapping> mapping;
     private int notch;
     private int id;

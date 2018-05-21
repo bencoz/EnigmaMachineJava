@@ -1,7 +1,9 @@
 package EnigmaMachineFactory.Actual;
 
 
-public class Mapping {
+import java.io.Serializable;
+
+public class Mapping implements Serializable {
     protected char right;
     protected char left;
 
