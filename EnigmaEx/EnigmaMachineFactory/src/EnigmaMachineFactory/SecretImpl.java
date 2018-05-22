@@ -105,6 +105,11 @@ public class SecretImpl implements Secret {
     }
 
     @Override
+    public void setRotorsIDs(List<Integer> rotorsIDs) {
+        selectedRotors = rotorsIDs;
+    }
+
+    @Override
     public List<Integer> getSelectedRotorsInOrder() {
         return selectedRotors;
     }
