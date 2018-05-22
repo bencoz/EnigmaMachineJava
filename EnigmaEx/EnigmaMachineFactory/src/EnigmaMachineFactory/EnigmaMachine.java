@@ -92,8 +92,6 @@ public interface EnigmaMachine {
 
     List<Character> getChosenRotorsLocationInit_Sorted();
 
-    List<Integer> getChosenRotorsPositions();
-
     Integer getChosenReflectorId();
 
     String getWorkingReflectorRomanID();

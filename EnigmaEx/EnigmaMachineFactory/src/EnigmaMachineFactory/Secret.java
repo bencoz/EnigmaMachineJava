@@ -39,13 +39,6 @@ public interface Secret {
 
     void setSelectedReflector(int reflectorID);
 
-    void moveToNext(EnigmaMachine enigmaMachine); //TODO:implement
+    //Secret next(); //TODO:implement
 
-    boolean hasNext(EnigmaMachine enigmaMachine); //TODO:implement
-
-    Secret toZero();
-
-    Secret advanceBy(Integer taskSize);
-
-    void setRotorsIDs(List<Integer> rotorsIDs);
 }

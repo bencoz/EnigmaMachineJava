@@ -32,11 +32,7 @@ public class SecretBuilder {
         machine.setSecret(secret);
         return secret;
     }
-
-    public Secret getSecret(){
-        return secret;
-    }
-
+	
 	public Secret moveNext() {
         Secret newSecret = new SecretImpl();
         newSecret.setSelectedReflector(secret.getSelectedReflector());
