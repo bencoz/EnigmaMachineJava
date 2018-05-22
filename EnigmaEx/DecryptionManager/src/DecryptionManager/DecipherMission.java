@@ -22,7 +22,7 @@ public class DecipherMission {
     //gets all mission details, and divide into sub-tasks(saved in tasks)
     public DecipherMission(EnigmaMachine machine, DifficultyLevel _difficulty){
         difficulty = _difficulty;
-        setSize(machine.getABC().length(), machine.getRotors().size(), machine.getRotorsCount(), machine.getNumOfReflectors());
+        setSize(difficulty, machine.getABC().length(), machine.getRotors().size(), machine.getRotorsCount(), machine.getNumOfReflectors());
     }
 
     private void setTasks(EnigmaMachine machine) {
