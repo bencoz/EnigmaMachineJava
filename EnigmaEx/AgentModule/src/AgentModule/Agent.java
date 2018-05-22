@@ -1,6 +1,7 @@
 package AgentModule;
 
 import EnigmaMachineFactory.*;
+import EnigmaMachineFactory.JAXBGenerated.Decipher;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,22 +16,23 @@ public class Agent extends Thread{
     private List<AgentTask> tasks ;
     private AgentTask currentTask;
     private AgentResponse response;
+    private DecipheringStatus DMstatus;
 
-    private Integer tasksAmount;
+    private Integer tasksAmount; //num of tasks that received each time ( == BlockSize)
     private BlockingQueue<AgentTask> tasksFromDM_Queue;
     private BlockingQueue<AgentResponse> answersToDM_Queue;
-    private List<String> dictionary;
+    //private List<String> dictionary; //copy of the dictionary
 
 
-    public Agent(EnigmaMachine _machine, String _code,Integer _ID,
-                 BlockingQueue<AgentResponse> _answersToDM_Queue){
+    public Agent(EnigmaMachine _machine, String _code, Integer _ID,
+                 BlockingQueue<AgentResponse> _answersToDM_Queue, DecipheringStatus _DMstatus){
         this.machine = _machine;
         this.code = _code;
         this.agentID = _ID;
         this.answersToDM_Queue = _answersToDM_Queue;
-        tasksFromDM_Queue = new ArrayBlockingQueue<>(tasksAmount);
-        response = new AgentResponse(agentID);
-        dictionary = machine.getDecipher().getDictionary();
+        this.tasksFromDM_Queue = new ArrayBlockingQueue<>(tasksAmount);
+        this.response = new AgentResponse(agentID);
+        this.DMstatus = _DMstatus;
     }
 
     private void addTaskToQueue(AgentTask i_task){
@@ -42,7 +44,7 @@ public class Agent extends Thread{
     private void doTasks() throws InterruptedException {
         for(int i=0;i<tasks.size();i++)
         {
-            currentTask = tasks.get(i);
+            this.currentTask = tasks.get(i);
             doCurrentTask();
         }
 
@@ -59,8 +61,7 @@ public class Agent extends Thread{
                 response.addDecoding(candidate);
             }
             if(currentTask.hasNext()){
-                if (!currentTask.moveToNextCode(machine)) // moveToNextCode returns false when no more codes configurations left.
-                    break;
+                currentTask.moveToNextCode();
             }
             else
                 break;
@@ -68,20 +69,7 @@ public class Agent extends Thread{
     }
 
     //gets code decoding and return true if all words in the dictionary and false otherwise
-    private boolean isCandidaciesForDecoding(String decoding){
-        boolean found;
-        String[] words = decoding.split(" ");
-        for (String word : words){
-            found = false;
-            for (String permittedWord : dictionary){
-                if (permittedWord.equals(word))
-                    found = true;
-            }
-            if (!found)
-                return false;
-        }
-        return true;
-    }
+    private boolean isCandidaciesForDecoding(String decoding){ return true; } //TODO:implement
 
     public void setID(Integer _ID){
         this.agentID = _ID;
@@ -96,16 +84,20 @@ public class Agent extends Thread{
     //agent wait and listen to pipe until he gets new mission from DM and start to work
     @Override
     public void run() {
+        boolean done = false;
         try {
-            AgentTask task;
-            tasks = new ArrayList<>();
-            for(int i=0;i<tasksAmount;i++) {
-                task = tasksFromDM_Queue.take();
-                tasks.add(task);
+            while (!done) {
+                AgentTask task;
+                tasks = new ArrayList<>();
+                for (int i = 0; i < tasksAmount; i++) {
+                    task = tasksFromDM_Queue.take();
+                    tasks.add(task);
+                }
+                doTasks();
+                answersToDM_Queue.put(response);
+                reset();
+                done = !DMstatus.checkIfToContinue();
             }
-            doTasks();
-            answersToDM_Queue.put(response);
-            reset();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
