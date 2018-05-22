@@ -24,7 +24,7 @@ public class DecipherMission {
     //add getting of Secret firstPos
     public DecipherMission(EnigmaMachine machine, DifficultyLevel _difficulty){
         difficulty = _difficulty;
-        setSize(machine.getABC().length(), machine.getRotors().size(), machine.getRotorsCount(), machine.getNumOfReflectors());
+        setSize(_difficulty,machine.getABC().length(), machine.getRotors().size(), machine.getRotorsCount(), machine.getNumOfReflectors());
         setTasks(machine);
         taskIterator = tasks.iterator();
     }
@@ -115,6 +115,7 @@ public class DecipherMission {
     public void init(Integer _taskSize, Integer _numOfAgents){
         taskSize = _taskSize;
         numOfAgents = _numOfAgents;
+        //taskIterator = tasks.iterator();
     }
 
     //return the next Agent tasks
@@ -142,24 +143,30 @@ public class DecipherMission {
         return done;
     }
 
-    private void setSize(Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors) {
-        switch (difficulty){
-            case Easy:
-                size = Math.pow(abcSize, rotorsCount);
-                break;
-            case Medium:
-                size = Math.pow(abcSize, rotorsCount) * numOfRelectors;
-                break;
-            case Hard:
-                size = Math.pow(abcSize, rotorsCount) * numOfRelectors * factorial(rotorsCount);
-                break;
-            case Impossible:
-                size = Math.pow(abcSize, rotorsCount) * numOfRelectors * factorial(rotorsCount) * binom(rotorsSize, rotorsCount);
-                break;
-        }
+    private void setSize(DifficultyLevel difficulty, Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors) {
+        size = DecipherMission.calcMissionSize(difficulty,abcSize,rotorsSize,rotorsCount,numOfRelectors);
     }
 
-    private double binom(Integer n, Integer k) {
+    public static double calcMissionSize(DifficultyLevel difficulty, Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors) {
+        double missionSize = 0;
+        switch (difficulty) {
+            case Easy:
+                missionSize = Math.pow(abcSize, rotorsCount);
+                break;
+            case Medium:
+                missionSize = Math.pow(abcSize, rotorsCount) * numOfRelectors;
+                break;
+            case Hard:
+                missionSize = Math.pow(abcSize, rotorsCount) * numOfRelectors * factorial(rotorsCount);
+                break;
+            case Impossible:
+                missionSize = Math.pow(abcSize, rotorsCount) * numOfRelectors * factorial(rotorsCount) * binom(rotorsSize, rotorsCount);
+                break;
+        }
+        return missionSize;
+    }
+
+    private static double binom(Integer n, Integer k) {
         if (n  < k) return 0;
         if (0 == n) return 0;
         if (0 == k) return 1;
@@ -168,7 +175,7 @@ public class DecipherMission {
         return factorial(n)/(factorial(n-k)*factorial(k));
     }
 
-    private double factorial(Integer number) {
+    private static double factorial(Integer number) {
         double result = 1;
         for (int factor = 2; factor <= number; factor++) {
             result *= factor;
