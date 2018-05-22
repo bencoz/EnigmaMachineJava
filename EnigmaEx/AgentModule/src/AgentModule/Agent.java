@@ -19,7 +19,7 @@ public class Agent extends Thread{
     private Integer tasksAmount;
     private BlockingQueue<AgentTask> tasksFromDM_Queue;
     private BlockingQueue<AgentResponse> answersToDM_Queue;
-    //private List<String> dictionary; //copy of the dictionary
+    private List<String> dictionary;
 
 
     public Agent(EnigmaMachine _machine, String _code,Integer _ID,
@@ -30,6 +30,7 @@ public class Agent extends Thread{
         this.answersToDM_Queue = _answersToDM_Queue;
         tasksFromDM_Queue = new ArrayBlockingQueue<>(tasksAmount);
         response = new AgentResponse(agentID);
+        dictionary = machine.getDecipher().getDictionary();
     }
 
     private void addTaskToQueue(AgentTask i_task){
@@ -58,7 +59,8 @@ public class Agent extends Thread{
                 response.addDecoding(candidate);
             }
             if(currentTask.hasNext()){
-                currentTask.moveToNextCode();
+                if (!currentTask.moveToNextCode(machine)) // moveToNextCode returns false when no more codes configurations left.
+                    break;
             }
             else
                 break;
@@ -66,7 +68,20 @@ public class Agent extends Thread{
     }
 
     //gets code decoding and return true if all words in the dictionary and false otherwise
-    private boolean isCandidaciesForDecoding(String decoding){ return true; } //TODO:implement
+    private boolean isCandidaciesForDecoding(String decoding){
+        boolean found;
+        String[] words = decoding.split(" ");
+        for (String word : words){
+            found = false;
+            for (String permittedWord : dictionary){
+                if (permittedWord.equals(word))
+                    found = true;
+            }
+            if (!found)
+                return false;
+        }
+        return true;
+    }
 
     public void setID(Integer _ID){
         this.agentID = _ID;

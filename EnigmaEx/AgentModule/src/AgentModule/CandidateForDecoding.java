@@ -4,14 +4,14 @@ import EnigmaMachineFactory.Secret;
 
 public class CandidateForDecoding {
     private String decoding;
-    private Secret position;
+    private Secret secret;
     private Integer agentID;
 
 
     public CandidateForDecoding(String _decoding, Secret _position, Integer _agentID)
     {
         this.decoding = _decoding;
-        this.position = _position;
+        this.secret = _position;
         this.agentID = _agentID;
     }
     public String getDecoding() {
@@ -22,12 +22,12 @@ public class CandidateForDecoding {
         this.decoding = decoding;
     }
 
-    public Secret getPosition() {
-        return position;
+    public Secret getSecret() {
+        return secret;
     }
 
-    public void setPosition(Secret position) {
-        this.position = position;
+    public void setSecret(Secret secret) {
+        this.secret = secret;
     }
 
     public Integer getAgentID() {

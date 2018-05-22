@@ -1,27 +1,32 @@
 package AgentModule;
 
+import EnigmaMachineFactory.EnigmaMachine;
 import EnigmaMachineFactory.Secret;
 
 public class AgentTask {
-    private Secret RotorsPosition;
+    private Secret secret;
     private Integer length;
 
     public AgentTask(Secret startPoint, Integer length) {
-        this.RotorsPosition = startPoint;
+        this.secret = startPoint;
         this.length = length;
     }
-    public void moveToNextCode(){
-        if (--length > 0) {
-            //RotorsPosition = RotorsPosition.next();
+    public boolean moveToNextCode(EnigmaMachine machine){
+        if (--length > 0 && secret.hasNext(machine)) {
+            secret.moveToNext(machine);
+            return true;
+        } else{
+            return false; //TODO:: tell agent task is finished
         }
     }
+
     public Boolean hasNext(){
         return length > 0 ? true:false;
     }
 
     public Secret getSecret()
     {
-        return RotorsPosition;
+        return secret;
     }
 
     public Integer getLength() {

@@ -31,21 +31,14 @@ public class DecipherManager extends Thread{
     }
 
     //only initialize the DM members
-    public boolean initFromUser(String _code, DifficultyLevel _difficulty, Integer _taskSize, Integer _numOfAgents){
-        if (_numOfAgents > maxNumOfAgents)
-            return false;
-
-        mission = MissionFactory.createMission(_difficulty, _taskSize, _numOfAgents);
-
-        if (mission.getSize() < _taskSize*numOfAgents)
-            return false;
+    public void initFromUser(String _code, DifficultyLevel _difficulty, Integer _taskSize, Integer _numOfAgents){
+        mission = new DecipherMission(machine, _difficulty);
+        mission.init(_taskSize,_numOfAgents);
         this.codeToDecipher = _code;
         answersToDM_Queue = new ArrayBlockingQueue<>(numOfAgents);
-
         //calculate block size
         blockSize = 10;
-        return true;
-    } //TODO:implement
+    }
 
 
     @Override
@@ -104,7 +97,7 @@ public class DecipherManager extends Thread{
         Agent agent;
         for(int i=0;i<numOfAgents;i++)
         {
-            agent = AgentFactory.createAgent(_machine.deepCopy(),_code, answersToDM_Queue);
+            agent = AgentFactory.createAgent(_machine.deepCopy(), _code, answersToDM_Queue);
             agentsList.add(agent);
         }
     } //TODO:implement
