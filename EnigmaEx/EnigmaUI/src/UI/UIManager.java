@@ -10,8 +10,10 @@ import sun.rmi.runtime.Log;
 public class UIManager {
     private EngineManager Logic;
     private StringBuilder m_menu;
+    private StringBuilder m_subMenu;
     private UIEnigmaProfile EnigmaProf;
     private boolean gameIsRunning = true;
+    private boolean isAutomaticDecoding = false;
     private boolean isMachineSet = false;
     private boolean isConfigSet = false;
     private int numOfOptions = 9;
@@ -31,6 +33,7 @@ public class UIManager {
     {
         EnigmaProf = new UIEnigmaProfile();
     }
+
     private void run() {
         while(gameIsRunning) {
             int userSelection = getValidUserSelection();
@@ -71,6 +74,27 @@ public class UIManager {
         }
     }
 
+    private void runSubMenu() {
+        while (isAutomaticDecoding) {
+            int userSelection = getValidUserSelection();
+            switch (userSelection) {
+                case 0:
+                    displaySubmenu();
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+            }
+            System.out.println("Waiting for the next command (press 0 to display menu)");
+        }
+    }
+
     private void automaticDecoding() {
         if (!Logic.isDecipherAvailable())
             return; //TODO: change and show msg
@@ -80,12 +104,17 @@ public class UIManager {
         Integer numOfAgents = getValidNumOfAgent();
         Integer taskSize = getValidTaskSize();
         boolean needToStart = getValidStartSignal();
-        Logic.setDecipher(code,difficulty,taskSize,numOfAgents);
+        //TODO:: check if machine is initialize
+        String precessedCode = Logic.process(code);
+        Logic.setDecipher(precessedCode, difficulty, taskSize, numOfAgents);
         Logic.startDecipher();
-        runSubMenu();
-    }//TODO:implement
-
-    private void runSubMenu() {
+        try {
+            initSubmenu();
+            isAutomaticDecoding = needToStart;
+            runSubMenu();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean getValidStartSignal() {
@@ -179,6 +208,18 @@ public class UIManager {
         return false;
     }
 
+    private void initSubmenu() throws IOException {
+        m_subMenu = new StringBuilder();
+        String line;
+        InputStream inputStream;
+        inputStream = UIManager.class.getResourceAsStream("/resources/UIsubMenu.txt");
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+        while((line = in.readLine()) != null) {
+            m_subMenu.append(line).append("\n");
+            System.out.println(line);
+        }
+    }
+
     private void init() throws IOException {
         m_menu = new StringBuilder();
         Logic = new EngineManager();
@@ -195,6 +236,11 @@ public class UIManager {
     private void displayMenu()
     {
         System.out.println(m_menu);
+    }
+
+    private void displaySubmenu()
+    {
+        System.out.println(m_subMenu);
     }
 
     //1.This function creates machine from XML-file

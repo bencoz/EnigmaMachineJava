@@ -7,5 +7,6 @@ Welcome to Enigma Machine, Choose one of the following options :
 5.Process code
 6.Reset machine
 7.Display history and statistics
-8.Exit
+8.Automatic Decoding
+9.Exit
 --------------------------------------------------------------------------------

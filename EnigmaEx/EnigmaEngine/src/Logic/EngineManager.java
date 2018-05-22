@@ -37,22 +37,22 @@ public class EngineManager {
         return errorInMachineBuilding;
     }
 
-    public boolean setDecipher(String i_encrypedCode, DifficultyLevel i_level, Integer i_taskSize, Integer i_numOfAgents){
+    public void setDecipher(String i_encrypedCode, DifficultyLevel i_level, Integer i_taskSize, Integer i_numOfAgents){
+        if (machine.getDecipher() != null) {
+            decipherManager = new DecipherManager(machine.deepCopy());
+            dictionary = machine.getDecipher().getDictionary();
+            decipherAvailable = true;
+        }
         if (!decipherAvailable)
-            return false;
+            return;
         DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(i_level.name());
 
-        return decipherManager.initFromUser(i_encrypedCode, newLevel, i_taskSize, i_numOfAgents);
+        decipherManager.initFromUser(i_encrypedCode, newLevel, i_taskSize, i_numOfAgents);
     }
 
     public boolean createEnigmaMachineFromXMLFile(String path) {
         try {
             machine = factory.createEnigmaMachineFromXMLFile(path);
-            if (machine.getDecipher() != null) {
-                decipherManager = new DecipherManager(machine.deepCopy());
-                dictionary = machine.getDecipher().getDictionary();
-                decipherAvailable = true;
-            }
         } catch (FileNotFoundException e){
             errorInMachineBuilding = "Could not find XML file.";
         }

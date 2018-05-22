@@ -1,6 +1,11 @@
 package DecryptionManager;
 
 import AgentModule.*;
+import EnigmaMachineFactory.EnigmaMachine;
+import EnigmaMachineFactory.Secret;
+import EnigmaMachineFactory.SecretBuilder;
+
+
 import java.util.*;
 
 public class DecipherMission {
@@ -8,21 +13,67 @@ public class DecipherMission {
     private Integer taskSize;
     private Integer numOfAgents;
     private boolean done;
+    private DifficultyLevel difficulty;
     private List<AgentTask> tasks;
     private Iterator<AgentTask> taskIterator;
-    //private Secret firstPos;
+    private Secret firstPos;
 
 
     //gets all mission details, and divide into sub-tasks(saved in tasks)
     //add getting of Secret firstPos
-    public DecipherMission(DifficultyLevel difficulty, Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer reflectorsSize){
-        setSize(difficulty, abcSize, rotorsSize, rotorsCount, reflectorsSize);
+    public DecipherMission(EnigmaMachine machine, DifficultyLevel _difficulty){
+        difficulty = _difficulty;
+        setSize(machine.getABC().length(), machine.getRotors().size(), machine.getRotorsCount(), machine.getNumOfReflectors());
+        setTasks(machine);
+        taskIterator = tasks.iterator();
     }
+
+    private void setTasks(EnigmaMachine machine) {
+        tasks = new LinkedList<>();
+        Secret currentSecret = machine.getSecret();
+        Secret secret = currentSecret.toZero();
+        SecretBuilder secretBuilder = machine.createSecret();
+        double rotorsPositionsSize = Math.pow(machine.getABC().length(), machine.getRotorsCount());
+        switch (difficulty){
+            case Easy:
+                for (int i = 0; i < rotorsPositionsSize; i += taskSize) {
+                    tasks.add(new AgentTask(secret,taskSize));
+                    secret = secret.advanceBy(taskSize);
+                }
+                break;
+            case Medium:
+                for (int j = 0; j < machine.getNumOfReflectors(); j++) {
+                    secret.setSelectedReflector(j+1);
+                    for (int i = 0; i < rotorsPositionsSize; i += taskSize) {
+                        tasks.add(new AgentTask(secret, taskSize));
+                        secret = secret.advanceBy(taskSize);
+                    }
+                }
+                break;
+            case Hard:
+                List<List<Integer>> allPermutaions = new LinkedList<>();
+                for (int k = 0; k < factorial(machine.getRotorsCount()); k++) {
+                    //Secret newSecret = buildNewSecret()
+                    for (int j = 0; j < machine.getNumOfReflectors(); j++) {
+                        secret.setSelectedReflector(j + 1);
+                        for (int i = 0; i < rotorsPositionsSize; i += taskSize) {
+                            tasks.add(new AgentTask(secret, taskSize));
+                            secret = secret.advanceBy(taskSize);
+                        }
+                    }
+                }
+                break;
+            case Impossible:
+                //size = Math.pow(abcSize, rotorsCount) * numOfRelectors * factorial(rotorsCount) * binom(rotorsSize, rotorsCount);
+                break;
+        }
+    }
+
     public void init(Integer _taskSize, Integer _numOfAgents){
         taskSize = _taskSize;
         numOfAgents = _numOfAgents;
-        taskIterator = tasks.iterator();
     }
+
     //return the next Agent tasks
     public AgentTask getNextTask() {
         if (taskIterator.hasNext()) {
@@ -48,7 +99,7 @@ public class DecipherMission {
         return done;
     }
 
-    private void setSize(DifficultyLevel difficulty, Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors) {
+    private void setSize(Integer abcSize, Integer rotorsSize, Integer rotorsCount, Integer numOfRelectors) {
         switch (difficulty){
             case Easy:
                 size = Math.pow(abcSize, rotorsCount);

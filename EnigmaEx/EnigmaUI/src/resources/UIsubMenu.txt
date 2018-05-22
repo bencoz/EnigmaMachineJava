@@ -1,0 +1,6 @@
+--------------------------------------------------------------------------------
+Welcome to Decoding Submenu, Choose one of the following options :
+1.Get current decoding status
+2.Pause\Continue decoding process
+3.Stop and return to main menu
+--------------------------------------------------------------------------------
