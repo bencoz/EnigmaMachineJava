@@ -381,5 +381,35 @@ public class EngineManager {
     public void startDecipher() {
         this.decipherManager.start();
     }
+
+    public boolean isValidTaskSize(Integer taskSize, DifficultyLevel difficulty, Integer numOfAgents) {
+        DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(difficulty.name());
+        return decipherManager.isValidTaskSize(taskSize,newLevel,numOfAgents);
+    }
+
+    public boolean isValidNumOfAgents(Integer numOfAgents) {
+        return decipherManager.isValidNumOfAgents(numOfAgents);
+    }
+
+    public double getNumOfOptionsforDecoding(DifficultyLevel difficulty) {
+        DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(difficulty.name());
+        return decipherManager.getNumOfOptionsforDecoding(newLevel);
+    }
+
+    public void pauseDeciphering() {
+        this.decipherManager.pauseDeciphering();
+    }
+
+    public void continueDeciphering() {
+        this.decipherManager.continueDeciphering();
+    }
+
+    public void stopDeciphering() {
+        this.decipherManager.stopDeciphering();
+    }
+
+    public void printDecipheringProgressMode() {
+        this.decipherManager.printDecipheringProgressMode();
+    }
 }
 
