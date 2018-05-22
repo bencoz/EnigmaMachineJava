@@ -18,6 +18,7 @@ public class UIManager {
     private boolean isConfigSet = false;
     private int numOfOptions = 9;
     private Decipher decipher;
+    private boolean decipheringIsPause = false;
 
     public static void main(String[] args) throws FileNotFoundException {
         UIManager manager = new UIManager();
@@ -105,13 +106,17 @@ public class UIManager {
                     displaySubmenu();
                     break;
                 case 1:
-
+                    printDecipheringProgressMode();
                     break;
                 case 2:
+                    if(decipheringIsPause)
+                        continueDeciphering();
+                    else
+                        pauseDeciphering();
 
                     break;
                 case 3:
-
+                        stopDeciphering();
                     break;
             }
             System.out.println("Waiting for the next command (press 0 to display menu)");
@@ -120,10 +125,12 @@ public class UIManager {
 
     private void pauseDeciphering(){
         Logic.pauseDeciphering();
+        this.decipheringIsPause = true;
     }
 
     private void continueDeciphering(){
         Logic.continueDeciphering();
+        this.decipheringIsPause = false;
     }
 
     private void stopDeciphering() {

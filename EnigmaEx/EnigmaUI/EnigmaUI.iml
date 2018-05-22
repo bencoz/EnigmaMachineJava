@@ -7,7 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="EnigmaEngine" exported="" />
+    <orderEntry type="module" module-name="EnigmaEngine" />
+    <orderEntry type="module" module-name="EnigmaMachineFactory" />
+    <orderEntry type="module" module-name="EnigmaMachineFactory" />
     <orderEntry type="module" module-name="EnigmaEngine" />
   </component>
 </module>
