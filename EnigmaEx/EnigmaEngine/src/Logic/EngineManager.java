@@ -37,22 +37,22 @@ public class EngineManager {
         return errorInMachineBuilding;
     }
 
-    public void setDecipher(String i_encrypedCode, DifficultyLevel i_level, Integer i_taskSize, Integer i_numOfAgents){
-        if (machine.getDecipher() != null) {
-            decipherManager = new DecipherManager(machine.deepCopy());
-            dictionary = machine.getDecipher().getDictionary();
-            decipherAvailable = true;
-        }
+    public boolean setDecipher(String i_encrypedCode, DifficultyLevel i_level, Integer i_taskSize, Integer i_numOfAgents){
         if (!decipherAvailable)
-            return;
+            return false;
         DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(i_level.name());
 
-        decipherManager.initFromUser(i_encrypedCode, newLevel, i_taskSize, i_numOfAgents);
+        return decipherManager.initFromUser(i_encrypedCode, newLevel, i_taskSize, i_numOfAgents);
     }
 
     public boolean createEnigmaMachineFromXMLFile(String path) {
         try {
             machine = factory.createEnigmaMachineFromXMLFile(path);
+            if (machine.getDecipher() != null) {
+                decipherManager = new DecipherManager(machine.deepCopy());
+                dictionary = machine.getDecipher().getDictionary();
+                decipherAvailable = true;
+            }
         } catch (FileNotFoundException e){
             errorInMachineBuilding = "Could not find XML file.";
         }
@@ -380,6 +380,36 @@ public class EngineManager {
 
     public void startDecipher() {
         this.decipherManager.start();
+    }
+
+    public boolean isValidTaskSize(Integer taskSize, DifficultyLevel difficulty, Integer numOfAgents) {
+        DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(difficulty.name());
+        return decipherManager.isValidTaskSize(taskSize,newLevel,numOfAgents);
+    }
+
+    public boolean isValidNumOfAgents(Integer numOfAgents) {
+        return decipherManager.isValidNumOfAgents(numOfAgents);
+    }
+
+    public double getNumOfOptionsforDecoding(DifficultyLevel difficulty) {
+        DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(difficulty.name());
+        return decipherManager.getNumOfOptionsforDecoding(newLevel);
+    }
+
+    public void pauseDeciphering() {
+        this.decipherManager.pauseDeciphering();
+    }
+
+    public void continueDeciphering() {
+        this.decipherManager.continueDeciphering();
+    }
+
+    public void stopDeciphering() {
+        this.decipherManager.stopDeciphering();
+    }
+
+    public void printDecipheringProgressMode() {
+        this.decipherManager.printDecipheringProgressMode();
     }
 }
 
