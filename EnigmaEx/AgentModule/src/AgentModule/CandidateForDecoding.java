@@ -37,4 +37,5 @@ public class CandidateForDecoding {
     public void setAgentID(Integer agentID) {
         this.agentID = agentID;
     }
+
 }
