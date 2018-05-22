@@ -39,6 +39,11 @@ public interface Secret {
 
     void setSelectedReflector(int reflectorID);
 
-    //Secret next(); //TODO:implement
+    void moveToNext(EnigmaMachine enigmaMachine); //TODO:implement
 
+    boolean hasNext(EnigmaMachine enigmaMachine); //TODO:implement
+
+    Secret toZero();
+
+    Secret advanceBy(Integer taskSize);
 }

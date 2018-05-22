@@ -155,7 +155,7 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
 
     @Override
     public List<Integer> getRotorsId_sorted() {
-        List<Integer> rotorsId_sorted =new ArrayList<>() ;
+        List<Integer> rotorsId_sorted = new ArrayList<>() ;
         for(Rotor rotor: enigma.getMachine().getRotors())
         {
             rotorsId_sorted.add(rotor.getID());
@@ -165,7 +165,7 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
 
     @Override
     public List<Integer> getRotorsNotch_sorted() {
-        List<Integer> rotorsNotch_sorted =new ArrayList<>() ;
+        List<Integer> rotorsNotch_sorted = new ArrayList<>() ;
         for(Rotor chosenRotor: enigma.getMachine().getRotors())
         {
             rotorsNotch_sorted.add(chosenRotor.getNotch());
@@ -188,7 +188,7 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
 
     @Override
     public List<Integer> getChosenRotorsID_sorted() {
-        List<Integer> chosenRotorsId_sorted =new ArrayList<>() ;
+        List<Integer> chosenRotorsId_sorted = new ArrayList<>() ;
         for(Rotor chosenRotor: workingRotors)
         {
             chosenRotorsId_sorted.add(chosenRotor.getID());
@@ -202,6 +202,16 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
         for(Rotor chosenRotor: workingRotors)
         {
             chosenRotorsLoc.add(chosenRotor.getMappingCharRightPart(chosenRotor.getPosition()));
+        }
+        return chosenRotorsLoc;
+    }
+
+    @Override
+    public List<Integer> getChosenRotorsPositions() {
+        List<Integer> chosenRotorsLoc = new ArrayList<>() ;
+        for(Rotor chosenRotor: workingRotors)
+        {
+            chosenRotorsLoc.add(chosenRotor.getPosition());
         }
         return chosenRotorsLoc;
     }
