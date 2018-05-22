@@ -33,7 +33,6 @@ public class UIManager {
     {
         EnigmaProf = new UIEnigmaProfile();
     }
-
     private void run() {
         while(gameIsRunning) {
             int userSelection = getValidUserSelection();
@@ -74,6 +73,30 @@ public class UIManager {
         }
     }
 
+    private void automaticDecoding() {
+        if (!Logic.isDecipherAvailable())
+            return; //TODO: change and show msg
+        String code = getValidCodeFromUser();
+        DifficultyLevel difficulty = getValidDifficultyLevel();
+        DisplayNumOfOptions(difficulty);
+        Integer numOfAgents = getValidNumOfAgents();
+        Integer taskSize = getValidTaskSize(difficulty,numOfAgents);
+        boolean needToStart = getValidStartSignal();
+        //TODO:: check if machine is initialize
+        if(needToStart) {
+            String precessedCode = Logic.process(code);
+            Logic.setDecipher(precessedCode, difficulty, taskSize, numOfAgents);
+            Logic.startDecipher();
+            try {
+                initSubmenu();
+                isAutomaticDecoding = needToStart;
+                runSubMenu();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }//TODO:implement
+
     private void runSubMenu() {
         while (isAutomaticDecoding) {
             int userSelection = getValidUserSelection();
@@ -95,51 +118,128 @@ public class UIManager {
         }
     }
 
-    private void automaticDecoding() {
-        if (!Logic.isDecipherAvailable())
-            return; //TODO: change and show msg
-        String code = getValidCodeFromUser();
-        DifficultyLevel difficulty = getValidDifficultyLevel();
-        DisplayNumOfOptions(difficulty);
-        Integer numOfAgents = getValidNumOfAgent();
-        Integer taskSize = getValidTaskSize();
-        boolean needToStart = getValidStartSignal();
-        //TODO:: check if machine is initialize
-        String precessedCode = Logic.process(code);
-        Logic.setDecipher(precessedCode, difficulty, taskSize, numOfAgents);
-        Logic.startDecipher();
-        try {
-            initSubmenu();
-            isAutomaticDecoding = needToStart;
-            runSubMenu();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void pauseDeciphering(){
+        Logic.pauseDeciphering();
+    }
+
+    private void continueDeciphering(){
+        Logic.continueDeciphering();
+    }
+
+    private void stopDeciphering() {
+        Logic.stopDeciphering();
+    }
+
+    private void printDecipheringProgressMode()
+    {
+        Logic.printDecipheringProgressMode();
     }
 
     private boolean getValidStartSignal() {
-        return true;
-    }//TODO:implement
+        Scanner in = new Scanner(System.in);
+        String userInput;
+        boolean toStart = false, valid = false;
+        while (!valid)
+        {
+            System.out.println("Please enter 'S' to start the automatic decoding and 'Q' to get back to menu");
+            userInput = in.next();
+            userInput = userInput.toUpperCase();
+            if (userInput.length() == 1 && (userInput.charAt(0) == 'S' || userInput.charAt(0) == 'Q')){
+                valid = true;
+                if(userInput.charAt(0) == 'S')
+                    toStart = true;
+            }
+            else
+            {
+                System.out.println("INVALID INPUT, try again:");
+            }
+        }
+        return toStart;
+    }
 
-    private Integer getValidTaskSize() {
+    private Integer getValidTaskSize(DifficultyLevel difficulty, Integer numOfAgents) {
         //need to check task size is less than num of options
-        return 0;
-    }//TODO:implement
+        Scanner in = new Scanner(System.in);
+        boolean validInput=false, validType=true;
+        Integer taskSize = 0;
+        String userInput;
 
-    private Integer getValidNumOfAgent() {
+        System.out.print("please enter your wanted size of agent task:");
+        while(!validInput) {
+            validType = true;
+            userInput = in.next();
+            if (!tryParseInt(userInput)) {
+                System.out.println("INVALID INPUT, please enter a NUMBER that represents size of agent task:");
+                validType = false;
+            }
+            if (validType) {
+                taskSize = Integer.parseInt(userInput);
+                if (Logic.isValidTaskSize(taskSize,difficulty,numOfAgents)) {
+                    validInput = true;
+                }
+                else {
+                    System.out.println("INVALID INPUT, task size doesn't match the current number of options and agents, try again:");
+                }
+            }
+        }
+        return taskSize;
+    }
+
+    private Integer getValidNumOfAgents() {
         //need to check is less than man num of agent(gotten from XML file)
-        return 0;
-    }//TODO:implement
+        Scanner in = new Scanner(System.in);
+        boolean validInput=false, validType=true;
+        Integer numOfAgents = 0;
+        String userInput;
+
+        System.out.print("please enter your wanted number of agents:");
+        while(!validInput) {
+            validType = true;
+            userInput = in.next();
+            if (!tryParseInt(userInput)) {
+                System.out.println("INVALID INPUT, please enter a NUMBER that represents number of agents:");
+                validType = false;
+            }
+            if (validType) {
+                numOfAgents = Integer.parseInt(userInput);
+                if (Logic.isValidNumOfAgents(numOfAgents)) {
+                    validInput = true;
+                }
+                else {
+                    System.out.println("INVALID INPUT, num of agents need to be between 2 and max num of agents, try again:");
+                }
+            }
+        }
+        return numOfAgents;
+    }
 
     private void DisplayNumOfOptions(DifficultyLevel difficulty) {
         //need to calculate num of option according to difficulty level and the size and properties of the machine
-    }//TODO:implement
+        System.out.println("The number of possible options, considering the level of difficulty and size of the machine is:");
+        System.out.println(Logic.getNumOfOptionsforDecoding(difficulty));
+    }
 
     private DifficultyLevel getValidDifficultyLevel() {
+        Scanner in = new Scanner(System.in);
+        String userInput;
+        DifficultyLevel difficulty = DifficultyLevel.Easy;
+        boolean validInput = false,validType=false;
+
         System.out.println("Please enter difficulty level:");
-        //..
-        return null;
-    }//TODO:implement
+        System.out.println("press 'E' for easy, 'M' for medium, 'H' for hard and 'I' for impossible");
+
+        while (!validInput) {
+            userInput = in.next();
+
+            if(DifficultyLevel.isDifficultyLevel(userInput)){
+                difficulty = DifficultyLevel.getDifficultyLevelByCharVal(userInput.charAt(0));
+                validInput = true;
+            }
+            else
+                System.out.println("INVALID INPUT, please try again:");
+        }
+        return difficulty;
+    }
 
     private String getValidCodeFromUser() {
         Scanner in = new Scanner(System.in);
@@ -344,7 +444,7 @@ public class UIManager {
             validType = true;
             System.out.print("Rotor ID: ");
             userInput = in.next();
-            while (!tryParseInt(userInput)) {
+            if (!tryParseInt(userInput)) {
                 System.out.println("INVALID INPUT, please enter a NUMBER that represents Rotor ID");
                 validType = false;
             }
