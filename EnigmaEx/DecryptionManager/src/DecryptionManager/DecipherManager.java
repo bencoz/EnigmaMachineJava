@@ -88,9 +88,17 @@ public class DecipherManager extends Thread{
     private void giveAgentBlockOfTasks(Agent agent)
     {
         try {
-            for (int i = 0; i < blockSize; i++) {//TODO:: fix end scenarios
-                agent.getTasksQueue().put(mission.getNextTask());
-            }
+            AgentTask task;
+            for (int i = 0; i < blockSize; i++) {
+                task = mission.getNextTask();
+                if(task != null) {
+                    agent.getTasksQueue().put(task);
+                }
+                else
+                {
+                    agent.setTasksAmount(i+1);
+                    break;
+                }
         }catch (InterruptedException e) {
             e.printStackTrace();
         }
