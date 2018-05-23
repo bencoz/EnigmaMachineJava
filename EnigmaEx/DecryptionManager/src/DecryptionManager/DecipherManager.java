@@ -35,8 +35,8 @@ public class DecipherManager extends Thread{
 
     //only initialize the DM members
     public boolean initFromUser(String _code, DifficultyLevel _difficulty, Integer _taskSize, Integer _numOfAgents){
-        mission = MissionFactory.createMission(_difficulty, _taskSize, _numOfAgents);
-
+        //mission = MissionFactory.createMission(_difficulty, _taskSize, _numOfAgents);
+        mission = new DecipherMission(machine,_difficulty);
         if (mission.getSize() < _taskSize*numOfAgents)
             return false;
         this.codeToDecipher = _code;

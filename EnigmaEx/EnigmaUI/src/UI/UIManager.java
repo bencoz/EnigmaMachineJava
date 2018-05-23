@@ -113,7 +113,6 @@ public class UIManager {
                         continueDeciphering();
                     else
                         pauseDeciphering();
-
                     break;
                 case 3:
                         stopDeciphering();
