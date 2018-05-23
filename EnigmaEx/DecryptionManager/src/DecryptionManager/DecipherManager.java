@@ -36,8 +36,8 @@ public class DecipherManager extends Thread{
 
     //only initialize the DM members
     public boolean initFromUser(String _code, DifficultyLevel _difficulty, Integer _taskSize, Integer _numOfAgents){
-        //mission = MissionFactory.createMission(_difficulty, _taskSize, _numOfAgents);
         mission = new DecipherMission(machine,_difficulty);
+        mission.init(machine, _taskSize, _numOfAgents);
         numOfAgents = _numOfAgents;
         if (mission.getSize() < _taskSize*numOfAgents)
             return false;
@@ -45,9 +45,9 @@ public class DecipherManager extends Thread{
         answersToDM_Queue = new ArrayBlockingQueue<>(numOfAgents);
 
         //calculate block size
-        blockSize = 10;
+        blockSize = 10;//TODO:find more appropiate function.
         return true;
-    } //TODO:implement
+    }
 
 
     @Override
@@ -88,7 +88,7 @@ public class DecipherManager extends Thread{
     private void giveAgentBlockOfTasks(Agent agent)
     {
         try {
-            for (int i = 0; i < blockSize; i++) {
+            for (int i = 0; i < blockSize; i++) {//TODO:: fix end scenarios
                 agent.getTasksQueue().put(mission.getNextTask());
             }
         }catch (InterruptedException e) {
@@ -118,7 +118,7 @@ public class DecipherManager extends Thread{
         Agent agent;
         for(int i=0;i<numOfAgents;i++)
         {
-            agent = AgentFactory.createAgent(_machine.deepCopy(),_code, this.answersToDM_Queue, status);
+            agent = AgentFactory.createAgent(_machine.deepCopy(),_code, this.answersToDM_Queue, status, blockSize, dictionary);
             agentsList.add(agent);
         }
     }
