@@ -48,4 +48,6 @@ public interface Secret {
     Secret advanceBy(Integer taskSize);
 
     void setRotorsIDs(List<Integer> rotorsIDs);
+
+    void setABCSize(int abcSize);
 }

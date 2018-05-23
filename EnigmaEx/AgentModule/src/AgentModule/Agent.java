@@ -25,15 +25,18 @@ public class Agent extends Thread{
 
 
     public Agent(EnigmaMachine _machine, String _code, Integer _ID,
-                 BlockingQueue<AgentResponse> _answersToDM_Queue, DecipheringStatus _DMstatus){
+                 BlockingQueue<AgentResponse> _answersToDM_Queue, DecipheringStatus _DMstatus, Integer blockSize,
+                 List<String> _dictionary){
         this.machine = _machine;
         this.code = _code;
         this.agentID = _ID;
         this.answersToDM_Queue = _answersToDM_Queue;
-        this.tasksFromDM_Queue = new ArrayBlockingQueue<>(tasksAmount);
+        this.tasksFromDM_Queue = new ArrayBlockingQueue<>(blockSize);
+        this.tasksAmount = blockSize;
         this.response = new AgentResponse(agentID);
         this.DMstatus = _DMstatus;
         this.setName("Agent "+agentID);
+        this.dictionary = _dictionary;
     }
 
     private void addTaskToQueue(AgentTask i_task){

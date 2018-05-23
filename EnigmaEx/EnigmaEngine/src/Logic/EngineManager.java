@@ -413,5 +413,13 @@ public class EngineManager {
     public void printDecipheringProgressMode() {
         this.decipherManager.printDecipheringProgressMode();
     }
+
+    public void initDecipher() {
+        if (machine.getDecipher() != null) {
+            decipherManager = new DecipherManager(machine.deepCopy());
+            dictionary = machine.getDecipher().getDictionary();
+            decipherAvailable = true;
+        }
+    }
 }
 

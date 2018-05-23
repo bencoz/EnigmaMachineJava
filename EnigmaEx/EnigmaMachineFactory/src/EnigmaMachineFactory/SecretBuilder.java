@@ -30,6 +30,7 @@ public class SecretBuilder {
 
 	public Secret create(){
         machine.setSecret(secret);
+        secret.setAbcSize(machine.getABC().length());
         return secret;
     }
 

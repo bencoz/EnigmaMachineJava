@@ -75,6 +75,7 @@ public class UIManager {
     }
 
     private void automaticDecoding() {
+        Logic.initDecipher();
         if (!Logic.isDecipherAvailable())
             return; //TODO: change and show msg
         String code = getValidCodeFromUser();
