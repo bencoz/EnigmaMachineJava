@@ -50,7 +50,7 @@ public class JAXBToActual {
         if (decipher != null){
             EnigmaMachineFactory.Actual.Decipher ActualDecipher = new EnigmaMachineFactory.Actual.Decipher(decipher.getAgents());
             String words = decipher.getDictionary().getWords().trim();
-            ActualDecipher.appedToDictionary(words.split(" "));
+            ActualDecipher.appedToDictionary(words.toUpperCase().split(" "));
             ActualDecipher.setExcludeChars(decipher.getDictionary().getExcludeChars());
             res.setDecipher(ActualDecipher);
             //TODO: process dictinary words that only exclude chars inside dictionary words

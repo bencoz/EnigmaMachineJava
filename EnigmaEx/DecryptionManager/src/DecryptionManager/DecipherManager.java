@@ -31,12 +31,14 @@ public class DecipherManager extends Thread{
         candidacies = new ArrayList<>();
         agentsList = new ArrayList<>();
         status = new DecipheringStatus();
+        this.setName("DM");
     }
 
     //only initialize the DM members
     public boolean initFromUser(String _code, DifficultyLevel _difficulty, Integer _taskSize, Integer _numOfAgents){
         //mission = MissionFactory.createMission(_difficulty, _taskSize, _numOfAgents);
         mission = new DecipherMission(machine,_difficulty);
+        numOfAgents = _numOfAgents;
         if (mission.getSize() < _taskSize*numOfAgents)
             return false;
         this.codeToDecipher = _code;

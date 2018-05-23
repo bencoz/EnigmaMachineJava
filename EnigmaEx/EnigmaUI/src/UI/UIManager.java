@@ -222,7 +222,7 @@ public class UIManager {
     private void DisplayNumOfOptions(DifficultyLevel difficulty) {
         //need to calculate num of option according to difficulty level and the size and properties of the machine
         System.out.println("The number of possible options, considering the level of difficulty and size of the machine is:");
-        System.out.println(Logic.getNumOfOptionsforDecoding(difficulty));
+        System.out.println(Logic.getNumOfOptionsforDecoding(difficulty).intValue());
     }
 
     private DifficultyLevel getValidDifficultyLevel() {
@@ -235,7 +235,7 @@ public class UIManager {
         System.out.println("press 'E' for easy, 'M' for medium, 'H' for hard and 'I' for impossible");
 
         while (!validInput) {
-            userInput = in.next();
+            userInput = in.next().toUpperCase();
 
             if(DifficultyLevel.isDifficultyLevel(userInput)){
                 difficulty = DifficultyLevel.getDifficultyLevelByCharVal(userInput.charAt(0));

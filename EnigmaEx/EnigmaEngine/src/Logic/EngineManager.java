@@ -393,7 +393,7 @@ public class EngineManager {
         return decipherManager.isValidNumOfAgents(numOfAgents);
     }
 
-    public double getNumOfOptionsforDecoding(DifficultyLevel difficulty) {
+    public Double getNumOfOptionsforDecoding(DifficultyLevel difficulty) {
         DecryptionManager.DifficultyLevel newLevel = DecryptionManager.DifficultyLevel.valueOf(difficulty.name());
         return decipherManager.getNumOfOptionsforDecoding(newLevel);
     }

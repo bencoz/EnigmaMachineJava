@@ -33,12 +33,12 @@ public class Agent extends Thread{
         this.tasksFromDM_Queue = new ArrayBlockingQueue<>(tasksAmount);
         this.response = new AgentResponse(agentID);
         this.DMstatus = _DMstatus;
+        this.setName("Agent "+agentID);
     }
 
     private void addTaskToQueue(AgentTask i_task){
         tasks.add(i_task);
     }
-
 
     //work on block of task that got from DM, solves each one, update the agent response (add the Candidacies For Decoding to it)
     private void doTasks() throws InterruptedException {
