@@ -2,10 +2,11 @@ package EnigmaMachineFactory;
 
 import EnigmaMachineFactory.Actual.Rotor;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SecretImpl implements Secret {
+public class SecretImpl implements Secret, Serializable {
     private List<Integer> selectedRotors;
     private List<Integer> selectedRotorsPositions;
     private int selectedReflector;
@@ -67,6 +68,7 @@ public class SecretImpl implements Secret {
     @Override
     public Secret toZero() {
         Secret newSecret = new SecretImpl();
+        newSecret.setABCSize(this.abcSize);
         newSecret.setSelectedReflector(this.selectedReflector);
         for (int i = 0; i < this.selectedRotors.size(); i++)
             newSecret.addRotor(this.selectedRotors.get(i),0);
@@ -76,6 +78,7 @@ public class SecretImpl implements Secret {
     @Override
     public Secret advanceBy(Integer taskSize) {
         Secret newSecret = new SecretImpl();
+        newSecret.setABCSize(this.abcSize);
         newSecret.setSelectedReflector(this.selectedReflector);
         boolean isCarry, finished;
         isCarry = finished = false;
@@ -127,6 +130,7 @@ public class SecretImpl implements Secret {
     @Override
     public Secret setInitialPosition(List<Integer> newPosition) {
         SecretImpl newSecret = new SecretImpl();
+        newSecret.setAbcSize(this.abcSize);
         List<Integer> rotorIDs = this.getSelectedRotorsInOrder();
         for (int i = 0; i < rotorIDs.size(); i++)
             newSecret.addRotor(rotorIDs.get(i).intValue(), newPosition.get(i).intValue()-1 );//Postion is 1-based
@@ -134,4 +138,8 @@ public class SecretImpl implements Secret {
         return (Secret)newSecret;
     }
 
+    @Override
+    public void setABCSize(int abcSize) {
+        this.abcSize = abcSize;
+    }
 }
