@@ -99,6 +99,7 @@ public class DecipherManager extends Thread{
                     agent.setTasksAmount(i+1);
                     break;
                 }
+            }
         }catch (InterruptedException e) {
             e.printStackTrace();
         }
