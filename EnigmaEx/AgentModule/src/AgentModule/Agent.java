@@ -1,9 +1,11 @@
 package AgentModule;
 
 import EnigmaMachineFactory.*;
+import EnigmaMachineFactory.Actual.Rotor;
 import EnigmaMachineFactory.JAXBGenerated.Decipher;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -15,6 +17,7 @@ public class Agent extends Thread{
     private String code;
     private List<AgentTask> tasks ;
     private AgentTask currentTask;
+    private Integer currentTaskInd = 0;
     private AgentResponse response;
     private DecipheringStatus DMstatus;
 
@@ -48,19 +51,20 @@ public class Agent extends Thread{
         for(int i=0;i<tasks.size();i++)
         {
             this.currentTask = tasks.get(i);
-            //doCurrentTask();
+            currentTaskInd = i;
+            doCurrentTask();
         }
+
     }
 
     //work on current task update the agent response (add the Candidacies For Decoding to it)
     private void doCurrentTask(){
-        int firstSize = this.currentTask.getLength();
-        for(int i=0; i < firstSize; i++) {
-            machine.initFromSecret(this.currentTask.getSecret());
+        for(int i=0; i<currentTask.getLength() ; i++) {
+            machine.initFromSecret(currentTask.getSecret());
             String decoding = machine.process(code);
 
             if(isCandidaciesForDecoding(decoding)) {
-                CandidateForDecoding candidate = new CandidateForDecoding(decoding, this.currentTask.getSecret(), agentID);
+                CandidateForDecoding candidate = new CandidateForDecoding(decoding, currentTask.getSecret(), agentID);
                 response.addDecoding(candidate);
             }
             if(currentTask.hasNext()){
@@ -108,18 +112,18 @@ public class Agent extends Thread{
                 AgentTask task;
                 tasks = new ArrayList<>();
                 for (int i = 0; i < tasksAmount; i++) {
-
-                    this.currentTask = tasksFromDM_Queue.take();
-                    doCurrentTask();
+                    task = tasksFromDM_Queue.take();
+                    tasks.add(task);
                 }
-                answersToDM_Queue.put(response);
+                doTasks();
+                if (!response.isEmpty()) {
+                    answersToDM_Queue.put(response);
+                }
                 reset();
                 done = !DMstatus.checkIfToContinue();
             }
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            //TODO:: HANDLE STUFF AFTER INTERRUPT
-            return;
+            e.printStackTrace();
         }
     }
 
@@ -127,6 +131,7 @@ public class Agent extends Thread{
     {
         tasks = null;
         currentTask = null;
+        currentTaskInd = 0;
         response = new AgentResponse(this.agentID);
         //response.reset();
         //tasksAmount = 0;
@@ -135,4 +140,72 @@ public class Agent extends Thread{
     public void setTasksAmount(Integer _tasksAmount) {
         this.tasksAmount = _tasksAmount;
     }
+
+
+    //new
+
+    public Integer getAgentID()
+    {
+        return agentID;
+    }
+
+    public AgentTask getCurrentTask() {
+        return currentTask;
+    }
+
+    public String getDecipheringStatus(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Agent ID:").append(agentID).append("\n");
+        int numOfRemainTasks = tasks.size() - currentTaskInd;
+        sb.append("Number of tasks remaining to perform").append(numOfRemainTasks).append("\n");
+        sb.append("Current Task:").append(getCurrentTaskStr()).append("\n");
+        return sb.toString();
+    }
+
+    private String getCurrentTaskStr(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getCurrentTaskWorkingRotors());
+        sb.append(getCurrentTaskWorkingRotorsChar());
+        sb.append(getCurrentTaskWorkingReflector());
+        sb.append('<').append(currentTask.getSecret().getSelectedReflector()).append('>');
+        return sb.toString();
+    }
+
+    private String getCurrentTaskWorkingReflector() {
+        return machine.getEnigma().getMachine().getReflectorStringById(currentTask.getSecret().getSelectedReflector());
+    }
+
+    private String getCurrentTaskWorkingRotors() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Integer> selectedRotors = currentTask.getSecret().getSelectedRotorsInOrder();
+        List<Integer> shallowCopy = selectedRotors.subList(0, selectedRotors.size());
+        Collections.reverse(shallowCopy);
+        for (Integer integer : shallowCopy){
+            sb.append(integer).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
+    }
+
+    private String getCurrentTaskWorkingRotorsChar() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Character> chars = new ArrayList<>();
+        List<Integer> selectedRotors = currentTask.getSecret().getSelectedRotorsInOrder();
+        List<Integer> rotorsLoc = currentTask.getSecret().getSelectedRotorsPositions();
+        for (int i = 0; i < selectedRotors.size(); i++){
+            Character ch = machine.getEnigma().getMachine().getRotorPositionByNumber(selectedRotors.get(i), rotorsLoc.get(i));
+            chars.add(ch);
+        }
+        List<Character> shallowCopy = chars.subList(0,chars.size());
+        Collections.reverse(shallowCopy);
+        for (Character character : shallowCopy){
+            sb.append(character).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
+    }
+
+
 }
