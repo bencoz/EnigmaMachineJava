@@ -59,8 +59,12 @@ public class DecipherManager extends Thread{
         divideTasks();
         while (!done) {
             try {
+
+                System.out.println("DM1");
                 AgentResponse response = answersToDM_Queue.take();
+                System.out.println("DM2");
                 handleAgentResponse(response);
+                System.out.println("DM3");
                 giveAgentBlockOfTasks(agentsList.get(response.getAgentID()));
 
                 done = mission.isDone() && !status.checkIfToContinue();
