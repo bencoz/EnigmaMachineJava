@@ -421,5 +421,9 @@ public class EngineManager {
             decipherAvailable = true;
         }
     }
+
+    public boolean isDecipherManagerAlive() {
+        return decipherManager.isAlive();
+    }
 }
 

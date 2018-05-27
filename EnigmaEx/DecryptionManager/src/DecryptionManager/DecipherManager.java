@@ -18,7 +18,7 @@ public class DecipherManager extends Thread{
     private Integer blockSize; //block of tasks
     private List<CandidateForDecoding> candidacies;
     private DecipheringStatus status;
-    private long decipheringStartTime ;
+    private long decipheringStartTime;
 
     private BlockingQueue<AgentResponse> answersToDM_Queue;
 
@@ -59,17 +59,37 @@ public class DecipherManager extends Thread{
         divideTasks();
         while (!done) {
             try {
-                System.out.println("DM1");
+
                 AgentResponse response = answersToDM_Queue.take();
-                System.out.println("DM2");
+
                 handleAgentResponse(response);
-                System.out.println("DM3");
+
                 giveAgentBlockOfTasks(agentsList.get(response.getAgentID()));
 
-                done = mission.isDone() && !status.checkIfToContinue();
+                done = mission.isDone() || !status.checkIfToContinue();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        status.stopDeciphering();
+        interruptAgents();
+        printDecipheringResults();
+    }
+
+    private void interruptAgents() {
+        for (Agent agent : agentsList){
+            agent.interrupt();
+        }
+    }
+
+
+    private void printDecipheringResults() {
+        System.out.println("Time elapsed since the beginning of the mission:");
+        System.out.println(formatDuration(System.currentTimeMillis() - decipheringStartTime));
+        System.out.println("Mission accomplished");
+        for (CandidateForDecoding candidate: candidacies)
+        {
+            System.out.println(candidacies.toString());
         }
     }
 

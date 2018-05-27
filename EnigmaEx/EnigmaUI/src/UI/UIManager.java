@@ -111,7 +111,7 @@ public class UIManager {
                     printDecipheringProgressMode();
                     break;
                 case 2:
-                    if(decipheringIsPause)
+                    if (decipheringIsPause)
                         continueDeciphering();
                     else
                         pauseDeciphering();
@@ -120,6 +120,9 @@ public class UIManager {
                     stopDeciphering();
                     isAutomaticDecoding = false;
                     break;
+            }
+            if (!Logic.isDecipherManagerAlive()) {
+                break;
             }
             System.out.println("Waiting for the next command (press 0 to display menu)");
         }

@@ -108,17 +108,18 @@ public class Agent extends Thread{
                 AgentTask task;
                 tasks = new ArrayList<>();
                 for (int i = 0; i < tasksAmount; i++) {
+
                     this.currentTask = tasksFromDM_Queue.take();
-                    //tasks.add(task);
                     doCurrentTask();
                 }
-                //doTasks();
                 answersToDM_Queue.put(response);
                 reset();
                 done = !DMstatus.checkIfToContinue();
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            //TODO:: HANDLE STUFF AFTER INTERRUPT
+            return;
         }
     }
 

@@ -83,14 +83,14 @@ public class SecretImpl implements Secret, Serializable {
             if (i == 0) {
                 newPosition = lastPosition + taskSize;
                 if (newPosition >= abcSize) {
-                    carry = newPosition - abcSize;
+                    carry = newPosition - abcSize + 1;
                     newPosition = newPosition % abcSize;
                     isCarry = true;
                 }
             } else if (isCarry){
                 newPosition = lastPosition + carry;
                 if (newPosition >= abcSize) {
-                    carry = newPosition - abcSize;
+                    carry = newPosition - abcSize + 1;
                     newPosition = newPosition % abcSize;
                     isCarry = true;
                 } else
