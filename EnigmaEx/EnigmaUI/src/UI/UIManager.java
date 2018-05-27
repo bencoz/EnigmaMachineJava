@@ -5,7 +5,6 @@ import java.util.*;
 
 import EnigmaMachineFactory.JAXBGenerated.Decipher;
 import Logic.*;
-import sun.rmi.runtime.Log;
 
 public class UIManager {
     private EngineManager Logic;
@@ -13,7 +12,7 @@ public class UIManager {
     private StringBuilder m_subMenu;
     private UIEnigmaProfile EnigmaProf;
     private boolean gameIsRunning = true;
-    private boolean isAutomaticDecoding = false;
+    private Boolean isAutomaticDecoding = false;
     private boolean isMachineSet = false;
     private boolean isConfigSet = false;
     private int numOfOptions = 9;
@@ -37,7 +36,9 @@ public class UIManager {
     }
     private void run() {
         while(gameIsRunning) {
-            int userSelection = getValidUserSelection();
+            Integer userSelection = getValidUserSelection();
+            if (userSelection == null)
+                return;
             switch (userSelection) {
                 case 0:
                     displayMenu();
@@ -89,6 +90,7 @@ public class UIManager {
         if(needToStart) {
             String precessedCode = Logic.process(code);
             Logic.setDecipher(precessedCode, difficulty, taskSize, numOfAgents);
+            Logic.setDecipherThreadToStop(Thread.currentThread());
             Logic.startDecipher();
             try {
                 initSubmenu();
@@ -102,7 +104,12 @@ public class UIManager {
 
     private void runSubMenu() {
         while (isAutomaticDecoding) {
-            int userSelection = getValidUserSelection_SM();
+            if (!Logic.isDecipherManagerAlive()) {
+                break;
+            }
+            Integer userSelection = getValidUserSelection_SM();
+            if (userSelection == null)
+                return;
             switch (userSelection) {
                 case 0:
                     displaySubmenu();
@@ -121,20 +128,19 @@ public class UIManager {
                     isAutomaticDecoding = false;
                     break;
             }
-            if (!Logic.isDecipherManagerAlive()) {
-                break;
-            }
             System.out.println("Waiting for the next command (press 0 to display menu)");
         }
     }
     
-    private int getValidUserSelection_SM() {
-        Scanner in = new Scanner(System.in);
+    private Integer getValidUserSelection_SM() {
+        Scanner in = new Scanner(System.in).useDelimiter("\n");
         String userInput;
         int userSelection = 0;
 
-        userInput = in.next();
-        while (!isValidOptionNum(userInput, numOfOptions_SM)) {
+        userInput = in.nextLine();
+        while (!isValidOptionNum(userInput, numOfOptions_SM) || Thread.currentThread().isInterrupted()) {
+            if (Thread.currentThread().isInterrupted())
+                return null;
             System.out.println("This option doesn't exist in the system, please try again:");
             userInput = in.next();
         }
@@ -359,6 +365,7 @@ public class UIManager {
             m_menu.append(line).append("\n");
             System.out.println(line);
         }
+        m_menu.delete(m_menu.length()-2, m_menu.length());
     }
 
     private void displayMenu()

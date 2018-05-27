@@ -18,7 +18,7 @@ public class CandidateForDecoding {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Agent: ").append(agentID).append(" Decoded: ").append(decoding);
+        sb.append("Agent: ").append(agentID).append(" Decoded: \"").append(decoding).append('"');
         return sb.toString();
     }
 

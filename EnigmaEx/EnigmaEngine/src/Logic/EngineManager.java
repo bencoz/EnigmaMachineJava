@@ -425,5 +425,9 @@ public class EngineManager {
     public boolean isDecipherManagerAlive() {
         return decipherManager.isAlive();
     }
+
+    public void setDecipherThreadToStop(Thread threadToStop) {
+        decipherManager.setThreadToStop(threadToStop);
+    }
 }
 
