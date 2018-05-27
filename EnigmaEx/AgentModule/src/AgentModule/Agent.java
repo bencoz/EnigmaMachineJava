@@ -48,19 +48,19 @@ public class Agent extends Thread{
         for(int i=0;i<tasks.size();i++)
         {
             this.currentTask = tasks.get(i);
-            doCurrentTask();
+            //doCurrentTask();
         }
-
     }
 
     //work on current task update the agent response (add the Candidacies For Decoding to it)
     private void doCurrentTask(){
-        for(int i=0; i<currentTask.getLength() ; i++) {
-            machine.initFromSecret(currentTask.getSecret());
+        int firstSize = this.currentTask.getLength();
+        for(int i=0; i < firstSize; i++) {
+            machine.initFromSecret(this.currentTask.getSecret());
             String decoding = machine.process(code);
 
             if(isCandidaciesForDecoding(decoding)) {
-                CandidateForDecoding candidate = new CandidateForDecoding(decoding, currentTask.getSecret(), agentID);
+                CandidateForDecoding candidate = new CandidateForDecoding(decoding, this.currentTask.getSecret(), agentID);
                 response.addDecoding(candidate);
             }
             if(currentTask.hasNext()){
@@ -108,13 +108,12 @@ public class Agent extends Thread{
                 AgentTask task;
                 tasks = new ArrayList<>();
                 for (int i = 0; i < tasksAmount; i++) {
-                    task = tasksFromDM_Queue.take();
-                    tasks.add(task);
+                    this.currentTask = tasksFromDM_Queue.take();
+                    //tasks.add(task);
+                    doCurrentTask();
                 }
-                doTasks();
-                if (!response.isEmpty()) {
-                    answersToDM_Queue.put(response);
-                }
+                //doTasks();
+                answersToDM_Queue.put(response);
                 reset();
                 done = !DMstatus.checkIfToContinue();
             }

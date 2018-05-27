@@ -117,7 +117,8 @@ public class UIManager {
                         pauseDeciphering();
                     break;
                 case 3:
-                        stopDeciphering();
+                    stopDeciphering();
+                    isAutomaticDecoding = false;
                     break;
             }
             System.out.println("Waiting for the next command (press 0 to display menu)");

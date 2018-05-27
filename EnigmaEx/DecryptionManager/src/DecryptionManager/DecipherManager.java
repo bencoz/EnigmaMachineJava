@@ -59,7 +59,6 @@ public class DecipherManager extends Thread{
         divideTasks();
         while (!done) {
             try {
-
                 System.out.println("DM1");
                 AgentResponse response = answersToDM_Queue.take();
                 System.out.println("DM2");
@@ -76,7 +75,7 @@ public class DecipherManager extends Thread{
 
     public boolean isValidNumOfAgents(Integer _numOfAgents)
     {
-        if (_numOfAgents >=2 && _numOfAgents <= maxNumOfAgents )
+        if (_numOfAgents >=1 && _numOfAgents <= maxNumOfAgents )//TODO::CHANGE BACK TO 2
             return true;
         else
             return false;
