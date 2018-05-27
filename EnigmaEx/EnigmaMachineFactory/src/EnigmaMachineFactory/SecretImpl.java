@@ -33,32 +33,26 @@ public class SecretImpl implements Secret, Serializable {
     }
 
     @Override
-    public void moveToNext(EnigmaMachine i_machine) {
-        List<Integer> chosenRotorsIDs = i_machine.getRotorsId_sorted();
-        List<Integer> chosenRotorsPositions = i_machine.getChosenRotorsPositions();
-        Integer chosenReflectorID = i_machine.getChosenReflectorId();
-        Integer abcSize = i_machine.getABC().length();
+    public Secret moveToNext(EnigmaMachine i_machine) {
         SecretBuilder secretBuilder = i_machine.createSecret();
         boolean isCarry = false;
 
-        for(int i = 0; i < chosenRotorsIDs.size(); i++) {
-            Integer position = chosenRotorsPositions.get(i);
+        for(int i = 0; i < this.selectedRotors.size(); i++) {
+            Integer position = this.selectedRotorsPositions.get(i);
             if (i == 0 || isCarry){
-                position = (position + 1) % abcSize;
+                position = (position + 1) % this.abcSize;
                 isCarry = (position == 0 ? true:false);
             }
-            secretBuilder.selectRotor(chosenRotorsIDs.get(i), position);
+            secretBuilder.selectRotor(this.selectedRotors.get(i), position + 1);//method uses position as 1-based
         }
-        secretBuilder.selectReflector(chosenReflectorID);
-        secretBuilder.create();
+        secretBuilder.selectReflector(this.selectedReflector);
+        return secretBuilder.create();
     }
 
     @Override
     public boolean hasNext(EnigmaMachine i_machine) {
-        List<Integer> chosenRotorsPositions = i_machine.getChosenRotorsPositions();
-        Integer abcSize = i_machine.getABC().length();
-        for (int i = 0; i < chosenRotorsPositions.size(); i++){
-            if (chosenRotorsPositions.get(i) != (abcSize - 1)){
+        for (int i = 0; i < this.selectedRotorsPositions.size(); i++){
+            if (this.selectedRotorsPositions.get(i) != (this.abcSize - 1)){
                 return true;
             }
         }

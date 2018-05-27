@@ -21,7 +21,6 @@ public class AgentResponse {
     }
 
     public void reset() {
-        candidacies = null;
         numOfCandidacies = 0;
     }
 
@@ -33,4 +32,7 @@ public class AgentResponse {
         return candidacies;
     }
 
+    public boolean isEmpty() {
+        return numOfCandidacies == 0;
+    }
 }

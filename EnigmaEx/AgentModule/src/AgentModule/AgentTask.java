@@ -13,7 +13,7 @@ public class AgentTask {
     }
     public boolean moveToNextCode(EnigmaMachine machine){
         if (--length > 0 && secret.hasNext(machine)) {
-            secret.moveToNext(machine);
+            this.secret = secret.moveToNext(machine);
             return true;
         } else{
             return false; //TODO:: tell agent task is finished

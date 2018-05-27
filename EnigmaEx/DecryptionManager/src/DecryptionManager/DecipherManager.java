@@ -79,7 +79,9 @@ public class DecipherManager extends Thread{
     }
 
     private void handleAgentResponse(AgentResponse response) {
-        for( CandidateForDecoding candidate: response.getCandidacies())
+        if (response.isEmpty())
+            return;
+        for (CandidateForDecoding candidate: response.getCandidacies())
         {
             candidacies.add(candidate);
         }

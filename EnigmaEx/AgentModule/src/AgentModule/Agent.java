@@ -112,7 +112,9 @@ public class Agent extends Thread{
                     tasks.add(task);
                 }
                 doTasks();
-                answersToDM_Queue.put(response);
+                if (!response.isEmpty()) {
+                    answersToDM_Queue.put(response);
+                }
                 reset();
                 done = !DMstatus.checkIfToContinue();
             }
@@ -125,7 +127,8 @@ public class Agent extends Thread{
     {
         tasks = null;
         currentTask = null;
-        response.reset();
+        response = new AgentResponse(this.agentID);
+        //response.reset();
         //tasksAmount = 0;
     }
 
