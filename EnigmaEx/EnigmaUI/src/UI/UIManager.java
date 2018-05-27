@@ -17,6 +17,7 @@ public class UIManager {
     private boolean isMachineSet = false;
     private boolean isConfigSet = false;
     private int numOfOptions = 9;
+    private int numOfOptions_SM = 3;
     private Decipher decipher;
     private boolean decipheringIsPause = false;
 
@@ -101,7 +102,7 @@ public class UIManager {
 
     private void runSubMenu() {
         while (isAutomaticDecoding) {
-            int userSelection = getValidUserSelection();
+            int userSelection = getValidUserSelection_SM();
             switch (userSelection) {
                 case 0:
                     displaySubmenu();
@@ -121,6 +122,22 @@ public class UIManager {
             }
             System.out.println("Waiting for the next command (press 0 to display menu)");
         }
+    }
+    
+    private int getValidUserSelection_SM() {
+        Scanner in = new Scanner(System.in);
+        String userInput;
+        int userSelection = 0;
+
+        userInput = in.next();
+        while (!isValidOptionNum(userInput, numOfOptions_SM)) {
+            System.out.println("This option doesn't exist in the system, please try again:");
+            userInput = in.next();
+        }
+        userSelection = Integer.parseInt(userInput);
+
+
+        return userSelection;
     }
 
     private void pauseDeciphering(){
@@ -272,7 +289,7 @@ public class UIManager {
 
         while (!isValid) {
             userInput = in.next();
-            while (!isValidOptionNum(userInput)) {
+            while (!isValidOptionNum(userInput, numOfOptions)) {
                 System.out.println("This option doesn't exist in the system, please try again:");
                 userInput = in.next();
             }
@@ -302,14 +319,14 @@ public class UIManager {
         return isValid;
     }
 
-    private boolean isValidOptionNum(String userInput) {
+    private boolean isValidOptionNum(String userInput, Integer wantedNumOfOptions) {
         int userSelection =0 ;
         if(!tryParseInt(userInput))
             return false; //invalid type
         else
         {
             userSelection = Integer.parseInt(userInput);
-            if((userSelection>=0)&&(userSelection<=numOfOptions))
+            if((userSelection>=0)&&(userSelection<=wantedNumOfOptions))
                 return true;
         }
         return false;
