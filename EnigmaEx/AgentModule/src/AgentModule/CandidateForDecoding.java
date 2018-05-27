@@ -19,7 +19,6 @@ public class CandidateForDecoding {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Agent :").append(agentID).append(" Decoding :").append(decoding);
-        sb.append(" Secret :").append(secret);
         return sb.toString();
     }
 
