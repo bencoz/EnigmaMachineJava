@@ -1,6 +1,7 @@
 package EnigmaMachineFactory;
 
 import EnigmaMachineFactory.Actual.Decipher;
+import EnigmaMachineFactory.Actual.Enigma;
 import EnigmaMachineFactory.Actual.Reflector;
 import EnigmaMachineFactory.Actual.Rotor;
 
@@ -109,4 +110,6 @@ public interface EnigmaMachine {
     EnigmaMachine deepCopy();
 
     Decipher getDecipher();
+
+    Enigma getEnigma();
 }

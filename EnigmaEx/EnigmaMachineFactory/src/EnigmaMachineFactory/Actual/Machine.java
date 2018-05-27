@@ -50,10 +50,24 @@ public class Machine implements Serializable {
         return rotor.getMapFromPositionByChar(rotorPosition);
     }
 
+    public Character getRotorPositionByNumber(int rotorID, Integer number) {
+        Rotor rotor = rotors.stream().
+                filter(r -> r.getID() == rotorID).
+                findAny().
+                get();
+        return rotor.getMappingCharRightPart(number);
+    }
+
     public Reflector getReflectorById(int selectedReflectorID) {
         return reflectors.stream().
                 filter(r -> r.getID() == selectedReflectorID).
                 findFirst().get();
+    }
+
+    public String getReflectorStringById(int selectedReflectorID) {
+        return reflectors.stream().
+                filter(r -> r.getID() == selectedReflectorID).
+                findFirst().get().getStringID();
     }
 
     public List<Rotor> getRotorsById(List<Integer> selectedRotorsInOrder) {
