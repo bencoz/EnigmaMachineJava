@@ -89,7 +89,8 @@ public class DecipherManager extends Thread{
         System.out.println("Mission accomplished");
         for (CandidateForDecoding candidate: candidacies)
         {
-            System.out.println(candidacies.toString());
+            System.out.println(candidate.toString());
+            System.out.println(getSecretStr(candidate.getSecret()));
         }
     }
 
