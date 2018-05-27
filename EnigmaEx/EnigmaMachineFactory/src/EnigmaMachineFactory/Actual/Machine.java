@@ -42,6 +42,20 @@ public class Machine implements Serializable {
 
     public int getRotorsSize() { return rotors.size(); }
 
+    public Character getRotorPositionByNumber(int rotorID, Integer number) {
+        Rotor rotor = rotors.stream().
+                filter(r -> r.getID() == rotorID).
+                findAny().
+                get();
+        return rotor.getMappingCharRightPart(number);
+    }
+
+    public String getReflectorStringById(int selectedReflectorID) {
+        return reflectors.stream().
+                filter(r -> r.getID() == selectedReflectorID).
+                findFirst().get().getStringID();
+    }
+
     public int getRotorPositionByChar(int rotorID, char rotorPosition) {
         Rotor rotor = rotors.stream().
         filter(r -> r.getID() == rotorID).

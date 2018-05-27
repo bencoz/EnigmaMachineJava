@@ -15,6 +15,7 @@ public class Agent extends Thread{
     private String code;
     private List<AgentTask> tasks ;
     private AgentTask currentTask;
+    private Integer currentTaskInd = 0;
     private AgentResponse response;
     private DecipheringStatus DMstatus;
 
@@ -48,19 +49,20 @@ public class Agent extends Thread{
         for(int i=0;i<tasks.size();i++)
         {
             this.currentTask = tasks.get(i);
-            //doCurrentTask();
+            currentTaskInd = i;
+            doCurrentTask();
         }
     }
 
     //work on current task update the agent response (add the Candidacies For Decoding to it)
     private void doCurrentTask(){
-        int firstSize = this.currentTask.getLength();
+        int firstSize = currentTask.getLength();
         for(int i=0; i < firstSize; i++) {
-            machine.initFromSecret(this.currentTask.getSecret());
+            machine.initFromSecret(currentTask.getSecret());
             String decoding = machine.process(code);
 
             if(isCandidaciesForDecoding(decoding)) {
-                CandidateForDecoding candidate = new CandidateForDecoding(decoding, this.currentTask.getSecret(), agentID);
+                CandidateForDecoding candidate = new CandidateForDecoding(decoding, currentTask.getSecret(), agentID);
                 response.addDecoding(candidate);
             }
             if(currentTask.hasNext()){
@@ -108,10 +110,10 @@ public class Agent extends Thread{
                 AgentTask task;
                 tasks = new ArrayList<>();
                 for (int i = 0; i < tasksAmount; i++) {
-
-                    this.currentTask = tasksFromDM_Queue.take();
-                    doCurrentTask();
+                    task = tasksFromDM_Queue.take();
+                    tasks.add(task);
                 }
+                doTasks();
                 answersToDM_Queue.put(response);
                 reset();
                 done = !DMstatus.checkIfToContinue();
@@ -127,6 +129,7 @@ public class Agent extends Thread{
     {
         tasks = null;
         currentTask = null;
+        currentTaskInd = 0;
         response = new AgentResponse(this.agentID);
         //response.reset();
         //tasksAmount = 0;
@@ -134,5 +137,22 @@ public class Agent extends Thread{
 
     public void setTasksAmount(Integer _tasksAmount) {
         this.tasksAmount = _tasksAmount;
+    }
+
+    public Integer getAgentID()
+    {
+        return agentID;
+    }
+
+    public AgentTask getCurrentTask() {
+        return currentTask;
+    }
+
+    public String getDecipheringStatus(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Agent ID:").append(agentID).append("\n");
+        int numOfRemainTasks = tasks.size() - currentTaskInd;
+        sb.append("Number of tasks remaining to perform").append(numOfRemainTasks).append("\n");
+        return sb.toString();
     }
 }

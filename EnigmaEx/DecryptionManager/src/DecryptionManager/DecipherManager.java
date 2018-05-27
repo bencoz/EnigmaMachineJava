@@ -95,7 +95,7 @@ public class DecipherManager extends Thread{
 
     public boolean isValidNumOfAgents(Integer _numOfAgents)
     {
-        if (_numOfAgents >=1 && _numOfAgents <= maxNumOfAgents )//TODO::CHANGE BACK TO 2
+        if (_numOfAgents >= 2 && _numOfAgents <= maxNumOfAgents )
             return true;
         else
             return false;
@@ -189,8 +189,11 @@ public class DecipherManager extends Thread{
         System.out.println("Time elapsed since the beginning of the mission:");
         System.out.println(formatDuration(System.currentTimeMillis() - decipheringStartTime));
         System.out.print("Percentage of progress: ");
-        System.out.print("Percentage of progress: ");
-
+        for(Agent agent: agentsList) {
+            System.out.println(agent.getDecipheringStatus());
+            System.out.print("agent current task: ");
+            System.out.println(getSecretStr(agent.getCurrentTask().getSecret()));
+        }
     }
 
     public static String formatDuration(long millis) {
@@ -198,5 +201,48 @@ public class DecipherManager extends Thread{
         long minutes = (millis / (1000 * 60));
 
         return String.format("%02d:%02d", minutes, seconds);
+    }
+    private String getSecretStr(Secret _secret){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getWorkingRotorsStr(_secret));
+        sb.append(getWorkingRotorsPositionStr(_secret));
+        sb.append('<').append(getWorkingReflectorStr(_secret)).append('>');
+        return sb.toString();
+    }
+
+    private String getWorkingReflectorStr(Secret _secret) {
+        return machine.getEnigma().getMachine().getReflectorStringById(_secret.getSelectedReflector());
+    }
+
+    private String getWorkingRotorsStr(Secret _secret) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Integer> selectedRotors = _secret.getSelectedRotorsInOrder();
+        List<Integer> shallowCopy = selectedRotors.subList(0, selectedRotors.size());
+        Collections.reverse(shallowCopy);
+        for (Integer integer : shallowCopy){
+            sb.append(integer).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
+    }
+
+    private String getWorkingRotorsPositionStr(Secret _secret) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Character> chars = new ArrayList<>();
+        List<Integer> selectedRotors = _secret.getSelectedRotorsInOrder();
+        List<Integer> rotorsLoc = _secret.getSelectedRotorsPositions();
+        for (int i = 0; i < selectedRotors.size(); i++){
+            Character ch = machine.getEnigma().getMachine().getRotorPositionByNumber(selectedRotors.get(i), rotorsLoc.get(i));
+            chars.add(ch);
+        }
+        List<Character> shallowCopy = chars.subList(0,chars.size());
+        Collections.reverse(shallowCopy);
+        for (Character character : shallowCopy){
+            sb.append(character).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
     }
 }

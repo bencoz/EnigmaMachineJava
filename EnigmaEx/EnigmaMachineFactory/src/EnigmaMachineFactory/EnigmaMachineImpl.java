@@ -21,6 +21,7 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
         this.enigma = enigma;
     }
 
+    @Override
     public Enigma getEnigma() {
         return enigma;
     }
