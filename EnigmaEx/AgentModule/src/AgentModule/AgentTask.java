@@ -1,7 +1,9 @@
 package AgentModule;
 
-import EnigmaMachineFactory.EnigmaMachine;
-import EnigmaMachineFactory.Secret;
+import EnigmaMachineFactory.*;
+import EnigmaMachineFactory.Actual.Rotor;
+
+import java.util.*;
 
 public class AgentTask {
     private Secret secret;
@@ -32,4 +34,7 @@ public class AgentTask {
     public Integer getLength() {
         return length;
     }
+
+
+
 }
