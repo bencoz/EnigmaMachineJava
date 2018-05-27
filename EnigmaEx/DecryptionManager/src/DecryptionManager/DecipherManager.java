@@ -18,7 +18,7 @@ public class DecipherManager extends Thread{
     private Integer blockSize; //block of tasks
     private List<CandidateForDecoding> candidacies;
     private DecipheringStatus status;
-    private long decipheringStartTime;
+    private long decipheringStartTime ;
 
     private BlockingQueue<AgentResponse> answersToDM_Queue;
 
@@ -60,42 +60,23 @@ public class DecipherManager extends Thread{
         while (!done) {
             try {
 
+                System.out.println("DM1");
                 AgentResponse response = answersToDM_Queue.take();
-
+                System.out.println("DM2");
                 handleAgentResponse(response);
-
+                System.out.println("DM3");
                 giveAgentBlockOfTasks(agentsList.get(response.getAgentID()));
 
-                done = mission.isDone() || !status.checkIfToContinue();
+                done = mission.isDone() && !status.checkIfToContinue();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-        status.stopDeciphering();
-        interruptAgents();
-        printDecipheringResults();
-    }
-
-    private void interruptAgents() {
-        for (Agent agent : agentsList){
-            agent.interrupt();
-        }
-    }
-
-
-    private void printDecipheringResults() {
-        System.out.println("Time elapsed since the beginning of the mission:");
-        System.out.println(formatDuration(System.currentTimeMillis() - decipheringStartTime));
-        System.out.println("Mission accomplished");
-        for (CandidateForDecoding candidate: candidacies)
-        {
-            System.out.println(candidacies.toString());
         }
     }
 
     public boolean isValidNumOfAgents(Integer _numOfAgents)
     {
-        if (_numOfAgents >=1 && _numOfAgents <= maxNumOfAgents )//TODO::CHANGE BACK TO 2
+        if (_numOfAgents >=2 && _numOfAgents <= maxNumOfAgents )
             return true;
         else
             return false;
@@ -189,7 +170,12 @@ public class DecipherManager extends Thread{
         System.out.println("Time elapsed since the beginning of the mission:");
         System.out.println(formatDuration(System.currentTimeMillis() - decipheringStartTime));
         System.out.print("Percentage of progress: ");
-        System.out.print("Percentage of progress: ");
+        //System.out.print(mission.getProgressPercentage());
+        for(Agent agent: agentsList) {
+            System.out.println(agent.getDecipheringStatus());
+            System.out.print("agent current task: ");
+            System.out.println(getSecretStr(agent.getCurrentTask().getSecret()));
+        }
 
     }
 
@@ -198,5 +184,50 @@ public class DecipherManager extends Thread{
         long minutes = (millis / (1000 * 60));
 
         return String.format("%02d:%02d", minutes, seconds);
+    }
+
+
+    private String getSecretStr(Secret _secret){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getWorkingRotorsStr(_secret));
+        sb.append(getWorkingRotorsPositionStr(_secret));
+        sb.append('<').append(getWorkingReflectorStr(_secret)).append('>');
+        return sb.toString();
+    }
+
+    private String getWorkingReflectorStr(Secret _secret) {
+        return machine.getEnigma().getMachine().getReflectorStringById(_secret.getSelectedReflector());
+    }
+
+    private String getWorkingRotorsStr(Secret _secret) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Integer> selectedRotors = _secret.getSelectedRotorsInOrder();
+        List<Integer> shallowCopy = selectedRotors.subList(0, selectedRotors.size());
+        Collections.reverse(shallowCopy);
+        for (Integer integer : shallowCopy){
+            sb.append(integer).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
+    }
+
+    private String getWorkingRotorsPositionStr(Secret _secret) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('<');
+        List<Character> chars = new ArrayList<>();
+        List<Integer> selectedRotors = _secret.getSelectedRotorsInOrder();
+        List<Integer> rotorsLoc = _secret.getSelectedRotorsPositions();
+        for (int i = 0; i < selectedRotors.size(); i++){
+            Character ch = machine.getEnigma().getMachine().getRotorPositionByNumber(selectedRotors.get(i), rotorsLoc.get(i));
+            chars.add(ch);
+        }
+        List<Character> shallowCopy = chars.subList(0,chars.size());
+        Collections.reverse(shallowCopy);
+        for (Character character : shallowCopy){
+            sb.append(character).append(',');
+        }
+        sb.deleteCharAt(sb.length()-1).append('>');
+        return sb.toString();
     }
 }
