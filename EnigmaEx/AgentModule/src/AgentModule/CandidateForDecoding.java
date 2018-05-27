@@ -14,15 +14,6 @@ public class CandidateForDecoding {
         this.secret = _position;
         this.agentID = _agentID;
     }
-
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Agent :").append(agentID).append(" Decoding :").append(decoding);
-        sb.append(" Secret :").append(secret);
-        return sb.toString();
-    }
-
     public String getDecoding() {
         return decoding;
     }
