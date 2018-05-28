@@ -48,11 +48,6 @@ public class EngineManager {
     public boolean createEnigmaMachineFromXMLFile(String path) {
         try {
             machine = factory.createEnigmaMachineFromXMLFile(path);
-            if (machine.getDecipher() != null) {
-                addToDictionary(removeExcludeCharsFromList(machine.getDecipher().getDictionary(),machine.getDecipher().getExcludeChars()).split(" "));
-                decipherManager = new DecipherManager(machine.deepCopy(), dictionary);
-                decipherAvailable = true;
-            }
         } catch (FileNotFoundException e){
             errorInMachineBuilding = "Could not find XML file.";
         }
@@ -64,7 +59,7 @@ public class EngineManager {
             errorInMachineBuilding = "Machine ABC is not Even";
             return false;
         }
-        if (!isMachineAgentsSizeOK()){
+        if (!isMachineAgentsSizeOK() && machine.getDecipher() != null){
             errorInMachineBuilding = "Too many agents... agents must be <= 50)";
             return false;
         }
