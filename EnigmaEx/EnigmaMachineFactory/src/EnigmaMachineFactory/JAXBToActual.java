@@ -8,6 +8,7 @@ import EnigmaMachineFactory.JAXBGenerated.Rotor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
 
 public class JAXBToActual {
     private static JAXBToActual ourInstance = new JAXBToActual();
@@ -49,14 +50,15 @@ public class JAXBToActual {
 
         if (decipher != null){
             EnigmaMachineFactory.Actual.Decipher ActualDecipher = new EnigmaMachineFactory.Actual.Decipher(decipher.getAgents());
+            ActualDecipher.setExcludeChars(decipher.getDictionary().getExcludeChars());
             String words = decipher.getDictionary().getWords().trim();
             ActualDecipher.appedToDictionary(words.toUpperCase().split(" "));
-            ActualDecipher.setExcludeChars(decipher.getDictionary().getExcludeChars());
+
             res.setDecipher(ActualDecipher);
-            //TODO: process dictinary words that only exclude chars inside dictionary words
         }
 
         res.setMachine(machine);
         return res;
     }
+
 }

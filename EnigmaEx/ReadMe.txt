@@ -1,4 +1,4 @@
-Enigma Ex1 By :
+Enigma Ex2 By :
 Ben Cohen	304965643	Bencohen3@gmail.com
 Eden Hartman	313526105	edenha@mta.ac.il 
 -------------------------------------------------------------------
@@ -28,11 +28,6 @@ Module : EnigmaEnigne Dependency(EnigmaMachineFactory)
 		-CodeFormat which represent a machine's "secret".
 		-CodedStrings which represent a machine's output and input history.
 
--------------------------------------------------------------------
-This was the 1st BOUNS of building the machine we used your supplied interfaces,
-expanded them and implenment them. We used a Factory method for creating, 
-Builder method for building the machine and its "secret", the java JAXB option for unmarsheling and more...
-
 Module : EnigmaMachineFactory 
 	Package : EnigmaMachineFactory
 		 Contains all off the Machine objects.
@@ -55,4 +50,28 @@ Module : EnigmaMachineFactory
 		 Contains our actual inner machine classes.
 		 Objects such as : Enigma, Machine, Mapping, Reflect, Reflector and Rotor
 
--------------------------------------------------------------------
+Module : DecryptionManager
+	Package : DecryptionManager
+		 Manages all of the deciphering mission 
+		-DecipherManager:
+		 The deciphering manager, in charge of the mission and all of the agents
+		-DecipherMission:
+		 Represent a mission for deciphering
+		-DifficultyLevel(Enum):
+		 4 levels of Difficulty
+
+Module : AgentModule
+	Package : AgentModule
+		 Contains all off the Agent related objects.
+		-Agent:
+		 Extends thread, gets a block of AgentTasks, deciphers them, check them with the dictonary and return results to DM
+		-AgentFactory:
+		 Resposnble for creating new agents
+		-AgentResponse:
+		 An object for representing an agent response to the DM
+		-AgentTask:
+		 Represent an agent task i.e a starting secret and a size to run on.
+		-CandidateForDecoding:
+		 1 code after deciphering it with its decipheing agent and it's secret
+		-DecipheringStatus:
+		 Object to sync the agents with the DM. i.e controls the pause\play\stop options from the DM

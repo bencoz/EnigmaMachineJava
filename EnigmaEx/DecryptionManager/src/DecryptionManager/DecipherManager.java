@@ -24,10 +24,9 @@ public class DecipherManager extends Thread{
 
     private BlockingQueue<AgentResponse> answersToDM_Queue;
 
-    public DecipherManager(EnigmaMachine em) {
+    public DecipherManager(EnigmaMachine em, List<String> _dictionary) {
         machine = em;
-        dictionary = new LinkedList<>();
-        dictionary = em.getDecipher().getDictionary();
+        dictionary = _dictionary;
         excludeWords = em.getDecipher().getExcludeChars();
         maxNumOfAgents = em.getDecipher().getMaxNumOfAgents();
         candidacies = new ArrayList<>();
@@ -179,20 +178,9 @@ public class DecipherManager extends Thread{
     }
 
     private void printDecipheringResults() {
-        System.out.println("Mission is done");
-        //display time
-        System.out.println("Time elapsed since the beginning of the mission:");
         long decipheringEndTime = System.currentTimeMillis();
-        System.out.println(formatDuration(decipheringEndTime - decipheringStartTime));
-        //display mission size
-        //TODO: need to display num of options(secrets) or num of task??
-        System.out.println("The number of options tested in the mission: " + mission.getSize().intValue());
-        //display agents details
-        System.out.println("Agents details:");
-        for(Agent agent : agentsList){
-            //TODO: need to display num of options(secrets) or num of task??
-            System.out.println("Agent " + agent.getAgentID() + " tested " +agent.getHandledOptionsAmount() + " options");
-        }
+        System.out.println("Mission is done");
+        System.out.println("Printing Results:\n--------------------------------------------");
         //display candidacies for decoding
         int numOfCandidacies = candidacies.size();
         if(numOfCandidacies > 0) {
@@ -205,8 +193,16 @@ public class DecipherManager extends Thread{
         else
             System.out.println("There are no candidacies for decoding.");
 
-        System.out.println();
-        System.out.println("Please press any key to continue");
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("Time elapsed since the beginning of the mission:");
+        System.out.println(formatDuration(decipheringEndTime - decipheringStartTime));
+        System.out.println("The number of options tested in the mission: " + mission.getSize().intValue());
+        //display agents details
+        System.out.println("Agents details:");
+        for(Agent agent : agentsList){
+            System.out.println("Agent " + agent.getAgentID() + " tested " +agent.getHandledOptionsAmount() + " options");
+        }
+        System.out.println("Press any key to continue...");
     }
 
     public void printDecipheringProgressMode() {

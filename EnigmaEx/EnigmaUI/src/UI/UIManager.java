@@ -282,6 +282,7 @@ public class UIManager {
         System.out.println("Please enter your wanted message:");
         userInput = in.nextLine();
         userInput = userInput.toUpperCase();
+        userInput = Logic.removeExcludeCharsFromString(userInput);
         while (!Logic.isValidABC(userInput) || !Logic.isInDictionary(userInput))
         {
             System.out.println("INVALID INPUT. Please enter your wanted message:");
@@ -352,6 +353,7 @@ public class UIManager {
             m_subMenu.append(line).append("\n");
             System.out.println(line);
         }
+        m_subMenu.delete(m_subMenu.length()-2, m_subMenu.length());
     }
 
     private void init() throws IOException {
@@ -365,6 +367,7 @@ public class UIManager {
             m_menu.append(line).append("\n");
             System.out.println(line);
         }
+        m_menu.delete(m_menu.length()-2, m_menu.length());
     }
 
     private void displayMenu()

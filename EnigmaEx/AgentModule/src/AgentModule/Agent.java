@@ -79,12 +79,14 @@ public class Agent extends Thread{
     //gets code decoding and return true if all words in the dictionary and false otherwise
     private boolean isCandidaciesForDecoding(String decoding){
         boolean found;
-        String[] words = decoding.split(" ");
+        String[] words = removeExcludeCharsFromString(decoding, machine.getDecipher().getExcludeChars()).split(" ");
         for (String word : words){
             found = false;
-            for (String permittedWord : dictionary){
-                if (permittedWord.equals(word))
+            for (int i = 0; i < dictionary.size() && !found; i++) {
+                String permittedWord = dictionary.get(i);
+                if (permittedWord.equals(word)) {
                     found = true;
+                }
             }
             if (!found)
                 return false;
@@ -92,6 +94,18 @@ public class Agent extends Thread{
         return true;
     }
 
+    private String removeExcludeCharsFromString(String words, String excludeChars) {
+        StringBuilder sb = new StringBuilder(words);
+        for(int i = 0; i < sb.length(); i++)
+        {
+            Character temp = sb.charAt(i);
+            if(excludeChars.contains(temp.toString()))
+            {
+                sb.deleteCharAt(sb.indexOf(temp.toString()));
+            }
+        }
+        return sb.toString();
+    }
 
     public void setID(Integer _ID){
         this.agentID = _ID;
@@ -133,8 +147,7 @@ public class Agent extends Thread{
         currentTask = null;
         currentTaskInd = 0;
         response = new AgentResponse(this.agentID);
-        //response.reset();
-        //tasksAmount = 0;
+
     }
 
     public void setTasksAmount(Integer _tasksAmount) {
@@ -158,7 +171,7 @@ public class Agent extends Thread{
         }
         else {
             int numOfRemainTasks = tasks.size() - currentTaskInd;
-            sb.append("Number of tasks remaining to perform").append(numOfRemainTasks).append("\n");
+            sb.append("Tasks remaining: ").append(numOfRemainTasks).append("\n");
         }
         return sb.toString();
     }

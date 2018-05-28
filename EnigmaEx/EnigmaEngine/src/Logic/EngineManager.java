@@ -49,8 +49,8 @@ public class EngineManager {
         try {
             machine = factory.createEnigmaMachineFromXMLFile(path);
             if (machine.getDecipher() != null) {
-                decipherManager = new DecipherManager(machine.deepCopy());
-                dictionary = machine.getDecipher().getDictionary();
+                addToDictionary(removeExcludeCharsFromList(machine.getDecipher().getDictionary(),machine.getDecipher().getExcludeChars()).split(" "));
+                decipherManager = new DecipherManager(machine.deepCopy(), dictionary);
                 decipherAvailable = true;
             }
         } catch (FileNotFoundException e){
@@ -64,6 +64,10 @@ public class EngineManager {
             errorInMachineBuilding = "Machine ABC is not Even";
             return false;
         }
+        if (!isMachineAgentsSizeOK()){
+            errorInMachineBuilding = "Too many agents... agents must be <= 50)";
+            return false;
+        }
         if (!isMachineRotorsCountOK())
             return false;
         if (!isMachineRotorsOK())
@@ -71,8 +75,17 @@ public class EngineManager {
         if (!isMachineReflectorsOK())
             return false;
 
+
         statsManager.reset();
         return true;
+    }
+
+    private void addToDictionary(String[] strings) {
+        if (dictionary == null)
+            dictionary = new LinkedList<>();
+        for (String word : strings) {
+            dictionary.add(word);
+        }
     }
 
     private boolean isMachineReflectorsOK() {
@@ -361,6 +374,36 @@ public class EngineManager {
             return "No messages received yet";
     }
 
+    private String removeExcludeCharsFromList(List<String> words, String excludeChars) {
+        StringBuilder sb = new StringBuilder();
+        for(String word : words)
+            sb.append(word).append(" ");
+
+        for(int i = 0; i < sb.length(); i++)
+        {
+            Character temp = sb.charAt(i);
+            if(excludeChars.contains(temp.toString()))
+            {
+                sb.deleteCharAt(sb.indexOf(temp.toString()));
+            }
+        }
+        return sb.toString();
+    }
+
+    public String removeExcludeCharsFromString(String words) {
+        StringBuilder sb = new StringBuilder(words);
+        String excludeChars = machine.getDecipher().getExcludeChars();
+        for(int i = 0; i < sb.length(); i++)
+        {
+            Character temp = sb.charAt(i);
+            if(excludeChars.contains(temp.toString()))
+            {
+                sb.deleteCharAt(sb.indexOf(temp.toString()));
+            }
+        }
+        return sb.toString();
+    }
+
     public boolean isInDictionary(String userInput) {
         if (!decipherAvailable)
             return true;
@@ -368,10 +411,10 @@ public class EngineManager {
         String[] words = userInput.split(" ");
         for (String word : words){
             found = false;
-            for (String permittedWord : dictionary){
+            for (int i = 0; i < dictionary.size() && !found; i++) {
+                String permittedWord = dictionary.get(i);
                 if (permittedWord.equals(word)) {
                     found = true;
-                    break;
                 }
             }
             if (!found)
@@ -416,14 +459,18 @@ public class EngineManager {
 
     public void initDecipher() {
         if (machine.getDecipher() != null) {
-            decipherManager = new DecipherManager(machine.deepCopy());
-            dictionary = machine.getDecipher().getDictionary();
+            addToDictionary(removeExcludeCharsFromList(machine.getDecipher().getDictionary(),machine.getDecipher().getExcludeChars()).split(" "));
+            decipherManager = new DecipherManager(machine.deepCopy(), dictionary);
             decipherAvailable = true;
         }
     }
 
     public boolean isDecipherManagerAlive() {
         return decipherManager.isAlive();
+    }
+
+    public boolean isMachineAgentsSizeOK() {
+        return machine.getDecipher().getMaxNumOfAgents() <= 50;
     }
 }
 

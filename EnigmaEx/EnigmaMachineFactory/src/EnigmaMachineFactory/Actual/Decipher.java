@@ -16,6 +16,12 @@ public class Decipher implements Serializable {
     public List<String> getDictionary() {
         return dictionary;
     }
+    public String getDictionaryAsString(){
+        StringBuilder sb = new StringBuilder();
+        for (String word : dictionary)
+            sb.append(word).append(" ");
+        return sb.toString();
+    }
     public void appedToDictionary(String[] words) {
         for (String word : words) {
             dictionary.add(word);
