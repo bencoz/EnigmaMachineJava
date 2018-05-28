@@ -18,6 +18,7 @@ public class Agent extends Thread{
     private Integer currentTaskInd = 0;
     private AgentResponse response;
     private DecipheringStatus DMstatus;
+    private Integer handledOptionsAmount = 0;
 
     private Integer tasksAmount; //num of tasks that received each time ( == BlockSize)
     private BlockingQueue<AgentTask> tasksFromDM_Queue;
@@ -60,6 +61,7 @@ public class Agent extends Thread{
         for(int i=0; i < firstSize; i++) {
             machine.initFromSecret(currentTask.getSecret());
             String decoding = machine.process(code);
+            handledOptionsAmount++;
 
             if(isCandidaciesForDecoding(decoding)) {
                 CandidateForDecoding candidate = new CandidateForDecoding(decoding, currentTask.getSecret(), agentID);
@@ -151,8 +153,19 @@ public class Agent extends Thread{
     public String getDecipheringStatus(){
         StringBuilder sb = new StringBuilder();
         sb.append("Agent ID:").append(agentID).append("\n");
-        int numOfRemainTasks = tasks.size() - currentTaskInd;
-        sb.append("Number of tasks remaining to perform").append(numOfRemainTasks).append("\n");
+        if(tasks == null){
+            sb.append("didn't get tasks yet").append("\n");
+        }
+        else {
+            int numOfRemainTasks = tasks.size() - currentTaskInd;
+            sb.append("Number of tasks remaining to perform").append(numOfRemainTasks).append("\n");
+        }
         return sb.toString();
     }
+
+    public Integer getHandledOptionsAmount() {
+        return handledOptionsAmount;
+    }
+
+
 }

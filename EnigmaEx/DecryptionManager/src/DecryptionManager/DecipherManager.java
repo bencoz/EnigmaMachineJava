@@ -11,15 +11,16 @@ public class DecipherManager extends Thread{
     private List<String> dictionary;
     private String excludeWords;
     private Integer numOfAgents;
+    private Integer taskSize;
     private Integer maxNumOfAgents;
     private EnigmaMachine machine; //copy of the machine
     private List<Agent> agentsList;
     private DecipherMission mission;
     private Integer blockSize; //block of tasks
-    private List<CandidateForDecoding> candidates;
+    private List<CandidateForDecoding> candidacies;
     private DecipheringStatus status;
-    private Thread threadToStop;
     private long decipheringStartTime;
+    private Integer handledTasksAmount = 0;
 
     private BlockingQueue<AgentResponse> answersToDM_Queue;
 
@@ -29,7 +30,7 @@ public class DecipherManager extends Thread{
         dictionary = em.getDecipher().getDictionary();
         excludeWords = em.getDecipher().getExcludeChars();
         maxNumOfAgents = em.getDecipher().getMaxNumOfAgents();
-        candidates = new ArrayList<>();
+        candidacies = new ArrayList<>();
         agentsList = new ArrayList<>();
         status = new DecipheringStatus();
         this.setName("DM");
@@ -40,6 +41,7 @@ public class DecipherManager extends Thread{
         mission = new DecipherMission(machine,_difficulty);
         mission.init(machine, _taskSize, _numOfAgents);
         numOfAgents = _numOfAgents;
+        taskSize = _taskSize;
         if (mission.getSize() < _taskSize*numOfAgents)
             return false;
         this.codeToDecipher = _code;
@@ -60,20 +62,18 @@ public class DecipherManager extends Thread{
         divideTasks();
         while (!done) {
             try {
-
                 AgentResponse response = answersToDM_Queue.take();
-
                 handleAgentResponse(response);
-
+                handledTasksAmount++;
                 giveAgentBlockOfTasks(agentsList.get(response.getAgentID()));
-
                 done = mission.isDone() || !status.checkIfToContinue();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        stopDeciphering();
+        status.stopDeciphering();
         interruptAgents();
+        AgentFactory.resetFactory();
         printDecipheringResults();
     }
 
@@ -83,19 +83,8 @@ public class DecipherManager extends Thread{
         }
     }
 
-    private void printDecipheringResults() {
-        long endTime = System.currentTimeMillis();
-        System.out.println("Printing Results:\n--------------------------------------------");
-        for (CandidateForDecoding candidate: candidates)
-        {
-            System.out.println(candidate.toString());
-            System.out.println("Secret: " + getSecretStr(candidate.getSecret()));
-        }
-        System.out.println("--------------------------------------------------------------------------------\nTotal number of candidates: "
-                + candidates.size());
-        System.out.println("Time elapsed since the beginning of the mission: " + formatDuration(endTime - decipheringStartTime));
-        System.out.println("Enter any key to continue...");
-    }
+
+
 
     public boolean isValidNumOfAgents(Integer _numOfAgents)
     {
@@ -110,7 +99,7 @@ public class DecipherManager extends Thread{
             return;
         for (CandidateForDecoding candidate: response.getCandidacies())
         {
-            candidates.add(candidate);
+            candidacies.add(candidate);
         }
     }
 
@@ -186,20 +175,69 @@ public class DecipherManager extends Thread{
     }
 
     public void stopDeciphering() {
-        threadToStop.interrupt();
         this.status.stopDeciphering();
     }
 
+    private void printDecipheringResults() {
+        System.out.println("Mission is done");
+        //display time
+        System.out.println("Time elapsed since the beginning of the mission:");
+        long decipheringEndTime = System.currentTimeMillis();
+        System.out.println(formatDuration(decipheringEndTime - decipheringStartTime));
+        //display mission size
+        //TODO: need to display num of options(secrets) or num of task??
+        System.out.println("The number of options tested in the mission: " + mission.getSize().intValue());
+        //display agents details
+        System.out.println("Agents details:");
+        for(Agent agent : agentsList){
+            //TODO: need to display num of options(secrets) or num of task??
+            System.out.println("Agent " + agent.getAgentID() + " tested " +agent.getHandledOptionsAmount() + " options");
+        }
+        //display candidacies for decoding
+        int numOfCandidacies = candidacies.size();
+        if(numOfCandidacies > 0) {
+            System.out.println("There are " + numOfCandidacies + " candidacies for decoding:");
+            for (CandidateForDecoding candidate : candidacies) {
+                System.out.println(candidate.toString());
+                System.out.println(getSecretStr(candidate.getSecret()));
+            }
+        }
+        else
+            System.out.println("There are no candidacies for decoding.");
+
+        System.out.println();
+        System.out.println("Please press any key to continue");
+    }
 
     public void printDecipheringProgressMode() {
+        System.out.println("Deciphering Status:");
+        //display time
         System.out.println("Time elapsed since the beginning of the mission:");
         System.out.println(formatDuration(System.currentTimeMillis() - decipheringStartTime));
-        System.out.print("Percentage of progress: ");
+        //display progress status (Percentage)
+        Double progressPercentage = (100 * handledTasksAmount * taskSize) / mission.getSize();
+        System.out.println("Percentage of progress: " + progressPercentage.intValue() + "%");
+        //display agents details
         for(Agent agent: agentsList) {
             System.out.println(agent.getDecipheringStatus());
             System.out.print("agent current task: ");
             System.out.println(getSecretStr(agent.getCurrentTask().getSecret()));
         }
+        //display candidacies for decoding
+        int numOfCandidacies = candidacies.size();
+        if(numOfCandidacies > 0) {
+            System.out.println("There are " + numOfCandidacies + " candidacies for decoding, recently found:");
+            CandidateForDecoding candidate;
+            for (int i = numOfCandidacies - 1 ; i >= 0 && i > numOfCandidacies - 10 ; i--) {
+                candidate = candidacies.get(i);
+                System.out.println(candidate.toString());
+                System.out.println(getSecretStr(candidate.getSecret()));
+            }
+        }
+        else
+            System.out.println("There are no candidacies for decoding.");
+
+        System.out.println();
     }
 
     public static String formatDuration(long millis) {
@@ -250,9 +288,5 @@ public class DecipherManager extends Thread{
         }
         sb.deleteCharAt(sb.length()-1).append('>');
         return sb.toString();
-    }
-
-    public void setThreadToStop(Thread threadToStop) {
-        this.threadToStop = threadToStop;
     }
 }

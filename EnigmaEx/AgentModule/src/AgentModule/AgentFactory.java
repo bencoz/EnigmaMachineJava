@@ -16,6 +16,8 @@ public class AgentFactory {
         return resAgent;
     }
 
-
+    public static void resetFactory(){
+        nextAgentID = 0;
+    }
 
 }
