@@ -119,7 +119,7 @@ public class EnigmaMachineImpl implements EnigmaMachine, Serializable {
         int i = 1;
         rotor.increasePositionBy(1);
         if (rotor.isNotchAtPosition()) {
-            while (!updateFinished && i < workingRotors.size()) {//TODO: check if the 2nd condition is  ok
+            while (!updateFinished) {
                 Rotor innerRotor = workingRotors.get(i);
                 innerRotor.increasePositionBy(1);
                 i++;
